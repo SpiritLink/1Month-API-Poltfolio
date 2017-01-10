@@ -33,22 +33,22 @@ void player::keyboardInput()
 {
 	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
 	{
-		x -= 1;
+		x -= 3;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
 	{
-		x += 1;
+		x += 3;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_UP))
 	{
-		y -= 1;
+		y -= 3;
 	}
 
 	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
 	{
-		y += 1;
+		y += 3;
 	}
 
 }
