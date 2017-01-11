@@ -104,6 +104,13 @@ public:
 	//알파 렌더
 	void alphaRender(HDC hdc, BYTE alpha);
 	void alphaRender(HDC hdc, int destX, int destY, BYTE alpha);
+	void alphaRender(HDC hdc, int destX, int destY, int srcX, int srcY, int srcWidth, int srcHeight, BYTE alpha);
+
+	//알파 프레임 렌더
+	void alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
+	
+	//알파 애니 렌더
+	void alphaAniRender(HDC hdc, int destX, int destY, animation* ani, BYTE alpha);
 
 
 	//메모리 DC얻어온다
