@@ -75,3 +75,15 @@ extern HINSTANCE	_hInstance; //프로그램 인스터스
 extern HWND			_hWnd;		//원도우 핸들
 extern POINT		_ptMouse;   //마우스 포인트
 extern BOOL			_leftButtonDown;
+
+//공용 ENUM 선언
+enum KEYBOARD
+{//시프트 연산 사용
+	KEYBOARD_LEFT = 1,			
+	KEYBOARD_RIGHT = 1 << 1,
+	KEYBOARD_UP = 1 << 2,
+	KEYBOARD_DOWN = 1 << 3,
+	KEYBOARD_Z = 1 << 4,
+	KEYBOARD_X = 1 << 5,
+	KEYBOARD_C = 1 << 6
+};
