@@ -29,6 +29,8 @@ public:
 
 	void testFunction();		//테스트중인 값을 확인하기 위한 함수
 
+	float getPlayerX() { return x; }
+	float getPlayerY() { return y; }
 	player();
 	virtual ~player();
 };

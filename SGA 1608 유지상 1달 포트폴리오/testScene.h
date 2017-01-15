@@ -15,6 +15,13 @@ private:
 	image* _image;
 	player* _player;
 	object rect[3];
+
+	float cameraX;
+	float cameraY;
+	RECT cameraRect;
+	RECT Background;
+
+	image* _test;
 public:
 	virtual HRESULT init();
 	virtual void release();
