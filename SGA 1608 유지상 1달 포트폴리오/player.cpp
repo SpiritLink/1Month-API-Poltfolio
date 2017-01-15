@@ -34,13 +34,13 @@ void player::render()
 
 void player::keyboardInput()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))	keyStatus = keyStatus | KEYBOARD_LEFT;
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))keyStatus = keyStatus | KEYBOARD_RIGHT;
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))	keyStatus = keyStatus | KEYBOARD_UP;
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))	keyStatus = keyStatus | KEYBOARD_DOWN;
-	if (KEYMANAGER->isOnceKeyDown('Z'))		keyStatus = keyStatus | KEYBOARD_Z;
-	if (KEYMANAGER->isOnceKeyDown('X'))		keyStatus = keyStatus | KEYBOARD_X;
-	if (KEYMANAGER->isOnceKeyDown('C'))		keyStatus = keyStatus | KEYBOARD_C;
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))	keyStatus += KEYBOARD_LEFT;
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))keyStatus += KEYBOARD_RIGHT;
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))	keyStatus += KEYBOARD_UP;
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))	keyStatus += KEYBOARD_DOWN;
+	if (KEYMANAGER->isOnceKeyDown('Z'))		keyStatus += KEYBOARD_Z;
+	if (KEYMANAGER->isOnceKeyDown('X'))		keyStatus += KEYBOARD_X;
+	if (KEYMANAGER->isOnceKeyDown('C'))		keyStatus += KEYBOARD_C;
 
 	if (KEYMANAGER->isOnceKeyUp(VK_LEFT))	keyStatus -= KEYBOARD_LEFT;
 	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT))	keyStatus -= KEYBOARD_RIGHT;
