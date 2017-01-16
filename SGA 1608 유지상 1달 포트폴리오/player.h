@@ -4,7 +4,7 @@
 
 #define DEFAULT_STR 1
 #define DEFAULT_DEF 1
-#define DEFAULT_SPEED 3
+#define DEFAULT_SPEED 10
 class player : public gameNode
 {
 private:
