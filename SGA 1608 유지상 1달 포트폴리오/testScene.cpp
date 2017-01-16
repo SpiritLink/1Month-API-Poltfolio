@@ -24,7 +24,7 @@ HRESULT testScene::init()
 
 	cameraRect = RectMakeCenter(WINSIZEX / 2, WINSIZEY / 2, 100, 100);
 
-	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", 1500, 751, false, RGB(0, 0, 0));
+	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", 3840, 2160, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());
 	return S_OK;
 }
@@ -66,6 +66,16 @@ void testScene::render()
 	_test->render(getMemDC(), Background.left, Background.top);
 	Rectangle(getMemDC(), cameraRect.left, cameraRect.top, cameraRect.right, cameraRect.bottom);
 	_player->render();
+
+	SetTextColor(getMemDC(), RGB(255, 255, 255));
+
+	char strPosition1[128];
+	char strPosition2[128];
+	char strPosition3[128];
+
+	sprintf(strPosition1, "%0.3f", getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY()));
+
+	TextOut(getMemDC(), 200, 100, strPosition1, strlen(strPosition1));
 }
 
 void testScene::cameraMove()
@@ -77,18 +87,43 @@ void testScene::cameraMove()
 	//{
 	if (DATABASE->getBaseTime() + 0.03f <= TIMEMANAGER->getWorldTime())
 	{
+		float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+		if (angle >= 0 && angle < 0.5f * PI)		//0에서 90도일때
+		{
+			if (Background.right  < WINSIZEX) return;
+		}
+
+		if (angle > 1.5f * PI && angle < 2.0f * PI)	//270도에서 360도일때
+		{
+			if (Background.right  < WINSIZEX) return;
+		}
+
+		if (angle > 0.5f * PI && angle < 1.5f * PI)
+		{
+
+			if (Background.left > 0) return;
+		}
+		
+		//if (DATABASE->getCamAngle() > 0 && DATABASE->getCamAngle() < PI)
+		//{
+		//	if (Background.bottom + DATABASE->getCamDistanceY() / 10.0f < WINSIZEY) return;
+		//}
+
+		//if (DATABASE->getCamAngle() > PI && DATABASE->getCamAngle() < 2.0f * PI)
+		//{
+		//	if (Background.top + DATABASE->getCamDistanceY() / 10.0f > -1) return;
+		//}
+
 		DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
-		DATABASE->setSourCamX(_player->getPlayerX());
-		DATABASE->setSourCamY(_player->getPlayerY());
 
-		Background.right += DATABASE->getCamDistanceX() / 30.0f;
-		Background.left += DATABASE->getCamDistanceX() / 30.0f;
+		Background.right -= DATABASE->getCamDistanceX() / 10.0f;
+		Background.left -= DATABASE->getCamDistanceX() / 10.0f;
 
-		Background.top += DATABASE->getCamDistanceY() / 30.0f;
-		Background.bottom += DATABASE->getCamDistanceY() / 30.0f;
+		Background.top -= DATABASE->getCamDistanceY() / 10.0f;
+		Background.bottom -= DATABASE->getCamDistanceY() / 10.0f;
 
-		_player->addPlayerX(DATABASE->getCamDistanceX() / 10.0f);
-		_player->addPlayerY(DATABASE->getCamDistanceY() / 10.0f);
+		_player->addPlayerX(-DATABASE->getCamDistanceX() / 10.0f);
+		_player->addPlayerY(-DATABASE->getCamDistanceY() / 10.0f);
 
 	}
 	//}

@@ -150,8 +150,8 @@ void database::setElementDataMaxHP(string str, int mh)
 
 float database::getCamDistanceX()
 {
-	float distance = getDistance(sourCamX, sourCamY, destCamX, destCamY);
-	float angle = getAngle(sourCamX, sourCamY, destCamX, destCamY);
+	float distance = getDistance(destCamX, destCamY, sourCamX, sourCamY);
+	float angle = getAngle(destCamX, destCamY, sourCamX, sourCamY);
 
 	if (angle <= 2.0f * PI) return cosf(angle) * distance;
 	else					return 0.0f;
@@ -159,9 +159,15 @@ float database::getCamDistanceX()
 
 float database::getCamDistanceY()
 {
-	float distance = getDistance(sourCamX, sourCamY, destCamX, destCamY);
-	float angle = getAngle(sourCamX, sourCamY, destCamX, destCamY);
+	float distance = getDistance(destCamX, destCamY, sourCamX, sourCamY);
+	float angle = getAngle(destCamX, destCamY, sourCamX, sourCamY);
 
 	if (angle <= 2.0f * PI) return -sinf(angle) * distance;
 	else					return 0.0f;
+}
+
+float database::getCamAngle()
+{
+	float Angle = getAngle(destCamX, destCamY, sourCamX, sourCamY);
+	return Angle;
 }

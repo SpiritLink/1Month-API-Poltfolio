@@ -24,6 +24,10 @@ void player::update()
 	keyboardInput();
 	playerMove();
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
+
+	DATABASE->setSourCamX(x);
+	DATABASE->setSourCamY(y);
+
 }
 
 void player::render()
