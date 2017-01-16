@@ -28,8 +28,10 @@ private:
 
 	float _angle;
 
-	float cameraX;
-	float cameraY;
+	float sourCamX;
+	float sourCamY;
+	float destCamX;
+	float destCamY;
 	float baseTime;
 public:
 	HRESULT init();
@@ -45,12 +47,18 @@ public:
 	void setElementDataCurrentHP(string str, int ch);
 	void setElementDataMaxHP(string str, int mh);
 
-	float getCameraX() { return cameraX; }
-	float getCameraY() { return cameraY; }
+	float getSourCamX() { return sourCamX; }
+	float getSourCamY() { return sourCamY; }
+	float getDestCamX() { return destCamX; }
+	float getDestCamY() { return destCamY; }
+	float getCamDistanceX();
+	float getCamDistanceY();
 	float getBaseTime() { return baseTime; }
 
-	void setCameraX(float addCameraXValue) { cameraX = addCameraXValue; }
-	void setCameraY(float addCameraYValue) { cameraY = addCameraYValue; }
+	void setSourCamX(float X) { sourCamX = X; }
+	void setSourCamY(float Y) { sourCamY = Y; }
+	void setDestCamX(float X) { destCamX = X; }
+	void setDestCamY(float Y) { destCamY = Y; }
 	void setBaseTime(float time) { baseTime = time; }
 
 	database();

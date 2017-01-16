@@ -147,3 +147,21 @@ void database::setElementDataMaxHP(string str, int mh)
 	iterElement mIter = _mTotalElement.find(str);
 	mIter->second->maxHP = mh;
 }
+
+float database::getCamDistanceX()
+{
+	float distance = getDistance(sourCamX, sourCamY, destCamX, destCamY);
+	float angle = getAngle(sourCamX, sourCamY, destCamX, destCamY);
+
+	if (angle <= 2.0f * PI) return cosf(angle) * distance;
+	else					return 0.0f;
+}
+
+float database::getCamDistanceY()
+{
+	float distance = getDistance(sourCamX, sourCamY, destCamX, destCamY);
+	float angle = getAngle(sourCamX, sourCamY, destCamX, destCamY);
+
+	if (angle <= 2.0f * PI) return -sinf(angle) * distance;
+	else					return 0.0f;
+}

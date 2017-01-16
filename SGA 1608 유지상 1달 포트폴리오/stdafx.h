@@ -48,10 +48,26 @@ using namespace MY_UTIL;
 #define WINNAME (LPTSTR)(TEXT("SGA 1608 유지상"))
 #define WINSTARTX 100
 #define WINSTARTY 0
-#define WINSIZEX 853
-#define WINSIZEY 480
+#define WINSIZEX 800
+#define WINSIZEY 600
 #define WINSTYLE WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN
 
+//모든 클래스에서 참조할 변수
+#define DEG_TO_RAD	0.017453f
+#define PI			3.141592654f
+#define PI2			6.283185308f
+
+#define PI_8 float(PI/8.0f)
+#define PI_16 float(PI/16.0f)
+#define PI_32 float(PI/32.0f)
+#define PI_64 float(PI/64.0f)
+#define PI_128 float(PI/128.0f)
+
+#define FLOAT_EPSILON	0.001f;
+#define FLOAT_TO_INT(f1) static_cast<int>(f1+ FLOAT_EPSILON)
+#define FLOAT_EQUAL(f1,f2) (fabs(f1-f2) <= FLOAT_EPSILON)
+
+//싱글톤 선언
 #define RND randomFunction::getSingleton()
 #define KEYMANAGER keyManager::getSingleton()
 #define IMAGEMANAGER imageManager::getSingleton()
