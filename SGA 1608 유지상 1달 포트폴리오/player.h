@@ -31,6 +31,8 @@ public:
 
 	float getPlayerX() { return x; }
 	float getPlayerY() { return y; }
+	void addPlayerX(float value) { x += value; }
+	void addPlayerY(float value) { y += value; }
 	player();
 	virtual ~player();
 };

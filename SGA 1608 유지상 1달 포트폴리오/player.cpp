@@ -12,7 +12,7 @@ HRESULT player::init()
 	SPEED = DEFAULT_SPEED;
 	ATK = STR * 3;
 	keyStatus = 0;
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 void player::release()

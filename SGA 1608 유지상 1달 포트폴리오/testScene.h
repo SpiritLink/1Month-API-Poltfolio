@@ -28,6 +28,7 @@ public:
 	virtual void update();
 	virtual void render();
 	
+	void cameraMove();
 	testScene();
 	virtual ~testScene();
 };

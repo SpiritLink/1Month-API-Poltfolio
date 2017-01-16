@@ -25,4 +25,12 @@ namespace MY_UTIL
 		if (y > 0) angle = PI * 2 - angle;
 		return angle;
 	}
+	float degreeToRadian(float degree)
+	{
+		return DEG_TO_RAD * degree;
+	}
+	float radianToDegree(float Radian)
+	{
+		return Radian / DEG_TO_RAD;
+	}
 }

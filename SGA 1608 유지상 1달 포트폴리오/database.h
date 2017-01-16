@@ -26,8 +26,11 @@ private:
 
 	arrElement _mTotalElement;
 
-	//float _angle;
+	float _angle;
 
+	float cameraX;
+	float cameraY;
+	float baseTime;
 public:
 	HRESULT init();
 	void release();
@@ -41,6 +44,14 @@ public:
 	void setElementDataAngle(string str, float a);
 	void setElementDataCurrentHP(string str, int ch);
 	void setElementDataMaxHP(string str, int mh);
+
+	float getCameraX() { return cameraX; }
+	float getCameraY() { return cameraY; }
+	float getBaseTime() { return baseTime; }
+
+	void setCameraX(float addCameraXValue) { cameraX = addCameraXValue; }
+	void setCameraY(float addCameraYValue) { cameraY = addCameraYValue; }
+	void setBaseTime(float time) { baseTime = time; }
 
 	database();
 	~database();
