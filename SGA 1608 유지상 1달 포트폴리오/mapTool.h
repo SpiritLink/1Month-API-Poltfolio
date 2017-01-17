@@ -75,8 +75,8 @@ public:
 	TERRAIN terrainSelect(int frameX ,int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 
-	void load();
-	void save();
+	void load(const char * fileName);
+	void save(const char * fileName);
 
 	mapTool();
 	virtual ~mapTool();

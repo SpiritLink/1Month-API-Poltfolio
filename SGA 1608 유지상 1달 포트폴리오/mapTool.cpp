@@ -48,7 +48,8 @@ void mapTool::update()
 		SendMessage(_btnObjDraw, BM_SETCHECK, BST_UNCHECKED, 0);
 		SendMessage(_btnEraser, BM_SETCHECK, BST_UNCHECKED, 0);
 		_ctrlSelect = CTRL_END;
-		save();
+		//save();	//파라미터 채워야함
+		save("DATA/MAP/테스트.map");
 	}
 	if (SendMessage(_btnLoad, BM_GETSTATE, BST_PUSHED, 0))
 	{
@@ -56,7 +57,7 @@ void mapTool::update()
 		SendMessage(_btnObjDraw, BM_SETCHECK, BST_UNCHECKED, 0);
 		SendMessage(_btnEraser, BM_SETCHECK, BST_UNCHECKED, 0);
 		_ctrlSelect = CTRL_END;
-		load();
+		load("DATA/MAP/테스트.bmp");
 	}
 
 	setMap();
@@ -200,10 +201,24 @@ OBJECT mapTool::objSelect(int frameX, int frameY)
 	return OBJ_BLOCK1;
 }
 
-void mapTool::load()
+void mapTool::load(const char * fileName)
 {
+	HANDLE file;
+	DWORD read;
+	file = CreateFile(fileName, GENERIC_READ,0,NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+	CloseHandle(file);
 }
 
-void mapTool::save()
+void mapTool::save(const char * fileName)
 {
+	HANDLE file;
+	DWORD write;
+	file = CreateFile(fileName, GENERIC_WRITE, 0, NULL,
+		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+	CloseHandle(file);
 }
