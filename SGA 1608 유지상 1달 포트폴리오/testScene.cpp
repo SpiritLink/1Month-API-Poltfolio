@@ -104,6 +104,15 @@ void testScene::cameraMove()
 			if (Background.left > 0) return;
 		}
 		
+		if (angle > 0 && angle < PI)
+		{
+			if (Background.top > 0) return;
+		}
+
+		if (angle > PI && angle < 2.0f * PI)
+		{
+			if (Background.bottom < WINSIZEY) return;
+		}
 		//if (DATABASE->getCamAngle() > 0 && DATABASE->getCamAngle() < PI)
 		//{
 		//	if (Background.bottom + DATABASE->getCamDistanceY() / 10.0f < WINSIZEY) return;
