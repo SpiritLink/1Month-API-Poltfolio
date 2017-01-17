@@ -8,8 +8,8 @@
 class player : public gameNode
 {
 private:
-	float x;
-	float y;
+	int x;
+	int y;
 	RECT PlayerRect;
 
 	int ATK;
@@ -29,10 +29,10 @@ public:
 
 	void testFunction();		//테스트중인 값을 확인하기 위한 함수
 
-	float getPlayerX() { return x; }
-	float getPlayerY() { return y; }
-	void addPlayerX(float value) { x += value; }
-	void addPlayerY(float value) { y += value; }
+	int getPlayerX() { return x; }
+	int getPlayerY() { return y; }
+	void addPlayerX(int value) { x += value; }
+	void addPlayerY(int value) { y += value; }
 	player();
 	virtual ~player();
 };

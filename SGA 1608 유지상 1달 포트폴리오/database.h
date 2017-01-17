@@ -27,10 +27,10 @@ private:
 	arrElement _mTotalElement;
 
 	float angle;			//각도
-	float sourCamX;			//기준점 (플레이어)
-	float sourCamY;
-	float destCamX;			//목적지점 (시야가 고정되기를 원하는 좌표)
-	float destCamY;
+	int sourCamX;			//기준점 (플레이어)
+	int sourCamY;
+	int destCamX;			//목적지점 (시야가 고정되기를 원하는 좌표)
+	int destCamY;
 	float baseTime;			//기준시간 (업데이트 횟수를 적당히 줄이기 위해서)
 public:
 	HRESULT init();
@@ -46,19 +46,19 @@ public:
 	void setElementDataCurrentHP(string str, int ch);
 	void setElementDataMaxHP(string str, int mh);
 
-	float getSourCamX() { return sourCamX; }	//기준점 X좌표를 얻어옴
-	float getSourCamY() { return sourCamY; }	//기준점 Y좌표를 얻어옴
-	float getDestCamX() { return destCamX; }	//목적지점 X좌표를 얻어옴
-	float getDestCamY() { return destCamY; }	//목적지점 Y좌표를 얻어옴
-	float getCamDistanceX();					//두 좌표 사이의 X 이동거리를 얻어옴
-	float getCamDistanceY();					//두 좌표 사이의 Y 이동거리를 얻어옴
+	int getSourCamX() { return sourCamX; }	//기준점 X좌표를 얻어옴
+	int getSourCamY() { return sourCamY; }	//기준점 Y좌표를 얻어옴
+	int getDestCamX() { return destCamX; }	//목적지점 X좌표를 얻어옴
+	int getDestCamY() { return destCamY; }	//목적지점 Y좌표를 얻어옴
+	int getCamDistanceX();					//두 좌표 사이의 X 이동거리를 얻어옴
+	int getCamDistanceY();					//두 좌표 사이의 Y 이동거리를 얻어옴
 	float getCamAngle();	//두 좌표의 각도를 얻어온다.
 	float getBaseTime() { return baseTime; }	//기준시간을 반환함 (업데이트 횟수 조절을 위한 용도)
 
-	void setSourCamX(float X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
-	void setSourCamY(float Y) { sourCamY = Y; }	//기준점 (플레이어) Y를 설정
-	void setDestCamX(float X) { destCamX = X; }	//목적지점 (시야) X를 설정
-	void setDestCamY(float Y) { destCamY = Y; }	//목적지점 (시야) Y를 설정
+	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
+	void setSourCamY(int Y) { sourCamY = Y; }	//기준점 (플레이어) Y를 설정
+	void setDestCamX(int X) { destCamX = X; }	//목적지점 (시야) X를 설정
+	void setDestCamY(int Y) { destCamY = Y; }	//목적지점 (시야) Y를 설정
 	void setBaseTime(float time) { baseTime = time; }	//기준시간 (업데이트 횟수 조절) 설정
 
 	database();

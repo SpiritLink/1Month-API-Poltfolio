@@ -72,7 +72,7 @@ void testScene::render()
 
 void testScene::cameraMove()
 {
-	if (DATABASE->getBaseTime() + 0.03f <= TIMEMANAGER->getWorldTime())
+	if (DATABASE->getBaseTime() + 0.02f <= TIMEMANAGER->getWorldTime())
 	{
 		float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
 		if (angle >= 0 && angle < 0.5f * PI)		//0에서 90도일때
