@@ -11,7 +11,6 @@ private:
 
 	float cameraX;
 	float cameraY;
-	RECT cameraRect;
 	RECT Background;
 
 	image* _test;
