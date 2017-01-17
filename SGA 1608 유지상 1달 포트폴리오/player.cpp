@@ -25,8 +25,8 @@ void player::update()
 	playerMove();
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 
-	//DATABASE->setSourCamX(x);
-	//DATABASE->setSourCamY(y);
+	DATABASE->setSourCamX(x);
+	DATABASE->setSourCamY(y);
 
 }
 
