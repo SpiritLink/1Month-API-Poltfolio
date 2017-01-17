@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "gameStudy.h"
 #include "testScene.h"
+#include "mapTool.h"
 
 
 gameStudy::gameStudy()
@@ -19,7 +20,8 @@ HRESULT gameStudy::init()
 
 	//------------------------------------------
 	SCENEMANAGER->addScene("testScene", new testScene);
-	SCENEMANAGER->changeScene("testScene");
+	SCENEMANAGER->addScene("mapTool", new mapTool);
+	SCENEMANAGER->changeScene("mapTool");
 	//------------------------------------------
 	return S_OK;
 }
