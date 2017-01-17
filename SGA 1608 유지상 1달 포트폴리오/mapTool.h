@@ -1,15 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-#define SAMPLETILEX 27
-#define SAMPLETILEY 24
-
-#define TILESIZE 30
-#define TILEX 20
-#define TILEY 20
-#define TILESIZEX (TILESIZE * TILEX)
-#define TILESIZEY (TILESIZE * TILEY)
-
 enum CTRL
 {
 	CTRL_TERRAINDRAW, CTRL_OBJDRAW, CTRL_ERASER, CTRL_END

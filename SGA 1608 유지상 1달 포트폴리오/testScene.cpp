@@ -70,8 +70,7 @@ void testScene::render()
 
 void testScene::cameraMove()
 {
-	if (DATABASE->getBaseTime() + 0.02f <= TIMEMANAGER->getWorldTime())
-	{
+
 		float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
 		int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 		int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
@@ -112,7 +111,6 @@ void testScene::cameraMove()
 		//if (angle > 0 && angle < PI) if (Background.top > 0) return;
 		//if (angle > PI && angle < 2.0f * PI)	if (Background.bottom < WINSIZEY) return;
 
-		DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 
 		//X좌표 이동
 		if (DATABASE->getSourCamX() > DATABASE->getDestCamX())		//화면 오른쪽으로 움직일때
@@ -143,7 +141,6 @@ void testScene::cameraMove()
 			Background.bottom += distanceY / 10;
 			_player->addPlayerY(distanceY / 10);
 		}
-	}
 }
 
 testScene::testScene()
