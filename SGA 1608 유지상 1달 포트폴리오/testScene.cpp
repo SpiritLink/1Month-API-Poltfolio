@@ -80,11 +80,6 @@ void testScene::render()
 
 void testScene::cameraMove()
 {
-	//if (Background.bottom >= WINSIZEY &&
-	//	Background.top <= 0 &&
-	//	Background.right >= WINSIZEX &&
-	//	Background.left <= 0)
-	//{
 	if (DATABASE->getBaseTime() + 0.03f <= TIMEMANAGER->getWorldTime())
 	{
 		float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
@@ -113,15 +108,6 @@ void testScene::cameraMove()
 		{
 			if (Background.bottom < WINSIZEY) return;
 		}
-		//if (DATABASE->getCamAngle() > 0 && DATABASE->getCamAngle() < PI)
-		//{
-		//	if (Background.bottom + DATABASE->getCamDistanceY() / 10.0f < WINSIZEY) return;
-		//}
-
-		//if (DATABASE->getCamAngle() > PI && DATABASE->getCamAngle() < 2.0f * PI)
-		//{
-		//	if (Background.top + DATABASE->getCamDistanceY() / 10.0f > -1) return;
-		//}
 
 		DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 
@@ -133,9 +119,8 @@ void testScene::cameraMove()
 
 		_player->addPlayerX(-DATABASE->getCamDistanceX() / 10.0f);
 		_player->addPlayerY(-DATABASE->getCamDistanceY() / 10.0f);
-
+		
 	}
-	//}
 }
 
 testScene::testScene()
