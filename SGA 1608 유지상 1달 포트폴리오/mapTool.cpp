@@ -13,7 +13,7 @@ mapTool::~mapTool()
 
 HRESULT mapTool::init()
 {
-	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 432, 528, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
+	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 810, 720, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
 	setup();
 
@@ -67,16 +67,26 @@ void mapTool::render()
 {
 	IMAGEMANAGER->render("tileMap", getMemDC(), WINSIZEX - IMAGEMANAGER->findImage("tileMap")->getWidth(), 0);
 
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-	}
+	//for (int i = 0; i < TILEX * TILEY; ++i)
+	//{
+	//	IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
+	//		_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+	//}
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
 		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].objFrameX, _tiles[i].objFrameY);
+	}
+
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		//Rectangle(getMemDC(),_tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].rc.right, _tiles[i].rc.bottom);
+	}
+
+	for (int i = 0; i < SAMPLETILEY * SAMPLETILEX; ++i)
+	{
+		//Rectangle(getMemDC(), _sampleTiles[i].rc.left, _sampleTiles[i].rc.top, _sampleTiles[i].rc.right, _sampleTiles[i].rc.bottom);
 	}
 }
 
@@ -115,7 +125,7 @@ void mapTool::setMap()
 					break;
 				case CTRL_ERASER:
 					_tiles[i].objFrameX = 0;
-					_tiles[i].objFrameY = 0;
+					_tiles[i].objFrameY = 4;
 					_tiles[i].obj = OBJ_NONE;
 					break;
 				}
@@ -176,7 +186,7 @@ void mapTool::setup()
 		_tiles[i].terrainFrameY = 0;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		_tiles[i].objFrameX = 0;
-		_tiles[i].objFrameY = 0;
+		_tiles[i].objFrameY = 4;
 		_tiles[i].obj = OBJ_NONE;
 	}
 		

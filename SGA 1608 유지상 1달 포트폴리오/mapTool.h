@@ -2,9 +2,9 @@
 #include "gameNode.h"
 
 #define SAMPLETILEX 27
-#define SAMPLETILEY 33
+#define SAMPLETILEY 24
 
-#define TILESIZE 16
+#define TILESIZE 30
 #define TILEX 20
 #define TILEY 20
 #define TILESIZEX (TILESIZE * TILEX)

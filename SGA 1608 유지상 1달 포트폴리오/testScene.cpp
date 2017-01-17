@@ -11,14 +11,6 @@ HRESULT testScene::init()
 	_player = new player;
 	_player->init();
 
-
-
-	for (int i = 0; i < 3; ++i)
-	{
-		rect[i].x = i * 100;
-		rect[i].y = i * 30;
-	}
-
 	cameraX = 0;
 	cameraY = 0;
 
