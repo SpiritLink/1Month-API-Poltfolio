@@ -43,6 +43,7 @@ void mapTool::render()
 	_sampleTile->render(getMemDC(), WINSIZEX - _sampleTile->getWidth(), 0);
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
+		if (!(_tiles[i].rc.left >= 50 && _tiles[i].rc.right <= 800 && _tiles[i].rc.top >= 50 && _tiles[i].rc.bottom <= 800)) continue;
 		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
@@ -153,8 +154,8 @@ void mapTool::setup()
 	_btnTerrainEraser = CreateWindow("button", "배경삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
 		1100, 440, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
 
-	_moveLeft = RectMake(0, WINSIZEY / 2, 50, 50);
-	_moveRight = RectMake(800, WINSIZEY / 2, 50, 50);
+	_moveLeft = RectMake(0, WINSIZEY / 2 - 50, 50, 50);
+	_moveRight = RectMake(800, WINSIZEY / 2 - 50, 50, 50);
 	_moveUp = RectMake(400, 0, 50, 50);
 	_moveDown = RectMake(400, 800, 50, 50);
 
