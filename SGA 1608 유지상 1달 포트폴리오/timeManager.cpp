@@ -53,14 +53,14 @@ void timeManager::render(HDC hdc)
 	{
 		//프레임 찍는다
 		sprintf(str, "FramePerSec : %d", _timer->getFrameRate());
-		TextOut(hdc, 0, 0, str, strlen(str));
+		TextOut(hdc, 0, WINSIZEY - 60, str, strlen(str));
 
 		//경과시간 찍는다
 		sprintf(str, "worldTime : %f", _timer->getWorldTime());
-		TextOut(hdc, 0, 20, str, strlen(str));
+		TextOut(hdc, 0, WINSIZEY - 40, str, strlen(str));
 
 		//갱신시간 찍는다
 		sprintf(str, "elapsedTime : %f", _timer->getElapsedTime());
-		TextOut(hdc, 0, 40, str, strlen(str));
+		TextOut(hdc, 0, WINSIZEY - 20, str, strlen(str));
 	}
 }

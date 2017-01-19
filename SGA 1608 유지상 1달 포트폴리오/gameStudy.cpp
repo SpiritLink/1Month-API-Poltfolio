@@ -21,7 +21,7 @@ HRESULT gameStudy::init()
 	//------------------------------------------
 	SCENEMANAGER->addScene("testScene", new testScene);
 	SCENEMANAGER->addScene("mapTool", new mapTool);
-	SCENEMANAGER->changeScene("testScene");
+	SCENEMANAGER->changeScene("mapTool");
 	//------------------------------------------
 	return S_OK;
 }

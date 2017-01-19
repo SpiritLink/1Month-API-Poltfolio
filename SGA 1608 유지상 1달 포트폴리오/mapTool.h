@@ -11,18 +11,10 @@ enum OBJECT
 	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_TANK1, OBJ_TANK2, OBJ_NONE
 };
 
-enum TERRAIN
-{
-	TR_CEMENT, TR_EARTH, TR_GRASS, TR_WATER, TR_END
-};
-
 struct tagTile
 {
-	TERRAIN terrain;
 	OBJECT obj;
 	RECT rc;
-	int terrainFrameX;
-	int terrainFrameY;
 	int objFrameX;
 	int objFrameY;
 };
@@ -43,9 +35,8 @@ struct tagCurrentTile
 class mapTool : public gameNode
 {
 private:
-	HWND _btnSave;
-	HWND _btnLoad;
-	HWND _btnTerrainDraw;
+	image* _whiteBackground;
+	image* _sampleTile;
 	HWND _btnObjDraw;
 	HWND _btnEraser;
 
@@ -62,8 +53,8 @@ public:
 
 	void setMap();
 	void setup();
+	void lineRender();
 
-	TERRAIN terrainSelect(int frameX ,int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 
 	void load(const char * fileName);

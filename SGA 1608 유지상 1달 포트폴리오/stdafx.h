@@ -45,11 +45,11 @@ using namespace std;
 using namespace MY_UTIL;
 
 //윈도우 크기 및 스타일 설정
-#define WINNAME (LPTSTR)(TEXT("SGA 1608 유지상"))
+#define WINNAME (LPTSTR)(TEXT("SGA 1608 유지상 1달 포트폴리오"))
 #define WINSTARTX 100
 #define WINSTARTY 0
-#define WINSIZEX 800
-#define WINSIZEY 600
+#define WINSIZEX 1600
+#define WINSIZEY 900
 #define WINSTYLE WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN
 
 //모든 클래스에서 참조할 변수
@@ -107,7 +107,8 @@ enum KEYBOARD
 //맵툴에서 사용되는 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24
-#define TILESIZE 30
+#define TILESIZE 50
+#define SAMPLETILESIZE 20
 #define TILEX 20
 #define TILEY 20
 #define TILESIZEX (TILESIZE * TILEX)
