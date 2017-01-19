@@ -30,9 +30,10 @@ void mapTool::release()
 
 void mapTool::update()
 {
-	if (SendMessage(_btnObjDraw, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJDRAW;;
-	if (SendMessage(_btnEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_ERASER;
-
+	if (SendMessage(_btnTerrainDraw, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_TERRAINDRAW;
+	if (SendMessage(_btnObjDraw, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJDRAW;
+	if (SendMessage(_btnObjEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJERASER;
+	if (SendMessage(_btnTerrainEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_TERRAINERASER;
 	mouseClick();
 }
 
@@ -40,9 +41,10 @@ void mapTool::render()
 {
 	_whiteBackground->render(getMemDC());
 	_sampleTile->render(getMemDC(), WINSIZEX - _sampleTile->getWidth(), 0);
-
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
+		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
+			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
 			_tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
@@ -101,7 +103,7 @@ void mapTool::mouseClick()
 
 	if (KEYMANAGER->isStayKeyDown(VK_LBUTTON))
 	{
-		if (_ptMouse.x >= 50 && _ptMouse.x <= 800)
+		if (_ptMouse.x >= 50 && _ptMouse.x <= 800 && _ptMouse.y >= 50 && _ptMouse.y <= 800)
 		{
 			for (int i = 0; i < TILEX * TILEY; ++i)
 			{
@@ -109,15 +111,25 @@ void mapTool::mouseClick()
 				{
 					switch (_ctrlSelect)
 					{
+					case CTRL_TERRAINDRAW:
+						_tiles[i].terrainFrameX = _currentTile.x;
+						_tiles[i].terrainFrameY = _currentTile.y;
+						_tiles[i].terrain = terrainSelect(_currentTile.x, _currentTile.y);
+						break;
 					case CTRL_OBJDRAW:
 						_tiles[i].objFrameX = _currentTile.x;
 						_tiles[i].objFrameY = _currentTile.y;
 						_tiles[i].obj = objSelect(_currentTile.x, _currentTile.y);
 						break;
-					case CTRL_ERASER:
+					case CTRL_OBJERASER:
 						_tiles[i].objFrameX = 0;
 						_tiles[i].objFrameY = 4;
 						_tiles[i].obj = OBJ_NONE;
+						break;
+					case CTRL_TERRAINERASER:
+						_tiles[i].terrainFrameX = 0;
+						_tiles[i].terrainFrameY = 4;
+						_tiles[i].terrain = TR_NONE;
 						break;
 					}
 					break;
@@ -129,12 +141,17 @@ void mapTool::mouseClick()
 
 void mapTool::setup()
 {
-
-	_btnObjDraw = CreateWindow("button", "설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+	_btnTerrainDraw = CreateWindow("button", "배경설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
 		1100, 380, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 
-	_btnEraser = CreateWindow("button", "삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+	_btnObjDraw = CreateWindow("button", "물체설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
 		1100, 410, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
+
+	_btnObjEraser = CreateWindow("button", "물체삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+		1100, 470, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
+
+	_btnTerrainEraser = CreateWindow("button", "배경삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+		1100, 440, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
 
 	_moveLeft = RectMake(0, WINSIZEY / 2, 50, 50);
 	_moveRight = RectMake(800, WINSIZEY / 2, 50, 50);
@@ -206,6 +223,11 @@ OBJECT mapTool::objSelect(int frameX, int frameY)
 	if (frameX == 0 && frameY == 1) return OBJ_BLOCK1;
 	if (frameX == 0 && frameY == 2) return OBJ_BLOCK2;
 	return OBJ_BLOCK1;
+}
+
+TERRAIN mapTool::terrainSelect(int frameX, int frameY)
+{
+	return TERRAIN();
 }
 
 void mapTool::load(const char * fileName)

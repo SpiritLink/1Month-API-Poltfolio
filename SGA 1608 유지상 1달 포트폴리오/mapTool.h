@@ -3,7 +3,7 @@
 
 enum CTRL
 {
-	CTRL_TERRAINDRAW, CTRL_OBJDRAW, CTRL_ERASER, CTRL_END
+	CTRL_TERRAINDRAW, CTRL_OBJDRAW, CTRL_OBJERASER, CTRL_TERRAINERASER, CTRL_END
 };
 
 enum OBJECT
@@ -11,10 +11,17 @@ enum OBJECT
 	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_NONE
 };
 
+enum TERRAIN
+{
+	TR_CEMENT, TR_EARTH, TR_GRASS, TR_WATER, TR_NONE
+};
 struct tagTile
 {
+	TERRAIN terrain;
 	OBJECT obj;
 	RECT rc;
+	int terrainFrameX;
+	int terrainFrameY;
 	int objFrameX;
 	int objFrameY;
 };
@@ -53,8 +60,10 @@ private:
 	RECT _loadField2;
 	RECT _loadBoss;
 
+	HWND _btnTerrainDraw;
 	HWND _btnObjDraw;
-	HWND _btnEraser;
+	HWND _btnTerrainEraser;
+	HWND _btnObjEraser;
 
 	tagCurrentTile _currentTile;
 	tagTile _tiles[TILEX * TILEY];
@@ -72,7 +81,7 @@ public:
 	void lineRender();
 
 	OBJECT objSelect(int frameX, int frameY);
-
+	TERRAIN terrainSelect(int frameX, int frameY);
 	void load(const char * fileName);
 	void save(const char * fileName);
 
