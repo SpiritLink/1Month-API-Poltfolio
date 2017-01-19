@@ -8,7 +8,7 @@ enum CTRL
 
 enum OBJECT
 {
-	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_TANK1, OBJ_TANK2, OBJ_NONE
+	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_NONE
 };
 
 struct tagTile
@@ -37,6 +37,22 @@ class mapTool : public gameNode
 private:
 	image* _whiteBackground;
 	image* _sampleTile;
+
+	RECT _moveRight;
+	RECT _moveLeft;
+	RECT _moveUp;
+	RECT _moveDown;
+
+	RECT _saveTown;
+	RECT _saveField1;
+	RECT _saveField2;
+	RECT _saveBoss;
+
+	RECT _loadTown;
+	RECT _loadField1;
+	RECT _loadField2;
+	RECT _loadBoss;
+
 	HWND _btnObjDraw;
 	HWND _btnEraser;
 
@@ -51,7 +67,7 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void setMap();
+	void mouseClick();
 	void setup();
 	void lineRender();
 

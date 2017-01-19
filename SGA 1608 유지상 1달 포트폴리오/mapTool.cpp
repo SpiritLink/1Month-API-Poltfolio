@@ -33,7 +33,7 @@ void mapTool::update()
 	if (SendMessage(_btnObjDraw, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJDRAW;;
 	if (SendMessage(_btnEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_ERASER;
 
-	setMap();
+	mouseClick();
 }
 
 void mapTool::render()
@@ -56,14 +56,38 @@ void mapTool::render()
 	{
 		//Rectangle(getMemDC(), _sampleTiles[i].rc.left, _sampleTiles[i].rc.top, _sampleTiles[i].rc.right, _sampleTiles[i].rc.bottom);
 	}
+	Rectangle(getMemDC(), _moveRight.left, _moveRight.top, _moveRight.right, _moveRight.bottom);
+	Rectangle(getMemDC(), _moveLeft.left, _moveLeft.top, _moveLeft.right, _moveLeft.bottom);
+	Rectangle(getMemDC(), _moveUp.left, _moveUp.top, _moveUp.right, _moveUp.bottom);
+	Rectangle(getMemDC(), _moveDown.left, _moveDown.top, _moveDown.right, _moveDown.bottom);
+
+	Rectangle(getMemDC(), _saveTown.left, _saveTown.top, _saveTown.right, _saveTown.bottom);
+	Rectangle(getMemDC(), _saveField1.left, _saveField1.top, _saveField1.right, _saveField1.bottom);
+	Rectangle(getMemDC(), _saveField2.left, _saveField2.top, _saveField2.right, _saveField2.bottom);
+	Rectangle(getMemDC(), _saveBoss.left, _saveBoss.top, _saveBoss.right, _saveBoss.bottom);
+
+	Rectangle(getMemDC(), _loadTown.left, _loadTown.top, _loadTown.right, _loadTown.bottom);
+	Rectangle(getMemDC(), _loadField1.left, _loadField1.top, _loadField1.right, _loadField1.bottom);
+	Rectangle(getMemDC(), _loadField2.left, _loadField2.top, _loadField2.right, _loadField2.bottom);
+	Rectangle(getMemDC(), _loadBoss.left, _loadBoss.top, _loadBoss.right, _loadBoss.bottom);
 
 	lineRender();
 }
 
-void mapTool::setMap()
+void mapTool::mouseClick()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
+		if (PtInRect(&_saveTown, _ptMouse)) save("DATA/MAP/Town.map");
+		if (PtInRect(&_saveField1, _ptMouse)) save("DATA/MAP/Field1.map");
+		if (PtInRect(&_saveField2, _ptMouse)) save("DATA/MAP/Field2.map");
+		if (PtInRect(&_saveBoss, _ptMouse)) save("DATA/MAP/Boss.map");
+
+		if (PtInRect(&_loadTown, _ptMouse)) load("DATA/MAP/Town.map");
+		if (PtInRect(&_loadField1, _ptMouse)) load("DATA/MAP/Field1.map");
+		if (PtInRect(&_loadField2, _ptMouse)) load("DATA/MAP/Field2.map");
+		if (PtInRect(&_loadBoss, _ptMouse)) load("DATA/MAP/Boss.map");
+
 		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; ++i)
 		{
 			if (PtInRect(&_sampleTiles[i].rc, _ptMouse))
@@ -106,12 +130,26 @@ void mapTool::setMap()
 void mapTool::setup()
 {
 
-	_btnObjDraw = CreateWindow("button", "objDraw", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		700, 380, 140, 30, _hWnd, HMENU(3), _hInstance, NULL);
+	_btnObjDraw = CreateWindow("button", "설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+		1100, 380, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 
-	_btnEraser = CreateWindow("button", "지우개", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		700, 410, 140, 30, _hWnd, HMENU(4), _hInstance, NULL);
+	_btnEraser = CreateWindow("button", "삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+		1100, 410, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
 
+	_moveLeft = RectMake(0, WINSIZEY / 2, 50, 50);
+	_moveRight = RectMake(800, WINSIZEY / 2, 50, 50);
+	_moveUp = RectMake(400, 0, 50, 50);
+	_moveDown = RectMake(400, 800, 50, 50);
+
+	_saveTown = RectMake(WINSIZEX - 200, 600, 50, 50);
+	_saveField1 = RectMake(WINSIZEX - 150, 600, 50, 50);
+	_saveField2 = RectMake(WINSIZEX - 100, 600, 50, 50);
+	_saveBoss = RectMake(WINSIZEX - 50, 600, 50, 50);
+
+	_loadTown = RectMake(WINSIZEX - 200, 650, 50, 50);
+	_loadField1 = RectMake(WINSIZEX - 150, 650, 50, 50);
+	_loadField2 = RectMake(WINSIZEX - 100, 650, 50, 50);
+	_loadBoss = RectMake(WINSIZEX - 50, 650, 50, 50);
 	//오른쪽 샘플타일의 렉트 설정한다
 	for (int i = 0; i < SAMPLETILEY; ++i)
 	{
@@ -167,8 +205,6 @@ OBJECT mapTool::objSelect(int frameX, int frameY)
 {
 	if (frameX == 0 && frameY == 1) return OBJ_BLOCK1;
 	if (frameX == 0 && frameY == 2) return OBJ_BLOCK2;
-	if (frameX == 0 && frameY == 0) return OBJ_TANK1;
-	if (frameX == 0 && frameY == 8) return OBJ_TANK2;
 	return OBJ_BLOCK1;
 }
 
