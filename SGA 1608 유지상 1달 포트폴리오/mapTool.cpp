@@ -215,15 +215,16 @@ void mapTool::lineRender()
 
 	MoveToEx(getMemDC(), 15 * TILESIZE + 50, 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
-	MoveToEx(getMemDC(), 50, TILESIZE * 15 + 50, NULL);
+	MoveToEx(getMemDC(), 50, TILESIZEs * 15 + 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
 }
 
 OBJECT mapTool::objSelect(int frameX, int frameY)
 {
-	if (frameX == 0 && frameY == 1) return OBJ_BLOCK1;
+	if (frameX == 0 && frameY == 1) return OBJ_GROUND;
+	if (frameX == 1 && frameY == 8) return OBJ_GROUND;
 	if (frameX == 0 && frameY == 2) return OBJ_BLOCK2;
-	return OBJ_BLOCK1;
+	return OBJ_NONE;
 }
 
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)

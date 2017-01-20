@@ -48,8 +48,8 @@ using namespace MY_UTIL;
 #define WINNAME (LPTSTR)(TEXT("SGA 1608 유지상 1달 포트폴리오"))
 #define WINSTARTX 100
 #define WINSTARTY 0
-#define WINSIZEX 800
-#define WINSIZEY 600
+#define WINSIZEX 1600
+#define WINSIZEY 900
 #define WINSTYLE WS_CAPTION | WS_SYSMENU | WS_CLIPCHILDREN
 
 //모든 클래스에서 참조할 변수
@@ -104,7 +104,7 @@ enum KEYBOARD
 	KEYBOARD_C = 1 << 6
 };
 
-//맵툴에서 사용되는 define
+//프로젝트에서 사용될 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24
 #define TILESIZE 50
@@ -114,6 +114,8 @@ enum KEYBOARD
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
+#define GRAVITY 0.09
+
 //맵툴에서 사용되는 공용 구조체와 enum
 enum CTRL
 {
@@ -122,7 +124,7 @@ enum CTRL
 
 enum OBJECT
 {
-	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_NONE
+	OBJ_GROUND, OBJ_BLOCK2, OBJ_NONE
 };
 
 enum TERRAIN

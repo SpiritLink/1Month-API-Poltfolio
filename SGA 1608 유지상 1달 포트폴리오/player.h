@@ -16,6 +16,7 @@ private:
 	int STR;
 	int DEF;
 	int SPEED;
+	float gravity;
 
 	int keyStatus;
 public:

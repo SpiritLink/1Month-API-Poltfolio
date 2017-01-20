@@ -6,6 +6,7 @@ HRESULT player::init()
 {
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
+	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	STR = DEFAULT_STR;
 	DEF = DEFAULT_DEF;
@@ -62,6 +63,9 @@ void player::playerMove()
 	if (keyStatus & KEYBOARD_RIGHT) x += SPEED;
 	if (keyStatus & KEYBOARD_UP) y -= SPEED;
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
+
+	gravity += GRAVITY;
+	y += gravity;
 }
 
 void player::testFunction()
