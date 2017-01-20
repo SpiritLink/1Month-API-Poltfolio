@@ -1,44 +1,6 @@
 #pragma once
 #include "gameNode.h"
 
-enum CTRL
-{
-	CTRL_TERRAINDRAW, CTRL_OBJDRAW, CTRL_OBJERASER, CTRL_TERRAINERASER, CTRL_END
-};
-
-enum OBJECT
-{
-	OBJ_BLOCK1, OBJ_BLOCK2, OBJ_NONE
-};
-
-enum TERRAIN
-{
-	TR_CEMENT, TR_EARTH, TR_GRASS, TR_WATER, TR_NONE
-};
-struct tagTile
-{
-	TERRAIN terrain;
-	OBJECT obj;
-	RECT rc;
-	int terrainFrameX;
-	int terrainFrameY;
-	int objFrameX;
-	int objFrameY;
-};
-
-struct tagSampleTile
-{
-	RECT rc;
-	int terrainFrameX;
-	int terrainFrameY;
-};
-
-struct tagCurrentTile
-{
-	int x;
-	int y;
-};
-
 class mapTool : public gameNode
 {
 private:
