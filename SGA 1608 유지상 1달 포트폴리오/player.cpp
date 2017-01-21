@@ -65,7 +65,7 @@ void player::playerMove()
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 
 	gravity += GRAVITY;
-	y += gravity;
+	//y += gravity;
 }
 
 void player::testFunction()

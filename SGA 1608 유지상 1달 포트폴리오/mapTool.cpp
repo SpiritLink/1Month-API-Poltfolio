@@ -215,7 +215,7 @@ void mapTool::lineRender()
 
 	MoveToEx(getMemDC(), 15 * TILESIZE + 50, 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
-	MoveToEx(getMemDC(), 50, TILESIZEs * 15 + 50, NULL);
+	MoveToEx(getMemDC(), 50, TILESIZE * 15 + 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
 }
 
