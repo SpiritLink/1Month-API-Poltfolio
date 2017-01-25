@@ -19,6 +19,7 @@ HRESULT gameStudy::init()
 	gameNode::init();
 
 	//------------------------------------------
+	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
 	SCENEMANAGER->addScene("testScene", new testScene);
 	SCENEMANAGER->addScene("mapTool", new mapTool);
 	SCENEMANAGER->changeScene("testScene");
@@ -58,7 +59,7 @@ void gameStudy::render()
 	//--------------------------------------------
 
 
-
+	_whiteBackground->render(getMemDC());
 	//---------------------------------------------
 
 	SCENEMANAGER->render();

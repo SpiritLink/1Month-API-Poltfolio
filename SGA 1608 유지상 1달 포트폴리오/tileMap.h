@@ -3,11 +3,17 @@
 
 class tileMap : public gameNode
 {
+private:
+	tagTile _tiles[TILEX * TILEY];
 public:
-	virtual HRESULT init();
+	virtual HRESULT init(const char* fileName);
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	void moveTileX(int value);
+	void moveTileY(int value);
+
 
 	tileMap();
 	virtual ~tileMap();

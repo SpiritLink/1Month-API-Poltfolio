@@ -14,7 +14,7 @@ class gameStudy : public gameNode
 private:
 	//º¯¼ö-----------------------------------
 
-
+	image* _whiteBackground;
 	//--------------------------------------
 
 public:

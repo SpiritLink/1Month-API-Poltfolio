@@ -8,10 +8,12 @@ HRESULT testScene::init()
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY / 2);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
-	initTile();
 	_image = IMAGEMANAGER->addImage("흰배경", "IMAGE/whiteBackground.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
 	_player = new player;
 	_player->init();
+
+	_tileMap = new tileMap;
+	_tileMap->init("DATA/MAP/Town.map");
 
 	cameraX = 0;
 	cameraY = 0;
@@ -57,7 +59,8 @@ void testScene::render()
 	_image->render(getMemDC());
 	Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
 	_test->render(getMemDC(), Background.left, Background.top);
-	tileRender();
+	//tileRender();
+	_tileMap->render();
 	_player->render();
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
@@ -84,7 +87,7 @@ void testScene::cameraMove()
 			int diffrence = WINSIZEX - Background.right;
 			Background.right += diffrence;	//배경의 움직이는 정도를 조절
 			Background.left += diffrence;	//배경의 움직이는 정도를 조정
-			moveTileX(diffrence);			//타일의 움직이는 정도를 조정
+			_tileMap->moveTileX(diffrence);
 			_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
 		}
 		if (Background.left > 0)
@@ -93,7 +96,7 @@ void testScene::cameraMove()
 			Background.right -= diffrence;
 			Background.left -= diffrence;
 			_player->addPlayerX(+diffrence);
-			moveTileX(-diffrence);
+			_tileMap->moveTileX(-diffrence);
 		}
 		if (Background.top > 0)
 		{
@@ -101,7 +104,7 @@ void testScene::cameraMove()
 			Background.top -= diffrence;
 			Background.bottom -= diffrence;
 			_player->addPlayerY(diffrence);
-			moveTileY(-diffrence);
+			_tileMap->moveTileY(-diffrence);
 		}
 
 		if (Background.bottom < WINSIZEY)
@@ -110,7 +113,7 @@ void testScene::cameraMove()
 			Background.top += diffrence;
 			Background.bottom += diffrence;
 			_player->addPlayerY(-diffrence);
-			moveTileY(diffrence);
+			_tileMap->moveTileY(+diffrence);
 		}
 		//if (angle >= 0 && angle < 0.5f * PI)	if (Background.right  < WINSIZEX) return;
 		//if (angle > 1.5f * PI && angle < 2.0f * PI)	if (Background.right  < WINSIZEX) return;
@@ -124,16 +127,16 @@ void testScene::cameraMove()
 		{
 			Background.left -= distanceX / 10;
 			Background.right -= distanceX / 10;
-			moveTileX(-distanceX / 10);
 			_player->addPlayerX(-distanceX / 10);
+			_tileMap->moveTileX(-distanceX / 10);
 		}
 
 		if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
 		{
 			Background.left += distanceX / 10;
 			Background.right += distanceX / 10;
-			moveTileX(distanceX / 10);
 			_player->addPlayerX(distanceX / 10);
+			_tileMap->moveTileX(distanceX / 10);
 		}
 
 		//Y좌표 이동
@@ -141,69 +144,19 @@ void testScene::cameraMove()
 		{
 			Background.top -= distanceY / 10;
 			Background.bottom -= distanceY / 10;
-			moveTileY(-distanceY / 10);
 			_player->addPlayerY(-distanceY / 10);
+			_tileMap->moveTileY(-distanceY / 10);
 		}
 		
 		if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
 		{
 			Background.top += distanceY / 10;
 			Background.bottom += distanceY / 10;
-			moveTileY(distanceY / 10);
 			_player->addPlayerY(distanceY / 10);
+			_tileMap->moveTileY(distanceY / 10);
 		}
 }
 
-void testScene::initTile()
-{
-	HANDLE file;
-	DWORD read;
-	file = CreateFile("DATA/MAP/Town.map", GENERIC_READ, 0, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
-	CloseHandle(file);
-	for (int i = 0; i < TILEY; ++i)
-	{
-		for (int j = 0; j < TILEX; ++j)
-		{
-			SetRect(&_tiles[i * TILEX + j].rc,
-				j*TILESIZE,
-				i*TILESIZE,
-				j*TILESIZE + TILESIZE,
-				i*TILESIZE + TILESIZE);
-		}
-	}
-}
-
-void testScene::tileRender()
-{
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		IMAGEMANAGER->frameRender("tileMap", getMemDC(), _tiles[i].rc.left, _tiles[i].rc.top,
-			_tiles[i].objFrameX, _tiles[i].objFrameY);
-	}
-}
-
-void testScene::moveTileX(int value)
-{
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-		_tiles[i].rc.left += value;
-		_tiles[i].rc.right += value;
-	}
-}
-
-void testScene::moveTileY(int value)
-{
-	for (int i = 0; i < TILEX * TILEY; ++i)
-	{
-		_tiles[i].rc.top += value;
-		_tiles[i].rc.bottom += value;
-	}
-}
 
 testScene::testScene()
 {
