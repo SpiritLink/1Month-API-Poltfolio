@@ -42,6 +42,8 @@ public:
 	void setup();
 	void lineRender();
 
+	void moveMaptoolX(int tileNum);
+	void moveMapToolY(int tileNum);
 	OBJECT objSelect(int frameX, int frameY);
 	TERRAIN terrainSelect(int frameX, int frameY);
 	void load(const char * fileName);

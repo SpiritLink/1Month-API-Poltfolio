@@ -60,19 +60,24 @@ void player::keyboardInput()
 
 void player::playerMove()
 {
-	if (keyStatus & KEYBOARD_LEFT) x -= SPEED;
-	if (keyStatus & KEYBOARD_RIGHT) x += SPEED;
-	if (keyStatus & KEYBOARD_UP) y -= SPEED;
-	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
-
+	//중력처리
 	gravity += GRAVITY;
-		//타일의 속성을 얻어오자.
+	//플레이어와 타일의 충돌을 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
 	{
 		gravity = 0;
 		y = _tileMap->getTiles()[currentCollisionTile].rc.top;
 	}
-	//y += gravity;
+
+	//키보드 입력을 처리
+	if (keyStatus & KEYBOARD_LEFT) x -= SPEED;
+	if (keyStatus & KEYBOARD_RIGHT) x += SPEED;
+	if (keyStatus & KEYBOARD_UP) y -= SPEED;
+	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
+	if (keyStatus & KEYBOARD_X) gravity = -10;
+
+		//타일의 속성을 얻어오자.
+	y += gravity;
 }
 
 void player::testFunction()

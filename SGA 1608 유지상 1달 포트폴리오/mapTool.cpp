@@ -91,6 +91,11 @@ void mapTool::mouseClick()
 		if (PtInRect(&_loadField2, _ptMouse)) load("DATA/MAP/Field2.map");
 		if (PtInRect(&_loadBoss, _ptMouse)) load("DATA/MAP/Boss.map");
 
+		if (PtInRect(&_moveRight, _ptMouse)) moveMaptoolX(-15);
+		if (PtInRect(&_moveLeft, _ptMouse)) moveMaptoolX(15);
+		if (PtInRect(&_moveUp, _ptMouse)) moveMapToolY(-15);
+		if (PtInRect(&_moveDown, _ptMouse)) moveMapToolY(15);
+
 		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; ++i)
 		{
 			if (PtInRect(&_sampleTiles[i].rc, _ptMouse))
@@ -188,10 +193,10 @@ void mapTool::setup()
 		for (int j = 0; j < TILEX; ++j)
 		{
 			SetRect(&_tiles[i * TILEX + j].rc,
-				j*TILESIZE,
-				i*TILESIZE,
-				j*TILESIZE + TILESIZE,
-				i*TILESIZE + TILESIZE);
+				50 + j*TILESIZE,
+				50 + i*TILESIZE,
+				50 + j*TILESIZE + TILESIZE,
+				50 + i*TILESIZE + TILESIZE);
 		}
 	}
 	
@@ -217,6 +222,24 @@ void mapTool::lineRender()
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
 	MoveToEx(getMemDC(), 50, TILESIZE * 15 + 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
+}
+
+void mapTool::moveMaptoolX(int tileNum)
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		_tiles[i].rc.left += tileNum * TILESIZE;
+		_tiles[i].rc.right += tileNum * TILESIZE;
+	}
+}
+
+void mapTool::moveMapToolY(int tileNum)
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		_tiles[i].rc.top += tileNum * TILESIZE;
+		_tiles[i].rc.bottom += tileNum * TILESIZE;
+	}
 }
 
 OBJECT mapTool::objSelect(int frameX, int frameY)

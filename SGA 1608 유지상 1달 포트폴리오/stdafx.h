@@ -109,12 +109,12 @@ enum KEYBOARD
 #define SAMPLETILEY 24
 #define TILESIZE 50
 #define SAMPLETILESIZE 20
-#define TILEX 20
-#define TILEY 20
+#define TILEX 150
+#define TILEY 150
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
-#define GRAVITY 0.09
+#define GRAVITY 0.4
 
 //맵툴에서 사용되는 공용 구조체와 enum
 enum CTRL
