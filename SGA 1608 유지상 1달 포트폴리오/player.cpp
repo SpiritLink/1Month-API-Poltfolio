@@ -66,6 +66,12 @@ void player::playerMove()
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 
 	gravity += GRAVITY;
+		//타일의 속성을 얻어오자.
+	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
+	{
+		gravity = 0;
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top;
+	}
 	//y += gravity;
 }
 
@@ -79,6 +85,7 @@ void player::testFunction()
 	char str6[128];
 	char str7[128];
 	char str8[128];
+	char str9[128];
 
 	if (keyStatus & KEYBOARD_LEFT)	sprintf(str1, "←"); else sprintf(str1, " ");
 	if (keyStatus & KEYBOARD_RIGHT) sprintf(str2, "→"); else sprintf(str2, " ");
@@ -88,7 +95,9 @@ void player::testFunction()
 	if (keyStatus & KEYBOARD_X)		sprintf(str6, "X"); else sprintf(str6, " ");
 	if (keyStatus & KEYBOARD_C)		sprintf(str7, "C"); else sprintf(str7, " ");
 	sprintf(str8, "%d", currentCollisionTile);
+	sprintf(str9, "%0.3f", gravity);
 
+	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
 	TextOut(getMemDC(), 320, 20, str2, strlen(str2));
 	TextOut(getMemDC(), 340, 20, str3, strlen(str3));
@@ -97,6 +106,7 @@ void player::testFunction()
 	TextOut(getMemDC(), 400, 20, str6, strlen(str6));
 	TextOut(getMemDC(), 420, 20, str7, strlen(str7));
 	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
+	TextOut(getMemDC(), 480, 20, str9, strlen(str9));
 
 }
 

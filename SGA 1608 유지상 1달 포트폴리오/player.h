@@ -11,8 +11,8 @@ class player : public gameNode
 private:
 	tileMap* _tileMap;
 
-	int x;
-	int y;
+	float x;
+	float y;
 	RECT PlayerRect;
 	
 	int currentCollisionTile;

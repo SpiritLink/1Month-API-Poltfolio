@@ -53,6 +53,12 @@ void testScene::update()
 		DATABASE->setDestCamX(WINSIZEX / 2);
 		DATABASE->setDestCamY(WINSIZEY / 2);
 	}
+
+	if (KEYMANAGER->isStayKeyDown('R'))
+	{
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY((WINSIZEY / 4) * 3);
+	}
 	cameraMove();
 
 }
