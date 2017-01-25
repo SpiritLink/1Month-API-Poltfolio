@@ -29,6 +29,7 @@ void player::update()
 
 	DATABASE->setSourCamX(x);
 	DATABASE->setSourCamY(y);
+	DATABASE->setCollisionTile(currentCollisionTile);
 
 }
 

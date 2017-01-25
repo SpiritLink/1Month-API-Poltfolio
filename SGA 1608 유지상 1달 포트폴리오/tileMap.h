@@ -6,6 +6,7 @@ class tileMap : public gameNode
 private:
 	tagTile _tiles[TILEX * TILEY];
 	image* _miniMapIMG;
+	image* _miniRedTile;
 public:
 	virtual HRESULT init(const char* fileName);
 	virtual void release();

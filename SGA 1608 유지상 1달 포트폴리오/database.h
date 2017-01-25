@@ -10,6 +10,7 @@ private:
 	int sourCamY;
 	int destCamX;			//목적지점 (시야가 고정되기를 원하는 좌표)
 	int destCamY;
+	int playerCollisionTile;//플레이어가 충돌중인 타일 번호
 	float baseTime;			//기준시간 (업데이트 횟수를 적당히 줄이기 위해서)
 
 	bool showPlayer;
@@ -26,6 +27,7 @@ public:
 	int getCamDistance();
 	float getCamAngle();	//두 좌표의 각도를 얻어온다.
 	float getBaseTime() { return baseTime; }	//기준시간을 반환함 (업데이트 횟수 조절을 위한 용도)
+	int getCollisionTile() { return playerCollisionTile; }
 
 	bool getShowPlayer() { return showPlayer; }
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
@@ -35,6 +37,7 @@ public:
 	void setDestCamX(int X) { destCamX = X; }	//목적지점 (시야) X를 설정
 	void setDestCamY(int Y) { destCamY = Y; }	//목적지점 (시야) Y를 설정
 	void setBaseTime(float time) { baseTime = time; }	//기준시간 (업데이트 횟수 조절) 설정
+	void setCollisionTile(int tileNum) { playerCollisionTile = tileNum; }
 
 	database();
 	~database();
