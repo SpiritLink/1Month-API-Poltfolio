@@ -2,7 +2,9 @@
 #include "gameStudy.h"
 #include "testScene.h"
 #include "mapTool.h"
-
+#include "townScene.h"
+#include "field1Scene.h"
+#include "field2Scene.h"
 
 gameStudy::gameStudy()
 {
@@ -22,6 +24,9 @@ HRESULT gameStudy::init()
 	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
 	SCENEMANAGER->addScene("testScene", new testScene);
 	SCENEMANAGER->addScene("mapTool", new mapTool);
+	SCENEMANAGER->addScene("townScene", new townScene);
+	//SCENEMANAGER->addScene("field1Scene", new field1Scene);
+	//SCENEMANAGER->addScene("field2Scene", new field2Scene);
 	SCENEMANAGER->changeScene("testScene");
 	//------------------------------------------
 	return S_OK;

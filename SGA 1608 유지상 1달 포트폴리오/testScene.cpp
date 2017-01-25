@@ -30,6 +30,9 @@ void testScene::release()
 {
 	_player->release();
 	SAFE_DELETE(_player);
+
+	_tileMap->release();
+	SAFE_DELETE(_tileMap);
 }
 
 void testScene::update()
@@ -73,14 +76,6 @@ void testScene::render()
 	_player->render();
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
-
-	char strPosition1[128];
-	char strPosition2[128];
-	char strPosition3[128];
-
-	sprintf(strPosition1, "%0.3f", getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY()));
-
-	TextOut(getMemDC(), 200, 100, strPosition1, strlen(strPosition1));
 }
 
 void testScene::cameraMove()
