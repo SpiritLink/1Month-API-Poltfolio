@@ -14,6 +14,7 @@ public:
 	void moveTileX(int value);
 	void moveTileY(int value);
 
+	tagTile* getTiles() { return _tiles; }
 
 	tileMap();
 	virtual ~tileMap();

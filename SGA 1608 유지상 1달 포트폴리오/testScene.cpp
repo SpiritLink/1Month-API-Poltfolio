@@ -9,11 +9,14 @@ HRESULT testScene::init()
 	DATABASE->setDestCamY(WINSIZEY / 2);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	_image = IMAGEMANAGER->addImage("Èò¹è°æ", "IMAGE/whiteBackground.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
-	_player = new player;
-	_player->init();
 
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Town.map");
+
+	_player = new player;
+	_player->init();
+	_player->setTileMapMemoryAddress(_tileMap);
+	_player->firstCollisionTileCheck();
 
 	cameraX = 0;
 	cameraY = 0;

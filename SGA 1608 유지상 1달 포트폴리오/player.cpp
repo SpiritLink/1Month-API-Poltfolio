@@ -22,6 +22,7 @@ void player::release()
 
 void player::update()
 {
+	collisionTileCheck();
 	keyboardInput();
 	playerMove();
 	PlayerRect = RectMakeCenter(x, y, 30, 30);
@@ -77,6 +78,7 @@ void player::testFunction()
 	char str5[128];
 	char str6[128];
 	char str7[128];
+	char str8[128];
 
 	if (keyStatus & KEYBOARD_LEFT)	sprintf(str1, "¡ç"); else sprintf(str1, " ");
 	if (keyStatus & KEYBOARD_RIGHT) sprintf(str2, "¡æ"); else sprintf(str2, " ");
@@ -85,6 +87,7 @@ void player::testFunction()
 	if (keyStatus & KEYBOARD_Z)		sprintf(str5, "Z"); else sprintf(str5, " ");
 	if (keyStatus & KEYBOARD_X)		sprintf(str6, "X"); else sprintf(str6, " ");
 	if (keyStatus & KEYBOARD_C)		sprintf(str7, "C"); else sprintf(str7, " ");
+	sprintf(str8, "%d", currentCollisionTile);
 
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
 	TextOut(getMemDC(), 320, 20, str2, strlen(str2));
@@ -93,7 +96,32 @@ void player::testFunction()
 	TextOut(getMemDC(), 380, 20, str5, strlen(str5));
 	TextOut(getMemDC(), 400, 20, str6, strlen(str6));
 	TextOut(getMemDC(), 420, 20, str7, strlen(str7));
+	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
 
+}
+
+void player::firstCollisionTileCheck()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		{
+			currentCollisionTile = i;
+			break;
+		}
+	}
+}
+
+void player::collisionTileCheck()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		{
+			currentCollisionTile = i;
+			break;
+		}
+	}
 }
 
 player::player()

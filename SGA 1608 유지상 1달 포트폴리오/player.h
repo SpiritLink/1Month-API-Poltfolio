@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gameNode.h"
+#include "tileMap.h"
 
 #define DEFAULT_STR 1
 #define DEFAULT_DEF 1
@@ -8,9 +9,13 @@
 class player : public gameNode
 {
 private:
+	tileMap* _tileMap;
+
 	int x;
 	int y;
 	RECT PlayerRect;
+	
+	int currentCollisionTile;
 
 	int ATK;
 	int STR;
@@ -34,6 +39,10 @@ public:
 	int getPlayerY() { return y; }
 	void addPlayerX(int value) { x += value; }
 	void addPlayerY(int value) { y += value; }
+
+	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
+	void firstCollisionTileCheck();
+	void collisionTileCheck();
 	player();
 	virtual ~player();
 };
