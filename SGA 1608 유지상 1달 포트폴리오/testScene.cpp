@@ -71,9 +71,9 @@ void testScene::render()
 	_image->render(getMemDC());
 	Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
 	_test->render(getMemDC(), Background.left, Background.top);
-	//tileRender();
 	_tileMap->render();
 	_player->render();
+	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }

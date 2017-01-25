@@ -5,6 +5,7 @@ class tileMap : public gameNode
 {
 private:
 	tagTile _tiles[TILEX * TILEY];
+	image* _miniMapIMG;
 public:
 	virtual HRESULT init(const char* fileName);
 	virtual void release();
@@ -13,6 +14,7 @@ public:
 
 	void moveTileX(int value);
 	void moveTileY(int value);
+	void miniMapRender();
 
 	tagTile* getTiles() { return _tiles; }
 

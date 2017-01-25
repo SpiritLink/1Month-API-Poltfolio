@@ -6,6 +6,7 @@ class mapTool : public gameNode
 private:
 	image* _whiteBackground;
 	image* _sampleTile;
+	image* _miniMapIMG;
 
 	RECT _moveRight;
 	RECT _moveLeft;

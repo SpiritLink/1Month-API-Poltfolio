@@ -43,9 +43,15 @@ public:
 	void render(string strKey, HDC hdc, int destX, int destY,
 		int sourX, int sourY, int width, int height);
 
+	//알파 렌더
+	void alphaRender(string strKey, HDC hdc, BYTE alpha);
+
 	//프레임 렌더
 	void frameRender(string strKey, HDC hdc, int destX, int destY);
 	void frameRender(string strKey, HDC hdc, int destX, int destY, int frameX, int frameY);
+
+	//알파 프레임 렌더
+	void alphaFrameRender(string strKey, HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha);
 
 	void loopRender(string strKey, HDC hdc, const LPRECT drawArea, int offsetX, int offsetY);
 

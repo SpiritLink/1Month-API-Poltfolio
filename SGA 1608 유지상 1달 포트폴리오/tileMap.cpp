@@ -12,6 +12,8 @@ HRESULT tileMap::init(const char* fileName)
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
 	
+	//미니맵 이미지 세팅
+	_miniMapIMG = IMAGEMANAGER->addFrameImage("miniMap", "IMAGE/tile/tile.bmp", SAMPLETILEX * 2, SAMPLETILEY * 2, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	//Rect 셋팅
 	for (int i = 0; i < TILEY; ++i)
 	{
@@ -64,6 +66,14 @@ void tileMap::moveTileY(int value)
 	{
 		_tiles[i].rc.top += value;
 		_tiles[i].rc.bottom += value;
+	}
+}
+
+void tileMap::miniMapRender()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2 )- 150 + ((i % TILEX)* 2), (WINSIZEY / 2) - 150 + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 }
 

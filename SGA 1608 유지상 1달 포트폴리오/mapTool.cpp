@@ -16,6 +16,8 @@ HRESULT mapTool::init()
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	_sampleTile = IMAGEMANAGER->addImage("sampleTile", "IMAGE/tile/tile.bmp", 0, 0, 540, 480, true, RGB(0, 0, 0));
 	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
+	_miniMapIMG = IMAGEMANAGER->addFrameImage("miniMap", "IMAGE/tile/tile.bmp", SAMPLETILEX * 2, SAMPLETILEY * 2, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
+
 	setup();
 
 	_ctrlSelect = CTRL_TERRAINDRAW;
@@ -52,7 +54,8 @@ void mapTool::render()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		//Rectangle(getMemDC(),_tiles[i].rc.left, _tiles[i].rc.top, _tiles[i].rc.right, _tiles[i].rc.bottom);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + (i % TILEX), (WINSIZEY / 2) + (i / TILEX), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + (i % TILEX), (WINSIZEY / 2) + (i / TILEX), _tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 
 	for (int i = 0; i < SAMPLETILEY * SAMPLETILEX; ++i)
