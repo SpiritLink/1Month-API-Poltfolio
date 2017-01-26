@@ -86,12 +86,6 @@ void townScene::cameraMove()
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
 	}
-	//if (angle >= 0 && angle < 0.5f * PI)	if (Background.right  < WINSIZEX) return;
-	//if (angle > 1.5f * PI && angle < 2.0f * PI)	if (Background.right  < WINSIZEX) return;
-	//if (angle > 0.5f * PI && angle < 1.5f * PI)	if (Background.left > 0) return;	
-	//if (angle > 0 && angle < PI) if (Background.top > 0) return;
-	//if (angle > PI && angle < 2.0f * PI)	if (Background.bottom < WINSIZEY) return;
-
 
 	//X좌표 이동
 	if (DATABASE->getSourCamX() > DATABASE->getDestCamX())		//화면 오른쪽으로 움직일때
