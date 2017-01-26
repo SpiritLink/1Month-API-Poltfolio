@@ -45,6 +45,7 @@ public:
 
 	void moveMaptoolX(int tileNum);
 	void moveMapToolY(int tileNum);
+	void defaultMapRect();
 	OBJECT objSelect(int frameX, int frameY);
 	TERRAIN terrainSelect(int frameX, int frameY);
 	void load(const char * fileName);

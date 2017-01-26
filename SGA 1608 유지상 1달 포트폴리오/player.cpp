@@ -28,7 +28,7 @@ void player::update()
 	collisionTileCheck();
 	keyboardInput();
 	playerMove();
-	PlayerRect = RectMakeCenter(x, y, 5, 5);
+	PlayerRect = RectMakeCenter(x, y, 50, 50);
 
 	DATABASE->setSourCamX(x);
 	DATABASE->setSourCamY(y);

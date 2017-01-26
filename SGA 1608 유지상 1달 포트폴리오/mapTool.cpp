@@ -84,15 +84,47 @@ void mapTool::mouseClick()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
 	{
-		if (PtInRect(&_saveTown, _ptMouse)) save("DATA/MAP/Town.map");
-		if (PtInRect(&_saveField1, _ptMouse)) save("DATA/MAP/Field1.map");
-		if (PtInRect(&_saveField2, _ptMouse)) save("DATA/MAP/Field2.map");
-		if (PtInRect(&_saveBoss, _ptMouse)) save("DATA/MAP/Boss.map");
+		if (PtInRect(&_saveTown, _ptMouse))
+		{
+			save("DATA/MAP/Town.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_saveField1, _ptMouse))
+		{
+			save("DATA/MAP/Field1.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_saveField2, _ptMouse))
+		{
+			save("DATA/MAP/Field2.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_saveBoss, _ptMouse))
+		{
+			save("DATA/MAP/Boss.map");
+			defaultMapRect();
+		}
 
-		if (PtInRect(&_loadTown, _ptMouse)) load("DATA/MAP/Town.map");
-		if (PtInRect(&_loadField1, _ptMouse)) load("DATA/MAP/Field1.map");
-		if (PtInRect(&_loadField2, _ptMouse)) load("DATA/MAP/Field2.map");
-		if (PtInRect(&_loadBoss, _ptMouse)) load("DATA/MAP/Boss.map");
+		if (PtInRect(&_loadTown, _ptMouse))
+		{
+			load("DATA/MAP/Town.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_loadField1, _ptMouse))
+		{
+			load("DATA/MAP/Field1.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_loadField2, _ptMouse))
+		{
+			load("DATA/MAP/Field2.map");
+			defaultMapRect();
+		}
+		if (PtInRect(&_loadBoss, _ptMouse))
+		{
+			load("DATA/MAP/Boss.map");
+			defaultMapRect();
+		}
 
 		if (PtInRect(&_moveRight, _ptMouse)) moveMaptoolX(-15);
 		if (PtInRect(&_moveLeft, _ptMouse)) moveMaptoolX(15);
@@ -242,6 +274,21 @@ void mapTool::moveMapToolY(int tileNum)
 	{
 		_tiles[i].rc.top += tileNum * TILESIZE;
 		_tiles[i].rc.bottom += tileNum * TILESIZE;
+	}
+}
+
+void mapTool::defaultMapRect()
+{
+	for (int i = 0; i < TILEY; ++i)
+	{
+		for (int j = 0; j < TILEX; ++j)
+		{
+			SetRect(&_tiles[i * TILEX + j].rc,
+				50 + j*TILESIZE,
+				50 + i*TILESIZE,
+				50 + j*TILESIZE + TILESIZE,
+				50 + i*TILESIZE + TILESIZE);
+		}
 	}
 }
 
