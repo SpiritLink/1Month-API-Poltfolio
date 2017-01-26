@@ -106,10 +106,11 @@ enum KEYBOARD
 
 enum STATUS
 {
-	STATUS_RUN = 1,
-	STATUS_JUMP = 1 << 1,
-	STATUS_LAND = 1 << 2,
-	STATUS_ATTACK = 1 << 3
+	STATUS_STAND = 1,
+	STATUS_RUN = 1 << 1,
+	STATUS_JUMP = 1 << 2,
+	STATUS_LAND = 1 << 3,
+	STATUS_ATTACK = 1 << 4
 };
 
 //프로젝트에서 사용될 define

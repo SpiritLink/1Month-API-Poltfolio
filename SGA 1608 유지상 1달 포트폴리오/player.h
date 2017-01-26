@@ -48,6 +48,8 @@ public:
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
 	void firstCollisionTileCheck();
 	void collisionTileCheck();
+
+	void playerRender();
 	player();
 	virtual ~player();
 };

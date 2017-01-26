@@ -4,7 +4,7 @@
 
 HRESULT player::init()
 {
-	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/달리기왼쪽.bmp", 384, 64, 6, 1, true, RGB(0, 0, 255));
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 384, 7, 6, true, RGB(0, 0, 255));
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
 	gravity = 0;
@@ -46,29 +46,7 @@ void player::update()
 void player::render()
 {
 	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
-	frameCount++;
-	if (frameCount > 6) frameCount = 0;
-	switch (direction)
-	{
-	case RIGHT:
-		break;
-	case UP:
-		break;
-	case LEFT:
-		switch (playerStatus)
-		{
-		case STATUS_RUN:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
-			break;
-		case STATUS_JUMP:
-			break;
-		case STATUS_LAND:
-			break;
-		}
-		break;
-	case DOWN:
-		break;
-	}
+	playerRender();	//플레이어를 그리는 함수
 	testFunction();	//값을 표시하기 위한 테스트용 함수.
 }
 
@@ -175,10 +153,21 @@ void player::playerStatusCheck()
 	}
 	if (gravity == 0)
 	{
-		playerStatus = playerStatus | STATUS_RUN;
-		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;
+		if (!(keyStatus & KEYBOARD_LEFT) && !(keyStatus & KEYBOARD_RIGHT))
+		{
+			playerStatus = playerStatus | STATUS_STAND;
+			if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;
+		}
+		if (keyStatus & KEYBOARD_LEFT || keyStatus & KEYBOARD_RIGHT)
+		{
+			playerStatus = playerStatus | STATUS_RUN;
+			if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;
+		}
+		if (playerStatus & STATUS_JUMP)	playerStatus -= STATUS_JUMP;
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
+
+	
 }
 
 void player::firstCollisionTileCheck()
@@ -203,6 +192,61 @@ void player::collisionTileCheck()
 			break;
 		}
 	}
+}
+
+void player::playerRender()
+{
+	switch (playerStatus)
+	{
+	case STATUS_RUN:
+		++frameCount;
+		if (frameCount > 6) frameCount = 0;
+		break;
+	case STATUS_JUMP:
+		++frameCount;
+		if (frameCount > 1) frameCount = 0;
+		break;
+	case STATUS_LAND:
+		++frameCount;
+		if (frameCount > 1) frameCount = 0;
+		break;
+	}
+	switch (direction)
+	{
+	case RIGHT:
+		switch (playerStatus)
+		{
+		case STATUS_RUN:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
+			break;
+		case STATUS_JUMP:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 2);
+			break;
+		case STATUS_LAND:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 4);
+			break;
+		}
+		break;
+	case UP:
+		break;
+	case LEFT:
+		switch (playerStatus)
+		{
+		case STATUS_RUN:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 1);
+			break;
+		case STATUS_JUMP:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 3);
+			break;
+		case STATUS_LAND:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 5);
+			break;
+		}
+		break;
+	case DOWN:
+		break;
+	}
+
 }
 
 player::player()
