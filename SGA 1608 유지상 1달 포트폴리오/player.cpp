@@ -4,7 +4,7 @@
 
 HRESULT player::init()
 {
-	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 384, 7, 6, true, RGB(0, 0, 255));
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 512, 7, 8, true, RGB(0, 0, 255));
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
 	gravity = 0;
@@ -35,7 +35,7 @@ void player::update()
 
 	//
 
-	PlayerRect = RectMakeCenter(x, y, 50, 50);
+	PlayerRect = RectMakeCenter(x, y, 5, 5);
 
 	DATABASE->setSourCamX(x);							//기준이 될 좌표를 플레이어 X좌표로 설정한다.
 	DATABASE->setSourCamY(y);							//기준이 될 좌표를 플레이어 y좌표로 설정한다.
@@ -45,8 +45,8 @@ void player::update()
 
 void player::render()
 {
-	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
 	playerRender();	//플레이어를 그리는 함수
+	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);	//충돌영역을 보여줌
 	testFunction();	//값을 표시하기 위한 테스트용 함수.
 }
 
@@ -144,12 +144,14 @@ void player::playerStatusCheck()
 		playerStatus = playerStatus | STATUS_JUMP;						//점프 상태로 변경함
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//착륙 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
+		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;
 	}
 	if (gravity < 0)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//착륙 상태로 변경함.
 		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//점프 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
+		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;
 	}
 	if (gravity == 0)
 	{
@@ -196,11 +198,15 @@ void player::collisionTileCheck()
 
 void player::playerRender()
 {
+	//프레임을 증가시키는 부분
 	switch (playerStatus)
 	{
+	case STATUS_STAND:
+		frameCount = 0;
+		break;
 	case STATUS_RUN:
 		++frameCount;
-		if (frameCount > 6) frameCount = 0;
+		if (frameCount > 5) frameCount = 0;
 		break;
 	case STATUS_JUMP:
 		++frameCount;
@@ -211,19 +217,24 @@ void player::playerRender()
 		if (frameCount > 1) frameCount = 0;
 		break;
 	}
+
+	//방향과 상태에 따라서 렌더하는 부분
 	switch (direction)
 	{
 	case RIGHT:
 		switch (playerStatus)
 		{
+		case STATUS_STAND:
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 0);
+			break;
 		case STATUS_RUN:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2);
 			break;
 		case STATUS_JUMP:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 2);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
 			break;
 		case STATUS_LAND:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 4);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4);
 			break;
 		}
 		break;
@@ -232,14 +243,17 @@ void player::playerRender()
 	case LEFT:
 		switch (playerStatus)
 		{
+		case STATUS_STAND:
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1);
+			break;
 		case STATUS_RUN:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 1);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3);
 			break;
 		case STATUS_JUMP:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 3);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
 			break;
 		case STATUS_LAND:
-			playerIMG->frameRender(getMemDC(), x, y, frameCount, 5);
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5);
 			break;
 		}
 		break;
