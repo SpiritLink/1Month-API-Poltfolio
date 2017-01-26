@@ -222,40 +222,26 @@ void player::playerRender()
 	switch (direction)
 	{
 	case RIGHT:
-		switch (playerStatus)
-		{
-		case STATUS_STAND:
+		if(playerStatus & STATUS_STAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 0);
-			break;
-		case STATUS_RUN:
+		if(playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2);
-			break;
-		case STATUS_JUMP:
+		if (playerStatus & STATUS_JUMP)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
-			break;
-		case STATUS_LAND:
+		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4);
-			break;
-		}
 		break;
 	case UP:
 		break;
 	case LEFT:
-		switch (playerStatus)
-		{
-		case STATUS_STAND:
+		if(playerStatus & STATUS_STAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1);
-			break;
-		case STATUS_RUN:
+		if (playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3);
-			break;
-		case STATUS_JUMP:
+		if(playerStatus & STATUS_JUMP)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
-			break;
-		case STATUS_LAND:
+		if (playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5);
-			break;
-		}
 		break;
 	case DOWN:
 		break;
