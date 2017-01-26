@@ -55,7 +55,16 @@ void player::render()
 	case UP:
 		break;
 	case LEFT:
-		playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
+		switch (playerStatus)
+		{
+		case STATUS_RUN:
+			playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
+			break;
+		case STATUS_JUMP:
+			break;
+		case STATUS_LAND:
+			break;
+		}
 		break;
 	case DOWN:
 		break;
@@ -123,6 +132,7 @@ void player::testFunction()
 	char str7[128];
 	char str8[128];
 	char str9[128];
+	char str10[128];
 
 	if (keyStatus & KEYBOARD_LEFT)	sprintf(str1, "←"); else sprintf(str1, " ");
 	if (keyStatus & KEYBOARD_RIGHT) sprintf(str2, "→"); else sprintf(str2, " ");
@@ -133,6 +143,7 @@ void player::testFunction()
 	if (keyStatus & KEYBOARD_C)		sprintf(str7, "C"); else sprintf(str7, " ");
 	sprintf(str8, "%d", currentCollisionTile);
 	sprintf(str9, "%0.3f", gravity);
+	sprintf(str10, "%d", playerStatus);
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
@@ -144,6 +155,7 @@ void player::testFunction()
 	TextOut(getMemDC(), 420, 20, str7, strlen(str7));
 	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
 	TextOut(getMemDC(), 480, 20, str9, strlen(str9));
+	TextOut(getMemDC(), 300, 40, str10, strlen(str10));
 
 }
 
@@ -153,11 +165,19 @@ void player::playerStatusCheck()
 	{
 		playerStatus = playerStatus | STATUS_JUMP;						//점프 상태로 변경함
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//착륙 상태를 제거한다.
+		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
 	}
 	if (gravity < 0)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//착륙 상태로 변경함.
 		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//점프 상태를 제거한다.
+		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
+	}
+	if (gravity == 0)
+	{
+		playerStatus = playerStatus | STATUS_RUN;
+		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;
+		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
 }
 
