@@ -104,6 +104,14 @@ enum KEYBOARD
 	KEYBOARD_C = 1 << 6
 };
 
+enum STATUS
+{
+	STATUS_RUN = 1,
+	STATUS_JUMP = 1 << 1,
+	STATUS_LAND = 1 << 2,
+	STATUS_ATTACK = 1 << 3
+};
+
 //프로젝트에서 사용될 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24
@@ -114,7 +122,7 @@ enum KEYBOARD
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
-#define GRAVITY 0.4
+#define GRAVITY 0.5
 
 //맵툴에서 사용되는 공용 구조체와 enum
 enum CTRL

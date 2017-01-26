@@ -25,7 +25,9 @@ private:
 	int SPEED;
 	float gravity;
 
-	int keyStatus;
+	int keyStatus;		//AND , OR 연산을 통한 검출
+	int playerStatus;	//AND , OR 연산을 통한 검출
+	//->키보드에서 해당 값을 빼내야 할때 만약 keyStatus & LEFT 면 keyStatus - LEFT하도록 처리해야 할것 같다.
 public:
 	virtual HRESULT init();
 	virtual void release();
@@ -36,6 +38,7 @@ public:
 	void playerMove();		//플레이어의 움직임
 
 	void testFunction();		//테스트중인 값을 확인하기 위한 함수
+	void playerStatusCheck();	//플레이어의 상태를 확인하고 상태를 저장하는 함수.
 
 	int getPlayerX() { return x; }
 	int getPlayerY() { return y; }

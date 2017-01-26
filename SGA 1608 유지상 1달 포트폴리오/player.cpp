@@ -13,7 +13,10 @@ HRESULT player::init()
 	DEF = DEFAULT_DEF;
 	SPEED = DEFAULT_SPEED;
 	ATK = STR * 3;
+
 	keyStatus = 0;
+	playerStatus = 0;
+
 	direction = RIGHT;
 	frameCount = 0;
 	return S_OK;
@@ -25,14 +28,18 @@ void player::release()
 
 void player::update()
 {
-	collisionTileCheck();
-	keyboardInput();
-	playerMove();
+	collisionTileCheck();	//몇번 타일에 충돌중인지
+	keyboardInput();		//어떤 키보드 입력을 받았는지
+	playerStatusCheck();	//플레이어의 상태는 어떤지
+	playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
+
+	//
+
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 
-	DATABASE->setSourCamX(x);
-	DATABASE->setSourCamY(y);
-	DATABASE->setCollisionTile(currentCollisionTile);
+	DATABASE->setSourCamX(x);							//기준이 될 좌표를 플레이어 X좌표로 설정한다.
+	DATABASE->setSourCamY(y);							//기준이 될 좌표를 플레이어 y좌표로 설정한다.
+	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
 
 }
 
@@ -53,12 +60,12 @@ void player::render()
 	case DOWN:
 		break;
 	}
-	testFunction();
+	testFunction();	//값을 표시하기 위한 테스트용 함수.
 }
 
 void player::keyboardInput()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))	keyStatus += KEYBOARD_LEFT;
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))	keyStatus = keyStatus | KEYBOARD_LEFT;
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))keyStatus += KEYBOARD_RIGHT;
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))	keyStatus += KEYBOARD_UP;
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))	keyStatus += KEYBOARD_DOWN;
@@ -74,11 +81,13 @@ void player::keyboardInput()
 	if (KEYMANAGER->isOnceKeyUp('X'))		keyStatus -= KEYBOARD_X;
 	if (KEYMANAGER->isOnceKeyUp('C'))		keyStatus -= KEYBOARD_C;
 
+	
+
 	//실험목적, 현재 키를 누르면 방향이 바로 삽입된다.
 	if (keyStatus & KEYBOARD_LEFT) direction = LEFT;
 	if (keyStatus & KEYBOARD_RIGHT) direction = RIGHT;
-	if (keyStatus & KEYBOARD_UP) direction = UP;
-	if (keyStatus & KEYBOARD_DOWN) direction = DOWN;
+	//if (keyStatus & KEYBOARD_UP) direction = UP;
+	//if (keyStatus & KEYBOARD_DOWN) direction = DOWN;
 }
 
 void player::playerMove()
@@ -99,7 +108,7 @@ void player::playerMove()
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 	if (keyStatus & KEYBOARD_X) gravity = -10;
 
-		//타일의 속성을 얻어오자.
+	//타일의 속성을 얻어오자.
 	y += gravity;
 }
 
@@ -136,6 +145,20 @@ void player::testFunction()
 	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
 	TextOut(getMemDC(), 480, 20, str9, strlen(str9));
 
+}
+
+void player::playerStatusCheck()
+{
+	if (gravity > 0)
+	{
+		playerStatus = playerStatus | STATUS_JUMP;						//점프 상태로 변경함
+		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//착륙 상태를 제거한다.
+	}
+	if (gravity < 0)
+	{
+		playerStatus = playerStatus | STATUS_LAND;						//착륙 상태로 변경함.
+		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//점프 상태를 제거한다.
+	}
 }
 
 void player::firstCollisionTileCheck()
