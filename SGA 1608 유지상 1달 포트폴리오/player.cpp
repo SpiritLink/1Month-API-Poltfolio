@@ -4,6 +4,7 @@
 
 HRESULT player::init()
 {
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/달리기왼쪽.bmp", 384, 64, 6, 1, true, RGB(0, 0, 255));
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
 	gravity = 0;
@@ -13,6 +14,8 @@ HRESULT player::init()
 	SPEED = DEFAULT_SPEED;
 	ATK = STR * 3;
 	keyStatus = 0;
+	direction = RIGHT;
+	frameCount = 0;
 	return S_OK;
 }
 
@@ -25,7 +28,7 @@ void player::update()
 	collisionTileCheck();
 	keyboardInput();
 	playerMove();
-	PlayerRect = RectMakeCenter(x, y, 30, 30);
+	PlayerRect = RectMakeCenter(x, y, 5, 5);
 
 	DATABASE->setSourCamX(x);
 	DATABASE->setSourCamY(y);
@@ -36,6 +39,20 @@ void player::update()
 void player::render()
 {
 	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
+	frameCount++;
+	if (frameCount > 6) frameCount = 0;
+	switch (direction)
+	{
+	case RIGHT:
+		break;
+	case UP:
+		break;
+	case LEFT:
+		playerIMG->frameRender(getMemDC(), x, y, frameCount, 0);
+		break;
+	case DOWN:
+		break;
+	}
 	testFunction();
 }
 
@@ -57,6 +74,11 @@ void player::keyboardInput()
 	if (KEYMANAGER->isOnceKeyUp('X'))		keyStatus -= KEYBOARD_X;
 	if (KEYMANAGER->isOnceKeyUp('C'))		keyStatus -= KEYBOARD_C;
 
+	//실험목적, 현재 키를 누르면 방향이 바로 삽입된다.
+	if (keyStatus & KEYBOARD_LEFT) direction = LEFT;
+	if (keyStatus & KEYBOARD_RIGHT) direction = RIGHT;
+	if (keyStatus & KEYBOARD_UP) direction = UP;
+	if (keyStatus & KEYBOARD_DOWN) direction = DOWN;
 }
 
 void player::playerMove()

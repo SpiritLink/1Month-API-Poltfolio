@@ -131,6 +131,11 @@ enum TERRAIN
 {
 	TR_CEMENT, TR_EARTH, TR_GRASS, TR_WATER, TR_NONE
 };
+
+enum DIRECTION
+{
+	RIGHT, UP, LEFT, DOWN, NONE
+};
 struct tagTile
 {
 	TERRAIN terrain;

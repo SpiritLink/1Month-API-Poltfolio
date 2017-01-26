@@ -10,13 +10,15 @@ class player : public gameNode
 {
 private:
 	tileMap* _tileMap;
+	image* playerIMG;
 
 	float x;
 	float y;
 	RECT PlayerRect;
 	
 	int currentCollisionTile;
-
+	int frameCount;	// 사용자의 프레임 
+	DIRECTION direction;
 	int ATK;
 	int STR;
 	int DEF;

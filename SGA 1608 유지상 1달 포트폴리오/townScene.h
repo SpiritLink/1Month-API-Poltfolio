@@ -9,7 +9,6 @@ class townScene : public gameNode
 private:
 	player* _player;
 	tileMap* _tileMap;
-
 	RECT Background;
 	image* _backIMG;
 
@@ -21,6 +20,6 @@ public:
 
 	void cameraMove();
 	townScene();
-	~townScene();
+	virtual ~townScene();
 };
 

@@ -54,8 +54,8 @@ void mapTool::render()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + (i % TILEX), (WINSIZEY / 2) + (i / TILEX), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + (i % TILEX), (WINSIZEY / 2) + (i / TILEX), _tiles[i].objFrameX, _tiles[i].objFrameY);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + ((i / TILEX) * 2), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 
 	for (int i = 0; i < SAMPLETILEY * SAMPLETILEX; ++i)
