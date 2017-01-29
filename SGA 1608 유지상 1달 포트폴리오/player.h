@@ -3,8 +3,6 @@
 #include "gameNode.h"
 #include "tileMap.h"
 
-#define DEFAULT_STR 1
-#define DEFAULT_DEF 1
 #define DEFAULT_SPEED 5
 class player : public gameNode
 {
@@ -15,13 +13,13 @@ private:
 	float x;
 	float y;
 	RECT PlayerRect;
-	
+	DIRECTION direction;
+
 	int currentCollisionTile;
 	int frameCount;	// 사용자의 프레임 
-	DIRECTION direction;
+	int HP;
+	int MP;
 	int ATK;
-	int STR;
-	int DEF;
 	int SPEED;
 	float gravity;
 

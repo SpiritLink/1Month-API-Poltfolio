@@ -9,14 +9,14 @@ HRESULT player::init()
 	y = WINSIZEY / 2;
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
-	STR = DEFAULT_STR;
-	DEF = DEFAULT_DEF;
 	SPEED = DEFAULT_SPEED;
-	ATK = STR * 3;
+	ATK = 1;
 
 	keyStatus = 0;
 	playerStatus = 0;
 
+	HP = 4;
+	MP = 4;
 	direction = RIGHT;
 	frameCount = 0;
 	return S_OK;
@@ -39,6 +39,8 @@ void player::update()
 
 	DATABASE->setSourCamX(x);							//기준이 될 좌표를 플레이어 X좌표로 설정한다.
 	DATABASE->setSourCamY(y);							//기준이 될 좌표를 플레이어 y좌표로 설정한다.
+	DATABASE->setHP(HP);
+	DATABASE->setMP(MP);
 	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
 
 }
@@ -186,7 +188,8 @@ void player::firstCollisionTileCheck()
 
 void player::collisionTileCheck()
 {
-	for (int i = 0; i < TILEX * TILEY; ++i)
+	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
+	for (int i = currentCollisionTile - TILEX * 2; i < currentCollisionTile + TILEX * 2; ++i)
 	{
 		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
 		{
