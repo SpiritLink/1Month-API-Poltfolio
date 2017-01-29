@@ -4,7 +4,7 @@
 
 HRESULT player::init()
 {
-	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 512, 7, 8, true, RGB(0, 0, 255));
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 1024, 7, 16, true, RGB(0, 0, 255));
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
 	gravity = 0;
@@ -15,7 +15,7 @@ HRESULT player::init()
 	keyStatus = 0;
 	playerStatus = 0;
 
-	HP = 4;
+	HP = 5;
 	MP = 4;
 	direction = RIGHT;
 	frameCount = 0;
@@ -83,16 +83,43 @@ void player::playerMove()
 {
 	//중력처리
 	gravity += GRAVITY;
+
 	//플레이어와 타일의 충돌을 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
 	{
 		gravity = 0;
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top;
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
+	}
+	//중력 예외처리 (땅위에 서있을때)
+	if (gravity <= 1)
+	{
+		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
+			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity)))
+		{
+			gravity = 0;
+		}
 	}
 
 	//키보드 입력을 처리
-	if (keyStatus & KEYBOARD_LEFT) x -= SPEED;
-	if (keyStatus & KEYBOARD_RIGHT) x += SPEED;
+	//타일과 부딪힌다면 움직이지 못하도록 처리.
+	if (keyStatus & KEYBOARD_LEFT)
+	{
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile-1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		{
+			if(_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
+		}	
+		else																						//이동해도 옆타일에 안닿는다면
+			x -= SPEED;																				//이동한다.
+	}
+	if (keyStatus & KEYBOARD_RIGHT)
+	{
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		{
+			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
+		}
+		else																						//이동해도 옆타일에 안닿는다면
+			x += SPEED;																				//이동한다.
+	}
 	if (keyStatus & KEYBOARD_UP) y -= SPEED;
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 	if (keyStatus & KEYBOARD_X) gravity = -10;
@@ -171,6 +198,11 @@ void player::playerStatusCheck()
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
 
+	if (keyStatus & KEYBOARD_Z && !(playerStatus & STATUS_ATTACK))
+	{
+		playerStatus = playerStatus | STATUS_ATTACK;
+	}
+
 	
 }
 
@@ -189,13 +221,22 @@ void player::firstCollisionTileCheck()
 void player::collisionTileCheck()
 {
 	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
-	for (int i = currentCollisionTile - TILEX * 2; i < currentCollisionTile + TILEX * 2; ++i)
+	for (int i = currentCollisionTile - 2; i < currentCollisionTile + 2; ++i)
 	{
-		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		for (int j = -2; j < 3; ++j)
 		{
-			currentCollisionTile = i;
-			break;
+			//캐릭터 주변 25개의 타일의 충돌을 계산한다. 이때 범위를 벗어나지 않도록 영역을 조절해 줘야 한다.
+			if (PtInRect(&_tileMap->getTiles()[i + j * TILEX].rc, PointMake(x, y)))
+			{
+				currentCollisionTile = i + j * TILEX;
+				break;
+			}
 		}
+		//if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		//{
+		//	currentCollisionTile = i;
+		//	break;
+		//}
 	}
 }
 

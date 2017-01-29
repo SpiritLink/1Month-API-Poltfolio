@@ -3,12 +3,14 @@
 #include "gameNode.h"
 #include "player.h"
 #include "tileMap.h"
+#include "playerUI.h"
 class testScene : public gameNode
 {
 private:
 	tileMap* _tileMap;
 	image* _image;
 	player* _player;
+	playerUI* _playerUI;
 
 	float cameraX;
 	float cameraY;

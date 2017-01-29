@@ -18,6 +18,9 @@ HRESULT testScene::init()
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->firstCollisionTileCheck();
 
+	_playerUI = new playerUI;
+	_playerUI->init();
+
 	cameraX = 0;
 	cameraY = 0;
 
@@ -33,12 +36,15 @@ void testScene::release()
 
 	_tileMap->release();
 	SAFE_DELETE(_tileMap);
+
+	_playerUI->release();
+	SAFE_DELETE(_playerUI);
 }
 
 void testScene::update()
 {
 	_player->update();											//플레이어에서 보고자 하는 대상의 위치를 먼저 전송합니다.
-
+	_playerUI->update();
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
@@ -78,6 +84,7 @@ void testScene::render()
 	_player->render();
 	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
+	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }
 
