@@ -70,13 +70,9 @@ void player::keyboardInput()
 	if (KEYMANAGER->isOnceKeyUp('X'))		keyStatus -= KEYBOARD_X;
 	if (KEYMANAGER->isOnceKeyUp('C'))		keyStatus -= KEYBOARD_C;
 
-	
-
 	//실험목적, 현재 키를 누르면 방향이 바로 삽입된다.
 	if (keyStatus & KEYBOARD_LEFT) direction = LEFT;
 	if (keyStatus & KEYBOARD_RIGHT) direction = RIGHT;
-	//if (keyStatus & KEYBOARD_UP) direction = UP;
-	//if (keyStatus & KEYBOARD_DOWN) direction = DOWN;
 }
 
 void player::playerMove()
@@ -87,17 +83,16 @@ void player::playerMove()
 	//플레이어와 타일의 충돌을 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
 	{
+		if (gravity > 0) y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;		//중력이 밑으로 향할때
+		if (gravity < 0) y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;	//중력이 위로 향할때
 		gravity = 0;
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
 	}
+
 	//중력 예외처리 (땅위에 서있을때)
 	if (gravity <= 1)
 	{
 		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
-			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity)))
-		{
-			gravity = 0;
-		}
+			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity))) gravity = 0;
 	}
 
 	//키보드 입력을 처리
@@ -122,7 +117,10 @@ void player::playerMove()
 	}
 	if (keyStatus & KEYBOARD_UP) y -= SPEED;
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
-	if (keyStatus & KEYBOARD_X) gravity = -10;
+	if (keyStatus & KEYBOARD_X)
+	{
+		gravity = -10;								//중력을 바꿔준다.
+	}
 
 	//타일의 속성을 얻어오자.
 	y += gravity;
