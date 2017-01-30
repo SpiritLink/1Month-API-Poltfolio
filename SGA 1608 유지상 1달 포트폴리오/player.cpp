@@ -268,24 +268,20 @@ void player::playerRender()
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 0);
 		if(playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2);
-		if (playerStatus & STATUS_JUMP)
+		if(playerStatus & STATUS_JUMP)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4);
 		break;
-	case UP:
-		break;
 	case LEFT:
 		if(playerStatus & STATUS_STAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1);
-		if (playerStatus & STATUS_RUN)
+		if(playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3);
 		if(playerStatus & STATUS_JUMP)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
-		if (playerStatus & STATUS_LAND)
+		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5);
-		break;
-	case DOWN:
 		break;
 	}
 
