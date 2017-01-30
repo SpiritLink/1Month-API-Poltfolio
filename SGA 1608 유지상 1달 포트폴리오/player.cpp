@@ -124,13 +124,24 @@ void player::playerMove()
 	{
 		if (!(Action & ACTION_JUMP))
 		{
-			Action = ACTION_JUMP;
+			Action = Action | ACTION_JUMP;
 			gravity = -10;								//중력을 바꿔준다.
 		}
 	}
 
-	//타일의 속성을 얻어오자.
 	y += gravity;
+}
+
+void player::playerAttack()
+{
+	if (keyStatus & KEYBOARD_Z)			//공격 키를 누른 상태일때
+	{
+		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
+		{
+			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로
+			playerStatus = playerStatus | STATUS_ATTACK;	//현재 상태를 공격상태로
+		}
+	}
 }
 
 void player::testFunction()
@@ -145,6 +156,16 @@ void player::testFunction()
 	char str8[128];
 	char str9[128];
 	char str10[128];
+	char str11[128];
+	char str12[128];
+	char str13[128];
+	char str14[128];
+	char str15[128];
+	char str16[128];
+	char str17[128];
+	char str18[128];
+	char str19[128];
+	char str20[128];
 
 	if (keyStatus & KEYBOARD_LEFT)	sprintf(str1, "←"); else sprintf(str1, " ");
 	if (keyStatus & KEYBOARD_RIGHT) sprintf(str2, "→"); else sprintf(str2, " ");
@@ -155,7 +176,21 @@ void player::testFunction()
 	if (keyStatus & KEYBOARD_C)		sprintf(str7, "C"); else sprintf(str7, " ");
 	sprintf(str8, "%d", currentCollisionTile);
 	sprintf(str9, "%0.3f", gravity);
-	sprintf(str10, "%d", playerStatus);
+	if (playerStatus & STATUS_STAND)		sprintf(str10, "STATUS_STAND");
+	else if(!(playerStatus & STATUS_STAND)) sprintf(str10, " ");
+	if (playerStatus & STATUS_RUN)			sprintf(str11, "STATUS_RUN");
+	else if(!(playerStatus & STATUS_RUN))	sprintf(str11, " ");
+	if (playerStatus & STATUS_JUMP)			sprintf(str12, "STATUS_JUMP");
+	else if(!(playerStatus & STATUS_JUMP))	sprintf(str12, " ");
+	if (playerStatus & STATUS_LAND)			sprintf(str13, "STATUS_LAND");
+	else if(!(playerStatus & STATUS_LAND))	sprintf(str13, " ");
+	if (playerStatus & STATUS_ATTACK)		sprintf(str14, "STATUS_ATTACK");
+	else if(!(playerStatus & STATUS_ATTACK))sprintf(str14, " ");
+	if (Action & ACTION_NONE)				sprintf(str15, "ACTION_NONE");
+	else if(!(Action & ACTION_NONE))		sprintf(str15, " ");
+	if (Action & ACTION_JUMP)				sprintf(str16, "ACTION_JUMP"); 
+	else if(!(Action & ACTION_JUMP))		sprintf(str16, " ");
+	if (Action & ACTION_ATTACK) sprintf(str17, "ACTION_ATTACK"); else sprintf(str17, "NULL");
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
@@ -167,7 +202,14 @@ void player::testFunction()
 	TextOut(getMemDC(), 420, 20, str7, strlen(str7));
 	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
 	TextOut(getMemDC(), 480, 20, str9, strlen(str9));
-	TextOut(getMemDC(), 300, 40, str10, strlen(str10));
+	TextOut(getMemDC(), 100, 300, str10, strlen(str10));
+	TextOut(getMemDC(), 100, 330, str11, strlen(str11));
+	TextOut(getMemDC(), 100, 360, str12, strlen(str12));
+	TextOut(getMemDC(), 100, 390, str13, strlen(str13));
+	TextOut(getMemDC(), 100, 420, str14, strlen(str14));
+	TextOut(getMemDC(), 100, 450, str15, strlen(str15));
+	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
+	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
 
 }
 
@@ -175,15 +217,15 @@ void player::playerStatusCheck()
 {
 	if (gravity > 0)
 	{
-		playerStatus = playerStatus | STATUS_JUMP;						//점프 상태로 변경함
-		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//착륙 상태를 제거한다.
+		playerStatus = playerStatus | STATUS_LAND;						//점프 상태로 변경함
+		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//착륙 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
 		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;	//서있는 상태를 제거한다.
 	}
 	if (gravity < 0)
 	{
-		playerStatus = playerStatus | STATUS_LAND;						//착륙 상태로 변경함.
-		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//점프 상태를 제거한다.
+		playerStatus = playerStatus | STATUS_JUMP;						//착륙 상태로 변경함.
+		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//점프 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
 		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;	//서있는 상태를 제거한다.
 	}
@@ -203,12 +245,8 @@ void player::playerStatusCheck()
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
 
-	if (keyStatus & KEYBOARD_Z)
-	{
-		if(!(playerStatus & STATUS_ATTACK)) playerStatus = playerStatus | STATUS_ATTACK;
-	}
+	if (keyStatus & KEYBOARD_Z) playerAttack();
 
-	
 }
 
 void player::firstCollisionTileCheck()
@@ -255,10 +293,11 @@ void player::playerRender()
 	}
 
 	//최대 프레임이 넘어가면 초기화 하는 부분
-	if (playerStatus & STATUS_STAND)	frameCount = 0;
+	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK))	frameCount = 0;
 	if (playerStatus & STATUS_RUN)		if (frameCount > 5) frameCount = 0;
 	if (playerStatus & STATUS_JUMP) 	if (frameCount > 1) frameCount = 0;
 	if (playerStatus & STATUS_LAND)		if (frameCount > 1) frameCount = 0;
+	if (playerStatus & STATUS_ATTACK)	if (frameCount > 2) frameCount = 0;
 
 	//방향과 상태에 따라서 렌더하는 부분
 	switch (direction)
@@ -269,9 +308,11 @@ void player::playerRender()
 		if(playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2);
 		if(playerStatus & STATUS_JUMP)
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
-		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4);
+		if(playerStatus & STATUS_LAND)
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
+		if(playerStatus & STATUS_ATTACK)
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8);
 		break;
 	case LEFT:
 		if(playerStatus & STATUS_STAND)
@@ -279,9 +320,11 @@ void player::playerRender()
 		if(playerStatus & STATUS_RUN)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3);
 		if(playerStatus & STATUS_JUMP)
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
-		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5);
+		if(playerStatus & STATUS_LAND)
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
+		if(playerStatus & STATUS_ATTACK)
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12);
 		break;
 	}
 
