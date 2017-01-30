@@ -113,6 +113,13 @@ enum STATUS
 	STATUS_ATTACK = 1 << 4
 };
 
+enum ACTION
+{
+	ACTION_NONE = 1,
+	ACTION_JUMP = 1 << 1,
+	ACTION_ATTACK = 1 << 2
+};
+
 //프로젝트에서 사용될 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24

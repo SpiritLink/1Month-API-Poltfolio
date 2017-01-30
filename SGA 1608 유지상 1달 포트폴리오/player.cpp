@@ -11,6 +11,7 @@ HRESULT player::init()
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	SPEED = DEFAULT_SPEED;
 	ATK = 1;
+	currentTime = TIMEMANAGER->getWorldTime();
 
 	keyStatus = 0;
 	playerStatus = 0;
@@ -18,6 +19,7 @@ HRESULT player::init()
 	HP = 5;
 	MP = 4;
 	direction = RIGHT;
+	Action = ACTION_NONE;
 	frameCount = 0;
 	return S_OK;
 }
@@ -85,6 +87,7 @@ void player::playerMove()
 	{
 		if (gravity > 0) y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;		//중력이 밑으로 향할때
 		if (gravity < 0) y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;	//중력이 위로 향할때
+		if (Action & ACTION_JUMP) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
 		gravity = 0;
 	}
 
@@ -119,7 +122,11 @@ void player::playerMove()
 	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 	if (keyStatus & KEYBOARD_X)
 	{
-		gravity = -10;								//중력을 바꿔준다.
+		if (!(Action & ACTION_JUMP))
+		{
+			Action = ACTION_JUMP;
+			gravity = -10;								//중력을 바꿔준다.
+		}
 	}
 
 	//타일의 속성을 얻어오자.
@@ -171,14 +178,14 @@ void player::playerStatusCheck()
 		playerStatus = playerStatus | STATUS_JUMP;						//점프 상태로 변경함
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//착륙 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
-		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;
+		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;	//서있는 상태를 제거한다.
 	}
 	if (gravity < 0)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//착륙 상태로 변경함.
 		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//점프 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
-		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;
+		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;	//서있는 상태를 제거한다.
 	}
 	if (gravity == 0)
 	{
@@ -196,9 +203,9 @@ void player::playerStatusCheck()
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
 
-	if (keyStatus & KEYBOARD_Z && !(playerStatus & STATUS_ATTACK))
+	if (keyStatus & KEYBOARD_Z)
 	{
-		playerStatus = playerStatus | STATUS_ATTACK;
+		if(!(playerStatus & STATUS_ATTACK)) playerStatus = playerStatus | STATUS_ATTACK;
 	}
 
 	
@@ -241,24 +248,17 @@ void player::collisionTileCheck()
 void player::playerRender()
 {
 	//프레임을 증가시키는 부분
-	switch (playerStatus)
+	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
-	case STATUS_STAND:
-		frameCount = 0;
-		break;
-	case STATUS_RUN:
+		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		if (frameCount > 5) frameCount = 0;
-		break;
-	case STATUS_JUMP:
-		++frameCount;
-		if (frameCount > 1) frameCount = 0;
-		break;
-	case STATUS_LAND:
-		++frameCount;
-		if (frameCount > 1) frameCount = 0;
-		break;
 	}
+
+	//최대 프레임이 넘어가면 초기화 하는 부분
+	if (playerStatus & STATUS_STAND)	frameCount = 0;
+	if (playerStatus & STATUS_RUN)		if (frameCount > 5) frameCount = 0;
+	if (playerStatus & STATUS_JUMP) 	if (frameCount > 1) frameCount = 0;
+	if (playerStatus & STATUS_LAND)		if (frameCount > 1) frameCount = 0;
 
 	//방향과 상태에 따라서 렌더하는 부분
 	switch (direction)

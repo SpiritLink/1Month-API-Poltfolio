@@ -12,8 +12,9 @@ private:
 
 	float x;
 	float y;
+	float currentTime;			//현재 시간을 저장하는 변수
 	RECT PlayerRect;
-	DIRECTION direction;
+	DIRECTION direction;		//방향을 확인하는 변수
 
 	int currentCollisionTile;
 	int frameCount;	// 사용자의 프레임 
@@ -23,8 +24,10 @@ private:
 	int SPEED;
 	float gravity;
 
-	int keyStatus;		//AND , OR 연산을 통한 검출
-	int playerStatus;	//AND , OR 연산을 통한 검출
+	int keyStatus;		//AND , OR 연산을 통한 검출 현재 키입력 확인하는 변수
+	int playerStatus;	//AND , OR 연산을 통한 검출 현재 상태를 확인하는 변수
+	int Action;			//AND , OR 연산을 통한 검출 현재 행동을 확인하는 변수
+
 	//->키보드에서 해당 값을 빼내야 할때 만약 keyStatus & LEFT 면 keyStatus - LEFT하도록 처리해야 할것 같다.
 public:
 	virtual HRESULT init();
