@@ -190,7 +190,8 @@ void player::testFunction()
 	else if(!(Action & ACTION_NONE))		sprintf(str15, " ");
 	if (Action & ACTION_JUMP)				sprintf(str16, "ACTION_JUMP"); 
 	else if(!(Action & ACTION_JUMP))		sprintf(str16, " ");
-	if (Action & ACTION_ATTACK) sprintf(str17, "ACTION_ATTACK"); else sprintf(str17, "NULL");
+	if (Action & ACTION_ATTACK)				sprintf(str17, "ACTION_ATTACK");
+	else if(!(Action & ACTION_ATTACK))		sprintf(str17, " ");
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
@@ -275,11 +276,6 @@ void player::collisionTileCheck()
 				break;
 			}
 		}
-		//if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
-		//{
-		//	currentCollisionTile = i;
-		//	break;
-		//}
 	}
 }
 
@@ -294,10 +290,18 @@ void player::playerRender()
 
 	//최대 프레임이 넘어가면 초기화 하는 부분
 	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK))	frameCount = 0;
-	if (playerStatus & STATUS_RUN)		if (frameCount > 5) frameCount = 0;
-	if (playerStatus & STATUS_JUMP) 	if (frameCount > 1) frameCount = 0;
-	if (playerStatus & STATUS_LAND)		if (frameCount > 1) frameCount = 0;
-	if (playerStatus & STATUS_ATTACK)	if (frameCount > 2) frameCount = 0;
+	//if (playerStatus & STATUS_RUN)		if (frameCount > 5) frameCount = 0;
+	//if (playerStatus & STATUS_JUMP) 	if (frameCount > 1) frameCount = 0;
+	//if (playerStatus & STATUS_LAND)		if (frameCount > 1) frameCount = 0;
+
+	//점프공격 , 땅에서 공격, 움직이면서 공격을 다 처리해 줘야 한다.
+	if (playerStatus & STATUS_ATTACK)	
+		if (frameCount > 2)
+		{
+			if (Action & ACTION_ATTACK) Action -= ACTION_ATTACK;
+			if (playerStatus & STATUS_ATTACK) playerStatus -= STATUS_ATTACK;
+			frameCount = 0;
+		}
 
 	//방향과 상태에 따라서 렌더하는 부분
 	switch (direction)
