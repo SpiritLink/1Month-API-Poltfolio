@@ -138,6 +138,7 @@ void player::playerAttack()
 	{
 		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
+			frameCount = 0;
 			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로
 			playerStatus = playerStatus | STATUS_ATTACK;	//현재 상태를 공격상태로
 		}
@@ -290,9 +291,9 @@ void player::playerRender()
 
 	//최대 프레임이 넘어가면 초기화 하는 부분
 	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK))	frameCount = 0;
-	//if (playerStatus & STATUS_RUN)		if (frameCount > 5) frameCount = 0;
-	//if (playerStatus & STATUS_JUMP) 	if (frameCount > 1) frameCount = 0;
-	//if (playerStatus & STATUS_LAND)		if (frameCount > 1) frameCount = 0;
+	if (playerStatus & STATUS_RUN && !(playerStatus & STATUS_ATTACK))	if (frameCount > 5) frameCount = 0;	//달리면서 공격을 안할때
+	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
+	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
 
 	//점프공격 , 땅에서 공격, 움직이면서 공격을 다 처리해 줘야 한다.
 	if (playerStatus & STATUS_ATTACK)	

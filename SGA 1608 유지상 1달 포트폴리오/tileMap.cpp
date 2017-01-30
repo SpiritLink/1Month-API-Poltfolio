@@ -28,7 +28,6 @@ HRESULT tileMap::init(const char* fileName)
 		}
 	}
 
-
 	return S_OK;
 }
 
