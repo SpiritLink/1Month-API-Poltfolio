@@ -30,6 +30,17 @@ HRESULT soundManager::init()
 	ZeroMemory(_sound, sizeof(Sound*) * (TOTAL_SOUND_CHANNEL));
 	ZeroMemory(_channel, sizeof(Channel*) * (TOTAL_SOUND_CHANNEL));
 
+	_channel[0]->setVolume(0.0f);
+	_channel[1]->setVolume(0.1f);
+	_channel[2]->setVolume(0.2f);
+	_channel[3]->setVolume(0.3f);
+	_channel[4]->setVolume(0.4f);
+	_channel[5]->setVolume(0.5f);
+	_channel[6]->setVolume(0.6f);
+	_channel[7]->setVolume(0.7f);
+	_channel[8]->setVolume(0.8f);
+	_channel[9]->setVolume(0.9f);
+	_channel[10]->setVolume(1.0f);
 	return S_OK;
 }
 

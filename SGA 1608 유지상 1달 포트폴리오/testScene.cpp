@@ -84,7 +84,7 @@ void testScene::render()
 	_player->render();
 	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
-	_playerUI->render();
+	//_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }
 

@@ -78,6 +78,16 @@ void mapTool::render()
 	Rectangle(getMemDC(), _loadBoss.left, _loadBoss.top, _loadBoss.right, _loadBoss.bottom);
 
 	lineRender();
+	if(KEYMANAGER->isToggleKey('R'))
+	{
+		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; ++i)
+		{
+			Rectangle(getMemDC(), _sampleTiles[i].rc.left, _sampleTiles[i].rc.top, _sampleTiles[i].rc.right, _sampleTiles[i].rc.bottom);
+		}
+	}
+	char str1[128];
+	sprintf(str1, "currentX %d, currentY %d", _currentTile.x, _currentTile.y);
+	TextOut(getMemDC(), 500, 100, str1, strlen(str1));
 }
 
 void mapTool::mouseClick()
@@ -87,22 +97,22 @@ void mapTool::mouseClick()
 		if (PtInRect(&_saveTown, _ptMouse))
 		{
 			save("DATA/MAP/Town.map");
-			defaultMapRect();
+			//defaultMapRect();
 		}
 		if (PtInRect(&_saveField1, _ptMouse))
 		{
 			save("DATA/MAP/Field1.map");
-			defaultMapRect();
+			//defaultMapRect();
 		}
 		if (PtInRect(&_saveField2, _ptMouse))
 		{
 			save("DATA/MAP/Field2.map");
-			defaultMapRect();
+			//defaultMapRect();
 		}
 		if (PtInRect(&_saveBoss, _ptMouse))
 		{
 			save("DATA/MAP/Boss.map");
-			defaultMapRect();
+			//defaultMapRect();
 		}
 
 		if (PtInRect(&_loadTown, _ptMouse))
@@ -257,6 +267,8 @@ void mapTool::lineRender()
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
 	MoveToEx(getMemDC(), 50, TILESIZE * 15 + 50, NULL);
 	LineTo(getMemDC(), 15 * TILESIZE + 50, 15 * TILESIZE + 50);
+
+
 }
 
 void mapTool::moveMaptoolX(int tileNum)
@@ -294,10 +306,8 @@ void mapTool::defaultMapRect()
 
 OBJECT mapTool::objSelect(int frameX, int frameY)
 {
-	if (frameX == 0 && frameY == 1) return OBJ_GROUND;
-	if (frameX == 1 && frameY == 8) return OBJ_GROUND;
 	if (frameX == 0 && frameY == 2) return OBJ_BLOCK2;
-	return OBJ_NONE;
+	return OBJ_GROUND;
 }
 
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)
