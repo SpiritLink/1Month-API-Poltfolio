@@ -21,6 +21,8 @@ HRESULT player::init()
 	direction = RIGHT;
 	Action = ACTION_NONE;
 	frameCount = 0;
+
+	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
 	return S_OK;
 }
 
@@ -138,6 +140,7 @@ void player::playerAttack()
 	{
 		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
+			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
 			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로
 			playerStatus = playerStatus | STATUS_ATTACK;	//현재 상태를 공격상태로
@@ -323,7 +326,15 @@ void player::playerRender()
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
 		if(playerStatus & STATUS_ATTACK)
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8);
+			switch (attackType)
+			{
+			case true:
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8);
+				break;
+			case false:
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9);
+				break;
+			}
 		break;
 	case LEFT:
 		if(playerStatus & STATUS_STAND)
@@ -335,7 +346,15 @@ void player::playerRender()
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
 		if(playerStatus & STATUS_ATTACK)
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12);
+			switch (attackType)
+			{
+			case true:
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12);
+				break;
+			case false:
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13);
+				break;
+			}
 		break;
 	}
 
