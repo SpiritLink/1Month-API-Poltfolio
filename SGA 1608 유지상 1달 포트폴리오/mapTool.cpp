@@ -136,10 +136,10 @@ void mapTool::mouseClick()
 			defaultMapRect();
 		}
 
-		if (PtInRect(&_moveRight, _ptMouse)) moveMaptoolX(-15);
-		if (PtInRect(&_moveLeft, _ptMouse)) moveMaptoolX(15);
-		if (PtInRect(&_moveUp, _ptMouse)) moveMapToolY(-15);
-		if (PtInRect(&_moveDown, _ptMouse)) moveMapToolY(15);
+		if (PtInRect(&_moveRight, _ptMouse)) moveMaptoolX(-10);
+		if (PtInRect(&_moveLeft, _ptMouse)) moveMaptoolX(10);
+		if (PtInRect(&_moveUp, _ptMouse)) moveMapToolY(10);
+		if (PtInRect(&_moveDown, _ptMouse)) moveMapToolY(-10);
 
 		for (int i = 0; i < SAMPLETILEX * SAMPLETILEY; ++i)
 		{
