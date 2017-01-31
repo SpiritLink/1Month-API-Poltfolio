@@ -251,6 +251,12 @@ void player::playerStatusCheck()
 
 }
 
+void player::setPlayerTilePosition(int tileNum)
+{
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+}
+
 void player::firstCollisionTileCheck()
 {
 	for (int i = 0; i < TILEX * TILEY; ++i)

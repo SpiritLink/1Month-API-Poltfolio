@@ -16,6 +16,7 @@ HRESULT testScene::init()
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
+	_player->setPlayerTilePosition(20557);
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -84,7 +85,7 @@ void testScene::render()
 	_player->render();
 	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
-	//_playerUI->render();
+	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }
 

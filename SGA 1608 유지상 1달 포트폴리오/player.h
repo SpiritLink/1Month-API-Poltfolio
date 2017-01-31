@@ -48,6 +48,7 @@ public:
 	void addPlayerY(int value) { y += value; }
 
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
+	void setPlayerTilePosition(int timeNum);	//플레이어를 타일 번호에 생성함.
 	void firstCollisionTileCheck();
 	void collisionTileCheck();
 
