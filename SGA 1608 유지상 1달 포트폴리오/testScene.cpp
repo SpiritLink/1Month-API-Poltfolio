@@ -13,9 +13,13 @@ HRESULT testScene::init()
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Town.map");
 
+	_attackManager = new attackManager;
+	_attackManager->init();
+
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
+	_player->setAttackManagerMemoryAddress(_attackManager);
 	_player->setPlayerTilePosition(20557);
 	_player->firstCollisionTileCheck();
 
@@ -40,12 +44,16 @@ void testScene::release()
 
 	_playerUI->release();
 	SAFE_DELETE(_playerUI);
+
+	_attackManager->release();
+	SAFE_DELETE(_attackManager);
 }
 
 void testScene::update()
 {
 	_player->update();											//플레이어에서 보고자 하는 대상의 위치를 먼저 전송합니다.
 	_playerUI->update();
+	_attackManager->update();
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
@@ -84,6 +92,7 @@ void testScene::render()
 	_player->render();
 	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
+	_attackManager->render();
 	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }

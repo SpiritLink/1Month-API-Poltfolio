@@ -141,6 +141,7 @@ void player::playerAttack()
 		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
 			SOUNDMANAGER->playSound("hit", PointMake(x,y));
+			_attackManager->playerAttack(x, y);
 			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
 			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로

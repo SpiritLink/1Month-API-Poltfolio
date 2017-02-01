@@ -4,10 +4,12 @@
 #include "player.h"
 #include "tileMap.h"
 #include "playerUI.h"
+#include "attackManager.h"
 class testScene : public gameNode
 {
 private:
 	tileMap* _tileMap;
+	attackManager* _attackManager;
 	image* _image;
 	player* _player;
 	playerUI* _playerUI;

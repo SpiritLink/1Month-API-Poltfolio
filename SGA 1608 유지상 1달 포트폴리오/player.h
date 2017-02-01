@@ -2,20 +2,23 @@
 
 #include "gameNode.h"
 #include "tileMap.h"
+#include "attackManager.h"
+
 
 #define DEFAULT_SPEED 5
 class player : public gameNode
 {
 private:
-	tileMap* _tileMap;
+	tileMap* _tileMap;				//맵과의 충돌을 처리하기 위해서 필요
+	attackManager* _attackManager;	//공격을 생성하기 위해서
 	image* playerIMG;
 
 	float x;
 	float y;
-	float currentTime;			//현재 시간을 저장하는 변수
+	float currentTime;				//현재 시간을 저장하는 변수
 	RECT PlayerRect;
-	DIRECTION direction;		//방향을 확인하는 변수
-	bool attackType;			//공격의 종류를 바꿔주는 변수
+	DIRECTION direction;			//방향을 확인하는 변수
+	bool attackType;				//공격의 종류를 바꿔주는 변수
 
 	int currentCollisionTile;
 	int frameCount;	// 사용자의 프레임 
@@ -49,6 +52,7 @@ public:
 	void addPlayerY(int value) { y += value; }
 
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
+	void setAttackManagerMemoryAddress(attackManager* ATM) { _attackManager = ATM; }
 	void setPlayerTilePosition(int timeNum);	//플레이어를 타일 번호에 생성함.
 	void firstCollisionTileCheck();
 	void collisionTileCheck();
