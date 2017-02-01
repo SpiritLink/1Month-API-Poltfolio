@@ -18,17 +18,19 @@ void attackManager::update()
 		(*_viAttack)->update();
 	}
 
-	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end();)
+	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end();)			//모든 공격을 확인한다.
 	{
-		if ((*_viAttack)->getInputTime() + 0.25f < TIMEMANAGER->getWorldTime())
+		if ((*_viAttack)->getInputTime() + 0.25f < TIMEMANAGER->getWorldTime())	//시간이 지난 공격이라면
 		{
 			(*_viAttack)->release();
-			_viAttack = _vAttack.erase(_viAttack);
+			_viAttack = _vAttack.erase(_viAttack);								//공격을 삭제한다.
 		}
-		else
+		else if ((*_viAttack)->getCheckCollision() == true)						//이미 한번 충돌된 공격이라면
 		{
-			++_viAttack;
+			(*_viAttack)->release();
+			_viAttack = _vAttack.erase(_viAttack);								//공격을 삭제한다.
 		}
+		else ++_viAttack;														//아니라면 다음 공격 확인
 	}
 }
 
@@ -44,6 +46,9 @@ void attackManager::moveAttackX(int value)
 {
 	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
 	{
+		if ((*_viAttack)->getAttackType() == ATTACK_PLAYER_SLASH_LEFT) continue;	//기본좌공격은 좌표를 옮기지 않는다.
+		if ((*_viAttack)->getAttackType() == ATTACK_PLAYER_SLASH_RIGHT) continue;	//기본우공격은 좌표를 옮기지 않는다.
+
 		(*_viAttack)->addX(value);
 	}
 }
@@ -52,6 +57,9 @@ void attackManager::moveAttackY(int value)
 {
 	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
 	{
+		if ((*_viAttack)->getAttackType() == ATTACK_PLAYER_SLASH_LEFT) continue;	//기본좌공격은 좌표를 옮기지 않는다.
+		if ((*_viAttack)->getAttackType() == ATTACK_PLAYER_SLASH_RIGHT) continue;	//기본우공격은 좌표를 옮기지 않는다.
+
 		(*_viAttack)->addY(value);
 	}
 }

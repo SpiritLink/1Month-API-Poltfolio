@@ -4,6 +4,10 @@
 
 HRESULT attack::init(float inputX, float inputY)
 {
+	inputTime = TIMEMANAGER->getWorldTime();
+	checkCollision = false;
+	x = inputX;
+	y = inputY;
 	return S_OK;
 }
 
@@ -31,6 +35,7 @@ attack::~attack()
 HRESULT playerSlash::init(float inputX, float inputY)
 {
 	inputTime = TIMEMANAGER->getWorldTime();
+	checkCollision = false;
 	x = inputX;
 	y = inputY;
 	return S_OK;
