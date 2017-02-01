@@ -6,6 +6,7 @@ class attack : public gameNode			//상속을 위한 용도
 {
 protected:
 	float inputTime;//공격이 삽입된 시간
+	ATTACKTYPE _attackType;	//공격의 종류를 구분하기 위한 변수
 	image* _image;	//이미지
 	RECT _RECT;		//충돌렉트
 	float x, y;		//좌표
@@ -17,6 +18,11 @@ public:
 	virtual void update();
 	virtual void render();
 
+	float getInputTime() { return inputTime; }
+	void setAttackType(ATTACKTYPE Type) { _attackType = Type; }
+
+	void addX(int value) { x += value; }
+	void addY(int value) { y += value; }
 	attack();
 	virtual ~attack();
 };

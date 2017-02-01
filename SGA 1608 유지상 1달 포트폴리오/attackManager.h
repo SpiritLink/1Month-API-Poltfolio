@@ -14,7 +14,10 @@ public:
 	virtual void update();
 	virtual void render();
 	
-	void playerAttack(float inputX, float inputY);
+	void moveAttackX(int value);
+	void moveAttackY(int value);
+
+	void playerAttack(float inputX, float inputY, DIRECTION Dir);
 	attackManager();
 	virtual ~attackManager();
 };

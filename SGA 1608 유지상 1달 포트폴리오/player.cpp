@@ -46,6 +46,8 @@ void player::update()
 	DATABASE->setHP(HP);
 	DATABASE->setMP(MP);
 	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
+	DATABASE->setPlayerX(x);
+	DATABASE->setPlayerY(y);
 
 }
 
@@ -141,7 +143,7 @@ void player::playerAttack()
 		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
 			SOUNDMANAGER->playSound("hit", PointMake(x,y));
-			_attackManager->playerAttack(x, y);
+			_attackManager->playerAttack(x, y, direction);
 			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
 			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로

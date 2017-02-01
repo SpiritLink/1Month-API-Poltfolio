@@ -42,7 +42,13 @@ void playerSlash::release()
 
 void playerSlash::update()
 {
-	_RECT = RectMakeCenter(x, y, 50, 50);
+	switch (_attackType)
+	{
+	case ATTACK_PLAYER_SLASH_LEFT: 	_RECT = RectMakeCenter(DATABASE->getPlayerX() - 30, DATABASE->getPlayerY() - 15, 50, 50);
+		break;
+	case ATTACK_PLAYER_SLASH_RIGHT:	_RECT = RectMakeCenter(DATABASE->getPlayerX() + 30, DATABASE->getPlayerY() - 15, 50, 50);
+		break;
+	}
 }
 
 void playerSlash::render()

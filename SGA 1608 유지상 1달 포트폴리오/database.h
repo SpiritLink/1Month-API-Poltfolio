@@ -13,6 +13,8 @@ private:
 	int playerCollisionTile;//플레이어가 충돌중인 타일 번호
 	float baseTime;			//기준시간 (업데이트 횟수를 적당히 줄이기 위해서)
 
+	float playerX;
+	float playerY;
 	int HP;					//플레이어의 HP
 	int MP;					//플레이어의 MP
 	bool showPlayer;
@@ -32,6 +34,8 @@ public:
 	int getCollisionTile() { return playerCollisionTile; }
 	int getHP() { return HP; }
 	int getMP() { return MP; }
+	float getPlayerX() { return playerX; }
+	float getPlayerY() { return playerY; }
 
 	bool getShowPlayer() { return showPlayer; }
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
@@ -44,6 +48,8 @@ public:
 	void setCollisionTile(int tileNum) { playerCollisionTile = tileNum; }
 	void setHP(int value) { HP = value; }
 	void setMP(int value) { MP = value; }
+	void setPlayerX(float x) { playerX = x; }
+	void setPlayerY(float y) { playerY = y; }
 	database();
 	~database();
 };
