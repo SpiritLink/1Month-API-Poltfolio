@@ -5,11 +5,14 @@
 #include "tileMap.h"
 #include "playerUI.h"
 #include "attackManager.h"
+#include "enemyManager.h"
+
 class testScene : public gameNode
 {
 private:
 	tileMap* _tileMap;
 	attackManager* _attackManager;
+	enemyManager* _enemyManager;
 	image* _image;
 	player* _player;
 	playerUI* _playerUI;
