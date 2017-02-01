@@ -30,17 +30,17 @@ HRESULT soundManager::init()
 	ZeroMemory(_sound, sizeof(Sound*) * (TOTAL_SOUND_CHANNEL));
 	ZeroMemory(_channel, sizeof(Channel*) * (TOTAL_SOUND_CHANNEL));
 
-	_channel[0]->setVolume(0.0f);
-	_channel[1]->setVolume(0.1f);
-	_channel[2]->setVolume(0.2f);
+	_channel[0]->setVolume(0.6f);	//제일 가까울때 할당되는 채널
+	_channel[1]->setVolume(0.5f);	
+	_channel[2]->setVolume(0.4f);
 	_channel[3]->setVolume(0.3f);
-	_channel[4]->setVolume(0.4f);
-	_channel[5]->setVolume(0.5f);
-	_channel[6]->setVolume(0.6f);
-	_channel[7]->setVolume(0.7f);
-	_channel[8]->setVolume(0.8f);
-	_channel[9]->setVolume(0.9f);
-	_channel[10]->setVolume(1.0f);
+	_channel[4]->setVolume(0.2f);
+	_channel[5]->setVolume(0.1f);
+	_channel[6]->setVolume(0.0f);	//거리가 600이상이면 소리가 나지 않는다.
+	_channel[7]->setVolume(0.0f);
+	_channel[8]->setVolume(0.0f);
+	_channel[9]->setVolume(0.0f);
+	_channel[10]->setVolume(0.0f);
 	return S_OK;
 }
 
@@ -99,7 +99,6 @@ void soundManager::addSound(string keyName, string soundName, bool background, b
 	else
 		_system->createSound(soundName.c_str(), FMOD_DEFAULT,
 			0, &_sound[_mTotalSounds.size()]);
-
 	_mTotalSounds.insert(make_pair(keyName, &_sound[_mTotalSounds.size()]));
 	_mTotalSoundNames.insert(make_pair(keyName, soundName));
 }
@@ -116,30 +115,31 @@ void soundManager::play(string keyName, float volume)
 		{
 			if (_channel[count]->isPlaying(&isPlay))
 			{
-				_system->playSound(FMOD_CHANNEL_FREE, _sound[count], false, &_channel[count]);
+				_system->playSound(FMOD_CHANNEL_FREE, *(iter->second), false, &_channel[count]);
 				_channel[count]->setVolume(volume);
 				break;
 			}
 
-			else if (!_channel[count]->getPaused(&isPlay)) resume(keyName);
+			else if (!(_channel[count]->getPaused(&isPlay))) resume(keyName);
 		}
 
 
 	}
 }
 
-void soundManager::stop(string keyName)
+void soundManager::playSound(string keyName, POINT position)
 {
 	arrSoundsIter iter = _mTotalSounds.begin();
 
-	int count = 0;
-
-	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	int distance = getDistance(WINSIZEX / 2, (WINSIZEY / 4) * 3, position.x, position.y);
+	distance = distance / 100;
+	if (distance > 6) return;	//최대 거리보다 멀어지면 재생을 하지 않는다.
+	
+	for (iter; iter != _mTotalSounds.end(); ++iter)
 	{
 		if (keyName == iter->first)
 		{
-			_channel[count]->stop();
-			break;
+			_system->playSound(FMOD_CHANNEL_FREE, *(iter->second), false, &_channel[distance]);
 		}
 	}
 }

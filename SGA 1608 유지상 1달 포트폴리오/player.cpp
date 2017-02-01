@@ -140,6 +140,7 @@ void player::playerAttack()
 	{
 		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
+			SOUNDMANAGER->playSound("hit", PointMake(x,y));
 			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
 			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로
@@ -197,6 +198,8 @@ void player::testFunction()
 	if (Action & ACTION_ATTACK)				sprintf(str17, "ACTION_ATTACK");
 	else if(!(Action & ACTION_ATTACK))		sprintf(str17, " ");
 
+	sprintf(str18, "%0.3f", getDistance(WINSIZEX / 2, (WINSIZEY / 4) * 3, x, y));
+
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
 	TextOut(getMemDC(), 320, 20, str2, strlen(str2));
@@ -215,7 +218,7 @@ void player::testFunction()
 	TextOut(getMemDC(), 100, 450, str15, strlen(str15));
 	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
 	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
-
+	TextOut(getMemDC(), 300, 100, str18, strlen(str18));
 }
 
 void player::playerStatusCheck()
