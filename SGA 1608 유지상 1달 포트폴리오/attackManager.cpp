@@ -79,6 +79,12 @@ void attackManager::playerAttack(float inputX, float inputY, DIRECTION Dir)
 	_vAttack.push_back(Attack);
 }
 
+void attackManager::playerThrow(float inputX, float inputY, DIRECTION Dir)
+{
+	attack* Attack;
+	//Attack = new
+}
+
 attackManager::attackManager()
 {
 }

@@ -68,3 +68,32 @@ playerSlash::playerSlash()
 playerSlash::~playerSlash()
 {
 }
+
+HRESULT playerThrow::init(float inputX, float inputY)
+{
+	inputTime = TIMEMANAGER->getWorldTime();
+	checkCollision = false;
+	x = inputX;
+	y = inputY;
+	return S_OK;
+}
+
+void playerThrow::release()
+{
+}
+
+void playerThrow::update()
+{
+}
+
+void playerThrow::render()
+{
+}
+
+playerThrow::playerThrow()
+{
+}
+
+playerThrow::~playerThrow()
+{
+}

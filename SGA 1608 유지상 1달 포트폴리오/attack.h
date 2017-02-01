@@ -42,3 +42,16 @@ public:
 	playerSlash();
 	virtual ~playerSlash();
 };
+
+class playerThrow : public attack
+{
+public:
+	virtual HRESULT init(float inputX, float inputY);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	playerThrow();
+	virtual ~playerThrow();
+
+};

@@ -4,7 +4,7 @@
 
 HRESULT player::init()
 {
-	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", 672, 1024, 7, 16, true, RGB(0, 0, 255));
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 18, true, RGB(0, 0, 255));
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
 	gravity = 0;
@@ -22,7 +22,8 @@ HRESULT player::init()
 	Action = ACTION_NONE;
 	frameCount = 0;
 
-	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
+	SOUNDMANAGER->addSound("playerSlash", "SOUND/hit.wav", false, false);
+	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
 	return S_OK;
 }
 
@@ -122,8 +123,8 @@ void player::playerMove()
 		else																						//이동해도 옆타일에 안닿는다면
 			x += SPEED;																				//이동한다.
 	}
-	if (keyStatus & KEYBOARD_UP) y -= SPEED;
-	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
+	//if (keyStatus & KEYBOARD_UP) y -= SPEED;
+	//if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 	if (keyStatus & KEYBOARD_X)
 	{
 		if (!(Action & ACTION_JUMP))
@@ -138,16 +139,28 @@ void player::playerMove()
 
 void player::playerAttack()
 {
-	if (keyStatus & KEYBOARD_Z)			//공격 키를 누른 상태일때
+	if (keyStatus & KEYBOARD_Z && !(keyStatus & KEYBOARD_UP))	//근접공격 키를 누른 상태일때
 	{
-		if (!(Action & ACTION_ATTACK))	//현재 행동이 공격 행동이 아니라면
+		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
-			SOUNDMANAGER->playSound("hit", PointMake(x,y));
+			SOUNDMANAGER->playSound("playerSlash", PointMake(x,y));
 			_attackManager->playerAttack(x, y, direction);
 			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
-			Action = Action | ACTION_ATTACK;				//현재 행동을 공격행동으로
+			Action = Action | ACTION_SLASH_ATTACK;				//현재 행동을 공격행동으로
 			playerStatus = playerStatus | STATUS_ATTACK;	//현재 상태를 공격상태로
+		}
+	}
+
+	if (keyStatus & KEYBOARD_Z && keyStatus & KEYBOARD_UP)		//원거리 공격 키를 누른 상태일때
+	{
+		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
+		{
+			SOUNDMANAGER->playSound("playerThrow", PointMake(x, y));
+			
+			frameCount = 0;
+			Action = Action | ACTION_THROW_ATTACK;
+			playerStatus = playerStatus | STATUS_ATTACK;
 		}
 	}
 }
@@ -184,24 +197,26 @@ void player::testFunction()
 	if (keyStatus & KEYBOARD_C)		sprintf(str7, "C"); else sprintf(str7, " ");
 	sprintf(str8, "%d", currentCollisionTile);
 	sprintf(str9, "%0.3f", gravity);
-	if (playerStatus & STATUS_STAND)		sprintf(str10, "STATUS_STAND");
-	else if(!(playerStatus & STATUS_STAND)) sprintf(str10, " ");
-	if (playerStatus & STATUS_RUN)			sprintf(str11, "STATUS_RUN");
-	else if(!(playerStatus & STATUS_RUN))	sprintf(str11, " ");
-	if (playerStatus & STATUS_JUMP)			sprintf(str12, "STATUS_JUMP");
-	else if(!(playerStatus & STATUS_JUMP))	sprintf(str12, " ");
-	if (playerStatus & STATUS_LAND)			sprintf(str13, "STATUS_LAND");
-	else if(!(playerStatus & STATUS_LAND))	sprintf(str13, " ");
-	if (playerStatus & STATUS_ATTACK)		sprintf(str14, "STATUS_ATTACK");
-	else if(!(playerStatus & STATUS_ATTACK))sprintf(str14, " ");
-	if (Action & ACTION_NONE)				sprintf(str15, "ACTION_NONE");
-	else if(!(Action & ACTION_NONE))		sprintf(str15, " ");
-	if (Action & ACTION_JUMP)				sprintf(str16, "ACTION_JUMP"); 
-	else if(!(Action & ACTION_JUMP))		sprintf(str16, " ");
-	if (Action & ACTION_ATTACK)				sprintf(str17, "ACTION_ATTACK");
-	else if(!(Action & ACTION_ATTACK))		sprintf(str17, " ");
+	if (playerStatus & STATUS_STAND)				sprintf(str10, "STATUS_STAND");
+	else if(!(playerStatus & STATUS_STAND))			sprintf(str10, " ");
+	if (playerStatus & STATUS_RUN)					sprintf(str11, "STATUS_RUN");
+	else if(!(playerStatus & STATUS_RUN))			sprintf(str11, " ");
+	if (playerStatus & STATUS_JUMP)					sprintf(str12, "STATUS_JUMP");
+	else if(!(playerStatus & STATUS_JUMP))			sprintf(str12, " ");
+	if (playerStatus & STATUS_LAND)					sprintf(str13, "STATUS_LAND");
+	else if(!(playerStatus & STATUS_LAND))			sprintf(str13, " ");
+	if (playerStatus & STATUS_ATTACK)				sprintf(str14, "STATUS_ATTACK");
+	else if(!(playerStatus & STATUS_ATTACK))		sprintf(str14, " ");
+	if (Action & ACTION_NONE)						sprintf(str15, "ACTION_NONE");
+	else if(!(Action & ACTION_NONE))				sprintf(str15, " ");
+	if (Action & ACTION_JUMP)						sprintf(str16, "ACTION_JUMP"); 
+	else if(!(Action & ACTION_JUMP))				sprintf(str16, " ");
+	if (Action & ACTION_SLASH_ATTACK)				sprintf(str17, "ACTION_ATTACK");
+	else if(!(Action & ACTION_SLASH_ATTACK))		sprintf(str17, " ");
+	if (Action & ACTION_THROW_ATTACK)				sprintf(str18, "ACTION_THROW");
+	else if (!(Action & ACTION_THROW_ATTACK))		sprintf(str18, " ");
 
-	sprintf(str18, "%0.3f", getDistance(WINSIZEX / 2, (WINSIZEY / 4) * 3, x, y));
+	sprintf(str20, "%0.3f", getDistance(WINSIZEX / 2, (WINSIZEY / 4) * 3, x, y));
 
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
@@ -221,7 +236,8 @@ void player::testFunction()
 	TextOut(getMemDC(), 100, 450, str15, strlen(str15));
 	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
 	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
-	TextOut(getMemDC(), 300, 100, str18, strlen(str18));
+	TextOut(getMemDC(), 100, 540, str18, strlen(str18));
+	TextOut(getMemDC(), 300, 100, str20, strlen(str20));
 }
 
 void player::playerStatusCheck()
@@ -305,7 +321,7 @@ void player::playerRender()
 	}
 
 	//최대 프레임이 넘어가면 초기화 하는 부분
-	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK))	frameCount = 0;
+	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK)) 	frameCount = 0;
 	if (playerStatus & STATUS_RUN && !(playerStatus & STATUS_ATTACK))	if (frameCount > 5) frameCount = 0;	//달리면서 공격을 안할때
 	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
 	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
@@ -314,7 +330,8 @@ void player::playerRender()
 	if (playerStatus & STATUS_ATTACK)	
 		if (frameCount > 2)
 		{
-			if (Action & ACTION_ATTACK) Action -= ACTION_ATTACK;
+			if (Action & ACTION_SLASH_ATTACK) Action -= ACTION_SLASH_ATTACK;
+			if (Action & ACTION_THROW_ATTACK) Action -= ACTION_THROW_ATTACK;
 			if (playerStatus & STATUS_ATTACK) playerStatus -= STATUS_ATTACK;
 			frameCount = 0;
 		}
@@ -332,6 +349,7 @@ void player::playerRender()
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
 		if(playerStatus & STATUS_ATTACK)
+			if(Action & ACTION_SLASH_ATTACK)
 			switch (attackType)
 			{
 			case true:
@@ -341,6 +359,11 @@ void player::playerRender()
 				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9);
 				break;
 			}
+		if (Action & ACTION_THROW_ATTACK)
+		{
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 16);
+			break;
+		}
 		break;
 	case LEFT:
 		if(playerStatus & STATUS_STAND)
@@ -352,6 +375,7 @@ void player::playerRender()
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
 		if(playerStatus & STATUS_ATTACK)
+			if(Action & ACTION_SLASH_ATTACK)
 			switch (attackType)
 			{
 			case true:
@@ -361,6 +385,11 @@ void player::playerRender()
 				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13);
 				break;
 			}
+		if (Action & ACTION_THROW_ATTACK)
+		{
+			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17);
+			break;
+		}
 		break;
 	}
 
