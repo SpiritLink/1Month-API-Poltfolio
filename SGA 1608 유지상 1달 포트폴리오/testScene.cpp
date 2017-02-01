@@ -147,6 +147,7 @@ void testScene::cameraMove()
 		Background.right -= distanceX / 10;
 		_player->addPlayerX(-distanceX / 10);
 		_tileMap->moveTileX(-distanceX / 10);
+		_attackManager->moveAttackX(-distanceX / 10);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -155,6 +156,7 @@ void testScene::cameraMove()
 		Background.right += distanceX / 10;
 		_player->addPlayerX(distanceX / 10);
 		_tileMap->moveTileX(distanceX / 10);
+		_attackManager->moveAttackX(distanceX / 10);
 	}
 
 	//Y좌표 이동
@@ -164,6 +166,7 @@ void testScene::cameraMove()
 		Background.bottom -= distanceY / 10;
 		_player->addPlayerY(-distanceY / 10);
 		_tileMap->moveTileY(-distanceY / 10);
+		_attackManager->moveAttackY(-distanceY / 10);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -172,6 +175,7 @@ void testScene::cameraMove()
 		Background.bottom += distanceY / 10;
 		_player->addPlayerY(distanceY / 10);
 		_tileMap->moveTileY(distanceY / 10);
+		_attackManager->moveAttackY(distanceY / 10);
 	}
 }
 
