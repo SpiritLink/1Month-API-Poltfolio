@@ -16,6 +16,9 @@ HRESULT testScene::init()
 	_attackManager = new attackManager;
 	_attackManager->init();
 
+	_enemyManager = new enemyManager;
+	_enemyManager->init(_tileMap);
+
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
@@ -29,6 +32,7 @@ HRESULT testScene::init()
 	cameraX = 0;
 	cameraY = 0;
 
+	_enemyManager->setAlien(21022);
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());
 	return S_OK;
@@ -47,6 +51,9 @@ void testScene::release()
 
 	_attackManager->release();
 	SAFE_DELETE(_attackManager);
+
+	_enemyManager->release();
+	SAFE_DELETE(_enemyManager);
 }
 
 void testScene::update()
@@ -54,6 +61,7 @@ void testScene::update()
 	_player->update();											//플레이어에서 보고자 하는 대상의 위치를 먼저 전송합니다.
 	_playerUI->update();
 	_attackManager->update();
+	_enemyManager->update();
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
@@ -89,6 +97,7 @@ void testScene::render()
 	Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
 	_test->render(getMemDC(), Background.left, Background.top);
 	_tileMap->render();
+	_enemyManager->render();
 	_player->render();
 	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
@@ -148,6 +157,7 @@ void testScene::cameraMove()
 		_player->addPlayerX(-distanceX / 10);
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
+		_enemyManager->addEnemyX(-distanceX / 10);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -157,6 +167,7 @@ void testScene::cameraMove()
 		_player->addPlayerX(distanceX / 10);
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
+		_enemyManager->addEnemyX(distanceX / 10);
 	}
 
 	//Y좌표 이동
@@ -167,6 +178,7 @@ void testScene::cameraMove()
 		_player->addPlayerY(-distanceY / 10);
 		_tileMap->moveTileY(-distanceY / 10);
 		_attackManager->moveAttackY(-distanceY / 10);
+		_enemyManager->addEnemyY(-distanceY / 10);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -176,6 +188,7 @@ void testScene::cameraMove()
 		_player->addPlayerY(distanceY / 10);
 		_tileMap->moveTileY(distanceY / 10);
 		_attackManager->moveAttackY(distanceY / 10);
+		_enemyManager->addEnemyY(distanceY / 10);
 	}
 }
 
