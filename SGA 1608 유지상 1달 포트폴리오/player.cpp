@@ -348,21 +348,23 @@ void player::playerRender()
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4);
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6);
-		if(playerStatus & STATUS_ATTACK)
-			if(Action & ACTION_SLASH_ATTACK)
-			switch (attackType)
+		if (playerStatus & STATUS_ATTACK)
+		{
+			if (Action & ACTION_SLASH_ATTACK)	//기본 공격 상태라면
+				switch (attackType)
+				{
+				case true:
+					playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8);
+					break;
+				case false:
+					playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9);
+					break;
+				}
+			if (Action & ACTION_THROW_ATTACK)	//투사체 공격 상태라면
 			{
-			case true:
-				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8);
-				break;
-			case false:
-				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9);
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 16);
 				break;
 			}
-		if (Action & ACTION_THROW_ATTACK)
-		{
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 16);
-			break;
 		}
 		break;
 	case LEFT:
@@ -374,21 +376,23 @@ void player::playerRender()
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5);
 		if(playerStatus & STATUS_LAND)
 			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7);
-		if(playerStatus & STATUS_ATTACK)
-			if(Action & ACTION_SLASH_ATTACK)
-			switch (attackType)
+		if (playerStatus & STATUS_ATTACK)
+		{
+			if (Action & ACTION_SLASH_ATTACK)		//기본 공격 상태라면
+				switch (attackType)
+				{
+				case true:
+					playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12);
+					break;
+				case false:
+					playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13);
+					break;
+				}
+			if (Action & ACTION_THROW_ATTACK)		//투사체 공격 상태라면
 			{
-			case true:
-				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12);
-				break;
-			case false:
-				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13);
+				playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17);
 				break;
 			}
-		if (Action & ACTION_THROW_ATTACK)
-		{
-			playerIMG->frameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17);
-			break;
 		}
 		break;
 	}
