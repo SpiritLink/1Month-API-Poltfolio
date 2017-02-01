@@ -144,7 +144,7 @@ void player::playerAttack()
 		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
 			SOUNDMANAGER->playSound("playerSlash", PointMake(x,y));
-			_attackManager->playerAttack(x, y, direction);
+			_attackManager->playerSlashAttack(x, y, direction);
 			attackType = (attackType == true) ? false : true;
 			frameCount = 0;
 			Action = Action | ACTION_SLASH_ATTACK;				//현재 행동을 공격행동으로
@@ -157,7 +157,7 @@ void player::playerAttack()
 		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
 			SOUNDMANAGER->playSound("playerThrow", PointMake(x, y));
-			
+			_attackManager->playerThrowAttack(x, y, direction);
 			frameCount = 0;
 			Action = Action | ACTION_THROW_ATTACK;
 			playerStatus = playerStatus | STATUS_ATTACK;
@@ -211,7 +211,7 @@ void player::testFunction()
 	else if(!(Action & ACTION_NONE))				sprintf(str15, " ");
 	if (Action & ACTION_JUMP)						sprintf(str16, "ACTION_JUMP"); 
 	else if(!(Action & ACTION_JUMP))				sprintf(str16, " ");
-	if (Action & ACTION_SLASH_ATTACK)				sprintf(str17, "ACTION_ATTACK");
+	if (Action & ACTION_SLASH_ATTACK)				sprintf(str17, "ACTION_SLASH");
 	else if(!(Action & ACTION_SLASH_ATTACK))		sprintf(str17, " ");
 	if (Action & ACTION_THROW_ATTACK)				sprintf(str18, "ACTION_THROW");
 	else if (!(Action & ACTION_THROW_ATTACK))		sprintf(str18, " ");

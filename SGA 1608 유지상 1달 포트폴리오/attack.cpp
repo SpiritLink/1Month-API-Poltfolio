@@ -84,10 +84,21 @@ void playerThrow::release()
 
 void playerThrow::update()
 {
+	_RECT = RectMakeCenter(x, y, 50, 50);
+	switch (_attackType)
+	{
+	case ATTACK_PLAYER_THROW_LEFT:
+		x -= 10;
+		break;
+	case ATTACK_PLAYER_THROW_RIGHT:
+		x += 10;
+		break;
+	}
 }
 
 void playerThrow::render()
 {
+	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 }
 
 playerThrow::playerThrow()

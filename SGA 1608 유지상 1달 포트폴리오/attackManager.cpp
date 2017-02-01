@@ -64,25 +64,30 @@ void attackManager::moveAttackY(int value)
 	}
 }
 
-void attackManager::playerAttack(float inputX, float inputY, DIRECTION Dir)
+void attackManager::playerSlashAttack(float inputX, float inputY, DIRECTION Dir)
 {
 	attack* Attack;
 	Attack = new playerSlash;
 	Attack->init(inputX, inputY);
 	switch (Dir)
 	{
-	case LEFT:
-		Attack->setAttackType(ATTACK_PLAYER_SLASH_LEFT); break;
-	case RIGHT:
-		Attack->setAttackType(ATTACK_PLAYER_SLASH_RIGHT); break;
+	case LEFT:		Attack->setAttackType(ATTACK_PLAYER_SLASH_LEFT); break;
+	case RIGHT:		Attack->setAttackType(ATTACK_PLAYER_SLASH_RIGHT); break;
 	}
 	_vAttack.push_back(Attack);
 }
 
-void attackManager::playerThrow(float inputX, float inputY, DIRECTION Dir)
+void attackManager::playerThrowAttack(float inputX, float inputY, DIRECTION Dir)
 {
 	attack* Attack;
-	//Attack = new
+	Attack = new playerThrow;
+	Attack->init(inputX, inputY);
+	switch (Dir)
+	{
+	case LEFT: Attack->setAttackType(ATTACK_PLAYER_THROW_LEFT); break;
+	case RIGHT: Attack->setAttackType(ATTACK_PLAYER_THROW_RIGHT); break;
+	}
+	_vAttack.push_back(Attack);
 }
 
 attackManager::attackManager()

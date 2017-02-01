@@ -17,8 +17,8 @@ public:
 	void moveAttackX(int value);
 	void moveAttackY(int value);
 
-	void playerAttack(float inputX, float inputY, DIRECTION Dir);
-	void playerThrow(float inputX, float inputY, DIRECTION Dir);
+	void playerSlashAttack(float inputX, float inputY, DIRECTION Dir);
+	void playerThrowAttack(float inputX, float inputY, DIRECTION Dir);
 	attackManager();
 	virtual ~attackManager();
 };
