@@ -17,12 +17,14 @@ private:
 	player* _player;
 	playerUI* _playerUI;
 
+	RECT Background;
 public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
+	void cameraMove();
 	bossScene();
 	virtual ~bossScene();
 };

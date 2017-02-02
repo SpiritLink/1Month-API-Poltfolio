@@ -5,6 +5,7 @@
 #include "townScene.h"
 #include "field1Scene.h"
 #include "field2Scene.h"
+#include "bossScene.h"
 
 gameStudy::gameStudy()
 {
@@ -27,8 +28,9 @@ HRESULT gameStudy::init()
 	SCENEMANAGER->addScene("townScene", new townScene);		//마을
 	SCENEMANAGER->addScene("field1Scene", new field1Scene);	//사냥터 1
 	SCENEMANAGER->addScene("field2Scene", new field2Scene);	//사냥터 2
+	SCENEMANAGER->addScene("bossScene", new bossScene);		//보스방
 
-	SCENEMANAGER->changeScene("testScene");					//현재 실험용 맵으로 진입한다.
+	SCENEMANAGER->changeScene("bossScene");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
 	return S_OK;
 }

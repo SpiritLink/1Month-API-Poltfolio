@@ -182,7 +182,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_THROW_ATTACK;
+	status = ACTION_NONE;
 
 	return S_OK;
 }
@@ -199,38 +199,38 @@ void eri::update()
 
 void eri::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	switch (status)
 	{
 	case ACTION_NONE:
-		if(dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 0);
-		if(dir == LEFT)		_image->frameRender(getMemDC(), x, y, frameCount, 1);
+		if(dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 0);
+		if(dir == LEFT)		_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 1);
 		break;
 	case ACTION_RUN:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 2);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 3);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 2);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 3);
 		break;
 	case ACTION_SLASH_ATTACK:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 4);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 5);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 4);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 5);
 		break;
 	case ACTION_CHARGE:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 6);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 7);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 6);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 7);
 		break;
 	case ACTION_BACKDASH:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 8);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 9);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 8);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 9);
 		break;
 	case ACTION_DASH:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 10);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 11);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 10);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 11);
 		break;
 	case ACTION_THROW_ATTACK:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 12);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 13);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 12);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 20, frameCount, 13);
 		break;
 	}
+	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
 }
 
 void eri::frameUpdate()
