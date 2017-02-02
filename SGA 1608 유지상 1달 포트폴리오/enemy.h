@@ -68,8 +68,12 @@ public:
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:
+	float gravity;				//보스가 가지는 중력
 	DIRECTION dir;				//방향
 	ACTION status;				//상태를 표시할 용도
+
+	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
+
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap);
 	virtual void release();
@@ -77,6 +81,13 @@ public:
 	virtual void render();
 
 	void frameUpdate();			//보스의 행동에 따라서 프레임 업데이트 속도를 다르게 합니다.
+	void firstCollisionTileCheck();	//처음 모든타일과 충돌을 체크합니다.
+	void collisionTileCheck();		//이후 주변 타일과 충돌을 체크합니다.
+
+	void eriMove();				// 보스용 이동 함수
+
+	void testFunction();		//테스트용 함수입니다.
+
 
 	eri();
 	virtual ~eri();
