@@ -17,6 +17,7 @@ public:
 	virtual void render();
 
 	void setAlien(int tileNum);
+	void setEri(int tileNum);
 
 	void addEnemyX(int value);
 	void addEnemyY(int value);

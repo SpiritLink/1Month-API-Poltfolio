@@ -10,6 +10,7 @@ protected:
 	float currentTime;	//특정 시간을 저장하기 위한 변수
 	tileMap* _tileMap;	//타일맵을 가지고 있음. (이닛 좌표설정 , 충돌처리 목적)
 	image* _image;	//이미지
+	RECT _hitArea;
 	float x, y;		//좌표
 	int HP;			//체력
 	int frameCount;	//프레임 카운트
@@ -27,7 +28,7 @@ public:
 	virtual ~enemy();
 };
 
-class alien : public enemy
+class alien : public enemy		//일반 몬스터
 {
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap);
@@ -37,4 +38,16 @@ public:
 
 	alien();
 	virtual ~alien();
+};
+
+class eri : public enemy		//첫번째 보스 몬스터
+{
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	eri();
+	virtual ~eri();
 };
