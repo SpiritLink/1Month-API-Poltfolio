@@ -42,6 +42,14 @@ void enemyManager::setAlien(int tileNum)
 	_vEnemy.push_back(Enemy);
 }
 
+void enemyManager::setGhost(int tileNum)
+{
+	enemy* Enemy;
+	Enemy = new ghost;
+	Enemy->init(tileNum, _tileMap);
+	_vEnemy.push_back(Enemy);
+}
+
 void enemyManager::setEri(int tileNum)
 {
 	enemy* Enemy;

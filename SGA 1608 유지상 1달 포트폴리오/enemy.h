@@ -28,7 +28,7 @@ public:
 	virtual ~enemy();
 };
 
-class alien : public enemy		//일반 몬스터
+class alien : public enemy		//일반 몬스터 (해파리)
 {
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap);
@@ -38,6 +38,20 @@ public:
 
 	alien();
 	virtual ~alien();
+};
+
+class ghost : public enemy		//일반 몬스터 (유령)
+{
+private:
+	DIRECTION dir;
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	ghost();
+	virtual ~ghost();
 };
 
 class eri : public enemy		//첫번째 보스 몬스터

@@ -30,6 +30,7 @@ enemy::~enemy()
 
 HRESULT alien::init(int tileNum, tileMap* tileMap)
 {
+	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
@@ -69,9 +70,66 @@ alien::~alien()
 {
 }
 
+HRESULT ghost::init(int tileNum, tileMap * tileMap)
+{
+	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addFrameImage("ghost", "IMAGE/enemy/ghost.bmp", 256, 128, 4, 2, true, RGB(255, 0, 255));
+	frameCount = 0;
+
+	//멤버변수 초기화
+	dir = LEFT;
+
+	return S_OK;
+}
+
+void ghost::release()
+{
+}
+
+void ghost::update()
+{
+	_hitArea = RectMakeCenter(x, y, 30, 30);
+	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+		if (frameCount > 3)
+		{
+			switch (dir)
+			{
+			case RIGHT: dir = LEFT; break;
+			case LEFT: dir = RIGHT; break;
+			}
+			frameCount = 0;
+		}
+	}
+}
+
+void ghost::render()
+{
+	switch (dir)
+	{
+	case RIGHT:_image->frameRender(getMemDC(), x, y, frameCount, 0); break;
+	case LEFT: _image->frameRender(getMemDC(), x, y, frameCount, 1); break;
+	}
+}
+
+ghost::ghost()
+{
+}
+
+ghost::~ghost()
+{
+}
+
 HRESULT eri::init(int tileNum, tileMap * tileMap)
 {
-	//일반적인 몬스터의 초기화
+	//상속받은 변수 초기화
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
 	_tileMap = tileMap;
@@ -79,10 +137,11 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
 
-	//보스 몬스터만의 초기화
+	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_THROW_ATTACK;			//아무것도 없는 상태로 초기화 한다.
+	status = ACTION_THROW_ATTACK;
+
 	return S_OK;
 }
 
@@ -197,3 +256,4 @@ eri::eri()
 eri::~eri()
 {
 }
+
