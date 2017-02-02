@@ -29,7 +29,7 @@ HRESULT bossScene::init()
 	_playerUI = new playerUI;
 	_playerUI->init();
 
-	_enemyManager->setEri(21381);
+	_enemyManager->setEri(21375);
 
 	return S_OK;
 }

@@ -72,6 +72,9 @@ private:
 	DIRECTION dir;				//방향
 	ACTION status;				//상태를 표시할 용도
 
+	float hitTime;				//공격을 받을때 여러개를 한번에 받지 못하게 처리한다.
+	bool invincible;			//무적 상태를 표시하는 변수
+
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
 
 public:

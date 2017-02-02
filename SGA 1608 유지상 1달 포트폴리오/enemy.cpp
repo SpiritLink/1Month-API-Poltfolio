@@ -182,8 +182,11 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_SLASH_ATTACK;
+	status = ACTION_BACKDASH;
 	gravity = 0;
+	hitTime = TIMEMANAGER->getWorldTime();
+	invincible = false;	// 현재 무적상태가 아님
+
 	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
 	return S_OK;
 }
@@ -274,7 +277,15 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 7) frameCount = 0;
+			if (frameCount > 7)
+			{
+				switch (dir)
+				{
+				case RIGHT: dir = LEFT; break;
+				case LEFT: dir = RIGHT; break;
+				}
+				frameCount = 0;
+			}
 		}
 		break;
 	case ACTION_DASH:
@@ -345,6 +356,29 @@ void eri::eriMove()
 	//중력에 해당하는 값만큼 움직인다.
 	y += gravity;
 
+	switch (status)
+	{
+	case ACTION_RUN:		//달리는 상황을 처리합니다.
+		switch (dir)
+		{
+		case LEFT: x -= 10; break;
+		case RIGHT: x += 10; break;
+		}
+		break;
+	case ACTION_BACKDASH:	//뒤로 대쉬하는 상황을 처리합니다.
+		switch (dir)
+		{
+		case LEFT:	if (frameCount >= 2 && frameCount <= 5) x += 10; break;
+		case RIGHT:	if (frameCount >= 2 && frameCount <= 5) x -= 10; break;
+		}
+		break;
+	case ACTION_DASH:
+		switch (dir)
+		{
+		case LEFT: x -= 20; break;
+		case RIGHT: x += 20; break;
+		}
+	}
 }
 
 void eri::testFunction()
