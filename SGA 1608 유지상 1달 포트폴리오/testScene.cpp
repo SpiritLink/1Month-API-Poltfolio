@@ -32,7 +32,7 @@ HRESULT testScene::init()
 	cameraX = 0;
 	cameraY = 0;
 
-	//_enemyManager->setAlien(21022);
+	_enemyManager->setAlien(21022);
 	_enemyManager->setEri(21022);
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());

@@ -71,13 +71,18 @@ alien::~alien()
 
 HRESULT eri::init(int tileNum, tileMap * tileMap)
 {
+	//일반적인 몬스터의 초기화
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
 	_tileMap = tileMap;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
+
+	//보스 몬스터만의 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
+	dir = LEFT;
+	status = ACTION_SLASH_ATTACK;			//아무것도 없는 상태로 초기화 한다.
 	return S_OK;
 }
 
@@ -88,13 +93,69 @@ void eri::release()
 void eri::update()
 {
 	_hitArea = RectMakeCenter(x, y, 50, 50);
-
+	frameUpdate();
 }
 
 void eri::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
-	_image->frameRender(getMemDC(), x, y, frameCount, 3);
+	switch (status)
+	{
+	case ACTION_NONE:
+		if(dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 0);
+		if(dir == LEFT)		_image->frameRender(getMemDC(), x, y, frameCount, 1);
+		break;
+	case ACTION_RUN:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 2);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 3);
+		break;
+	case ACTION_SLASH_ATTACK:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 4);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 5);
+		break;
+	case ACTION_CHARGE:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 6);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 7);
+		break;
+	case ACTION_BACKDASH:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 8);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 9);
+		break;
+	case ACTION_DASH:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 10);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 11);
+		break;
+	case ACTION_THROW_ATTACK:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x, y, frameCount, 12);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x, y, frameCount, 13);
+		break;
+	}
+}
+
+void eri::frameUpdate()
+{
+	switch (status)
+	{
+	case ACTION_NONE:
+		frameCount = 0;
+		break;
+	case ACTION_SLASH_ATTACK:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 3) frameCount = 0;			//최대 프레임일때
+		}
+		break;
+	case ACTION_THROW_ATTACK:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 5) frameCount = 0;			//최대 프레임일때
+		}
+		break;
+	}
 }
 
 eri::eri()
