@@ -16,6 +16,7 @@ HRESULT player::init()
 	keyStatus = 0;
 	playerStatus = 0;
 
+	MAXHP = 5;
 	HP = 5;
 	MP = 4;
 	direction = RIGHT;

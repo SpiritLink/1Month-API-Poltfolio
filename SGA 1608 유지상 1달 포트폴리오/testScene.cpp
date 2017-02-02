@@ -35,6 +35,8 @@ HRESULT testScene::init()
 	_enemyManager->setAlien(21022);
 	_enemyManager->setEri(21022);
 	_enemyManager->setGhost(21022);
+
+
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());
 	return S_OK;
@@ -78,7 +80,8 @@ void testScene::update()
 	}
 
 	if (KEYMANAGER->isStayKeyDown('E'))
-	{		DATABASE->setDestCamX(WINSIZEX / 2);			//대상이 고정되기 원하는 X좌표 위치
+	{		
+		DATABASE->setDestCamX(WINSIZEX / 2);			//대상이 고정되기 원하는 X좌표 위치
 		DATABASE->setDestCamY(WINSIZEY / 2);			//대상이 고정되기 원하는 Y좌표 위치
 	}
 
