@@ -18,6 +18,7 @@ public:
 
 	void setAlien(int tileNum);
 	void setGhost(int tileNum);
+	void setFlower(int tileNum);
 	void setEri(int tileNum);
 
 	void addEnemyX(int value);

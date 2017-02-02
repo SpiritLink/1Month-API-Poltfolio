@@ -54,6 +54,17 @@ public:
 	virtual ~ghost();
 };
 
+class flower : public enemy
+{
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	flower();
+	virtual ~flower();
+};
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:
