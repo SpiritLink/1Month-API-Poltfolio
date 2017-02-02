@@ -198,7 +198,12 @@ void eri::release()
 void eri::update()
 {
 	_hitArea = RectMakeCenter(x, y, 50, 50);
-	gravity += GRAVITY;		//보스몬스터 중력 처리
+	detectArea = RectMakeCenter(x, y, 1000, 300);
+	gravity += GRAVITY;		//보스 중력 처리
+	DATABASE->setEriX(x);	//싱글톤으로 좌표를 보낸다
+	DATABASE->setEriY(y);	//싱글톤으로 좌표를 보낸다
+	//공격 범위내에 들어온다면 보스 AI를 실행한다.
+	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
 	frameUpdate();
 	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
 	eriMove();				//타일을 확인하고 중력을 처리합니다.
@@ -206,6 +211,7 @@ void eri::update()
 
 void eri::render()
 {
+	Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
 	switch (status)
 	{
 	case ACTION_NONE:
@@ -334,6 +340,10 @@ void eri::collisionTileCheck()
 			}
 		}
 	}
+}
+
+void eri::eriAI()
+{
 }
 
 void eri::eriMove()

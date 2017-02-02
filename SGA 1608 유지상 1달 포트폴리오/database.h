@@ -15,6 +15,9 @@ private:
 
 	float playerX;
 	float playerY;
+
+	float eriX;				//보스 기본공격 좌표 업데이트를 위한 변수
+	float eriY;				//보스 기본공격 좌표 업데이트를 위한 변수
 	int HP;					//플레이어의 HP
 	int MP;					//플레이어의 MP
 	bool showPlayer;
@@ -36,6 +39,8 @@ public:
 	int getMP() { return MP; }
 	float getPlayerX() { return playerX; }
 	float getPlayerY() { return playerY; }
+	float getEriX() { return eriX; }
+	float getEriY() { return eriY; }
 
 	bool getShowPlayer() { return showPlayer; }
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
@@ -50,6 +55,8 @@ public:
 	void setMP(int value) { MP = value; }
 	void setPlayerX(float x) { playerX = x; }
 	void setPlayerY(float y) { playerY = y; }
+	void setEriX(float x) { eriX = x; }
+	void setEriY(float y) { eriY = y; }
 	database();
 	~database();
 };

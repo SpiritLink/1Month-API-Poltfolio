@@ -3,6 +3,7 @@
 #include "gameNode.h"
 #include "enemy.h"
 #include "tileMap.h"
+#include "attackManager.h"
 
 class enemyManager : public gameNode
 {

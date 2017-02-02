@@ -315,7 +315,13 @@ void player::collisionTileCheck()
 void player::playerRender()
 {
 	//프레임을 증가시키는 부분
-	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (playerStatus & STATUS_ATTACK && currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+	}
+	
+	if(!(playerStatus & STATUS_ATTACK) && currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
