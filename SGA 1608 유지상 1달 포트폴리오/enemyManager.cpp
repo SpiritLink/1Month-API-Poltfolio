@@ -50,6 +50,14 @@ void enemyManager::setGhost(int tileNum)
 	_vEnemy.push_back(Enemy);
 }
 
+void enemyManager::setFlower(int tileNum)
+{
+	enemy* Enemy;
+	Enemy = new flower;
+	Enemy->init(tileNum, _tileMap);
+	_vEnemy.push_back(Enemy);
+}
+
 void enemyManager::setEri(int tileNum)
 {
 	enemy* Enemy;
