@@ -82,7 +82,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//보스 몬스터만의 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_SLASH_ATTACK;			//아무것도 없는 상태로 초기화 한다.
+	status = ACTION_THROW_ATTACK;			//아무것도 없는 상태로 초기화 한다.
 	return S_OK;
 }
 
@@ -139,12 +139,44 @@ void eri::frameUpdate()
 	case ACTION_NONE:
 		frameCount = 0;
 		break;
+	case ACTION_RUN:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 5) frameCount = 0;
+		}
+		break;
 	case ACTION_SLASH_ATTACK:
 		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
 			if (frameCount > 3) frameCount = 0;			//최대 프레임일때
+		}
+		break;
+	case ACTION_CHARGE:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 2) frameCount = 0;
+		}
+		break;
+	case ACTION_BACKDASH:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 7) frameCount = 0;
+		}
+		break;
+	case ACTION_DASH:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 2) frameCount = 0;
 		}
 		break;
 	case ACTION_THROW_ATTACK:
