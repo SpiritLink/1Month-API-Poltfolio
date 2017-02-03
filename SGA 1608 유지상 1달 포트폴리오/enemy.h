@@ -94,7 +94,7 @@ public:
 	void eriAI();					//보스몬스터 eri의 AI입니다.
 	bool checkXAndMove(DIRECTION dir,int value);		//X좌표지점의 상태를 확인하고 이동시킴.
 
-	void eriMove();				// 보스용 이동 함수
+	void eriGravity();				// 보스용 이동 함수
 
 	void testFunction();		//테스트용 함수입니다.
 

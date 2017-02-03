@@ -209,7 +209,7 @@ void eri::update()
 	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
 	frameUpdate();
 	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
-	eriMove();				//타일을 확인하고 중력을 처리합니다.
+	eriGravity();				//타일을 확인하고 중력을 처리합니다.
 }
 
 void eri::render()
@@ -378,15 +378,17 @@ void eri::eriAI()
 		case ACTION_NONE:						//아무것도 아닌 상태일때
 			switch (RND->getFromIntTo(0, 5))
 			{
-			//case 0: status = ACTION_BACKDASH; break;
+			case 0: status = ACTION_BACKDASH; break;
 			case 1: status = ACTION_CHARGE; break;
 			//case 2: status = ACTION_DASH; break;
-			//case 3: status = ACTION_THROW_ATTACK; break;
-			//case 4: status = ACTION_RUN; break;
-			//case 5:	status = ACTION_SLASH_ATTACK; break;
+			case 3: status = ACTION_THROW_ATTACK; break;
+			case 4: status = ACTION_RUN; break;
+			case 5:	status = ACTION_SLASH_ATTACK; break;
 			}
 			break;
 		case ACTION_BACKDASH:
+			if (!(frameCount >= 2 && frameCount <= 5)) break;
+			checkXAndMove(dir, ERISPEED);
 			break;
 		case ACTION_CHARGE:
 			if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime()) status = ACTION_DASH;
@@ -403,6 +405,7 @@ void eri::eriAI()
 		case ACTION_JUMP:
 			break;
 		case ACTION_RUN:
+			checkXAndMove(dir, ERISPEED);
 			break;
 		case ACTION_SLASH_ATTACK:
 			break;
@@ -452,7 +455,7 @@ bool eri::checkXAndMove(DIRECTION dir, int value)
 	}
 }
 
-void eri::eriMove()
+void eri::eriGravity()
 {
 	//보스가 땅에 충돌했을때 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
@@ -471,17 +474,6 @@ void eri::eriMove()
 
 	//중력에 해당하는 값만큼 움직인다.
 	y += gravity;
-
-	switch (status)
-	{
-	case ACTION_RUN:	
-		checkXAndMove(dir, ERISPEED);	
-		break;
-	case ACTION_BACKDASH:
-		if (!(frameCount >= 2 && frameCount <= 5)) break;
-		checkXAndMove(dir, ERISPEED);	
-		break;
-	}
 }
 
 void eri::testFunction()
