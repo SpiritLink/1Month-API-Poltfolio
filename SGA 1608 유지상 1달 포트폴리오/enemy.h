@@ -82,6 +82,9 @@ private:
 
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
 
+	image* chargeAura;			//보스 전용 차지 이펙트
+	int auraCount;				//오라 프레임을 넘기기 위한 전용 카운트
+
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();

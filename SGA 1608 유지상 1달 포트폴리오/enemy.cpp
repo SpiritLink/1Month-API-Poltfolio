@@ -187,6 +187,8 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));
+	chargeAura = IMAGEMANAGER->addFrameImage("chargeAura", "IMAGE/EFFECT/chargeAura(dark).bmp", 312, 52, 6, 1, true, RGB(0, 0, 0));
+	auraCount = 0;
 	dir = LEFT;
 	status = ACTION_CHARGE;
 	gravity = 0;
@@ -234,6 +236,7 @@ void eri::render()
 		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 32, frameCount, 5);
 		break;
 	case ACTION_CHARGE:
+		chargeAura->frameRender(getMemDC(), x - chargeAura->getFrameWidth() / 2, y - chargeAura->getFrameHeight(), auraCount, 0);
 		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 6);
 		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 7);
 		break;
@@ -281,10 +284,9 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 2)
-			{
-				frameCount = 0;
-			}
+			++auraCount;
+			if (frameCount > 2) frameCount = 0;
+			if (auraCount > 5) auraCount = 0;
 
 		}
 		break;
@@ -393,13 +395,13 @@ void eri::eriAI()
 		{
 			switch (RND->getFromIntTo(0, 6))
 			{
-			case 0: status = ACTION_BACKDASH; break;
+			//case 0: status = ACTION_BACKDASH; break;
 			case 1: status = ACTION_CHARGE; break;
 				//case 2: status = ACTION_DASH; break;
 				//case 3: status = ACTION_THROW_ATTACK; break;
-			case 4: status = ACTION_RUN; break;
-			case 5:	status = ACTION_SLASH_ATTACK; break;
-			case 6: status = ACTION_THROW_ATTACK; break;
+			//case 4: status = ACTION_RUN; break;
+			//case 5:	status = ACTION_SLASH_ATTACK; break;
+			//case 6: status = ACTION_THROW_ATTACK; break;
 			}
 
 			finalActionTime = TIMEMANAGER->getWorldTime();
