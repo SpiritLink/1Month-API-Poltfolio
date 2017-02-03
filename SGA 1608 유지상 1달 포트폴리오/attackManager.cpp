@@ -20,12 +20,7 @@ void attackManager::update()
 
 	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end();)			//모든 공격을 확인한다.
 	{
-		if ((*_viAttack)->getInputTime() + 0.125f < TIMEMANAGER->getWorldTime())//시간이 지난 공격이라면
-		{
-			(*_viAttack)->release();
-			_viAttack = _vAttack.erase(_viAttack);								//공격을 삭제한다.
-		}
-		else if ((*_viAttack)->getCheckCollision() == true)						//이미 한번 충돌된 공격이라면
+		if ((*_viAttack)->getCheckCollision() == true)						//이미 한번 충돌된 공격이라면
 		{
 			(*_viAttack)->release();
 			_viAttack = _vAttack.erase(_viAttack);								//공격을 삭제한다.

@@ -54,6 +54,8 @@ void playerSlash::update()
 	case ATTACK_PLAYER_SLASH_RIGHT:	_RECT = RectMakeCenter(DATABASE->getPlayerX() + 30, DATABASE->getPlayerY() - 15, 50, 50);
 		break;
 	}
+
+	if (inputTime + 0.1f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }
 
 void playerSlash::render()
@@ -134,6 +136,7 @@ void eriWave::update()
 		x += 10;
 		break;
 	}
+	if (inputTime + 2.5f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }
 
 void eriWave::render()
