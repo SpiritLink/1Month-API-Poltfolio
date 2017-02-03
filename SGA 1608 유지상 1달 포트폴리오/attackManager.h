@@ -19,6 +19,8 @@ public:
 
 	void playerSlashAttack(float inputX, float inputY, DIRECTION Dir);
 	void playerThrowAttack(float inputX, float inputY, DIRECTION Dir);
+	void eriWaveAttack(float inputX, float inputY, DIRECTION Dir);
+
 	attackManager();
 	virtual ~attackManager();
 };

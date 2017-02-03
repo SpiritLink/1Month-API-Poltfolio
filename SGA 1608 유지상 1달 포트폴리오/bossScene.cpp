@@ -17,7 +17,7 @@ HRESULT bossScene::init()
 	_attackManager->init();
 
 	_enemyManager = new enemyManager;
-	_enemyManager->init(_tileMap);
+	_enemyManager->init(_tileMap, _attackManager);
 
 	_player = new player;
 	_player->init();

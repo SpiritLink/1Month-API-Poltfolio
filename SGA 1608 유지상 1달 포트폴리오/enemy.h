@@ -19,7 +19,7 @@ protected:
 	int frameCount;					//프레임 카운트
 	
 public:
-	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();
@@ -34,7 +34,7 @@ public:
 class alien : public enemy		//일반 몬스터 (해파리)
 {
 public:
-	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();
@@ -48,7 +48,7 @@ class ghost : public enemy		//일반 몬스터 (유령)
 private:
 	DIRECTION dir;
 public:
-	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();
@@ -60,7 +60,7 @@ public:
 class flower : public enemy
 {
 public:
-	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();
@@ -83,7 +83,7 @@ private:
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
 
 public:
-	virtual HRESULT init(int tileNum, tileMap* _tileMap);
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();

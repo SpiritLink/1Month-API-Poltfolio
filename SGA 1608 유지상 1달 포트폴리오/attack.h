@@ -55,3 +55,15 @@ public:
 	virtual ~playerThrow();
 
 };
+
+class eriWave : public attack
+{
+public:
+	virtual HRESULT init(float inputX, float inputY);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	eriWave();
+	virtual ~eriWave();
+};

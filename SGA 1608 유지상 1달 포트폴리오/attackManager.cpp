@@ -90,6 +90,19 @@ void attackManager::playerThrowAttack(float inputX, float inputY, DIRECTION Dir)
 	_vAttack.push_back(Attack);
 }
 
+void attackManager::eriWaveAttack(float inputX, float inputY, DIRECTION Dir)
+{
+	attack* Attack;
+	Attack = new eriWave;
+	Attack->init(inputX, inputY);
+	switch (Dir)
+	{
+	case LEFT: Attack->setAttackType(ATTACK_ERI_WAVE_LEFT); break;
+	case RIGHT: Attack->setAttackType(ATTACK_ERI_WAVE_RIGHT); break;
+	}
+	_vAttack.push_back(Attack);
+}
+
 attackManager::attackManager()
 {
 }

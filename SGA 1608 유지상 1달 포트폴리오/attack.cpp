@@ -108,3 +108,43 @@ playerThrow::playerThrow()
 playerThrow::~playerThrow()
 {
 }
+
+HRESULT eriWave::init(float inputX, float inputY)
+{
+	inputTime = TIMEMANAGER->getWorldTime();
+	checkCollision = false;
+	x = inputX;
+	y = inputY;
+	return S_OK;
+}
+
+void eriWave::release()
+{
+}
+
+void eriWave::update()
+{
+	_RECT = RectMakeCenter(x, y, 50, 100);
+	switch (_attackType)
+	{
+	case ATTACK_ERI_WAVE_LEFT:
+		x -= 10;
+		break;
+	case ATTACK_ERI_WAVE_RIGHT:
+		x += 10;
+		break;
+	}
+}
+
+void eriWave::render()
+{
+	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
+}
+
+eriWave::eriWave()
+{
+}
+
+eriWave::~eriWave()
+{
+}

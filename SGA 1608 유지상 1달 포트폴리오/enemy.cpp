@@ -4,7 +4,7 @@
 #define ERISPEED 10
 #define ERIDASHSPEED 20
 
-HRESULT enemy::init(int tileNum, tileMap* _tileMap)
+HRESULT enemy::init(int tileNum, tileMap* _tileMap, attackManager* ATM)
 {
 	return S_OK;
 }
@@ -30,10 +30,11 @@ enemy::~enemy()
 {
 }
 
-HRESULT alien::init(int tileNum, tileMap* tileMap)
+HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
+	_attackManager = ATM;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
@@ -72,10 +73,11 @@ alien::~alien()
 {
 }
 
-HRESULT ghost::init(int tileNum, tileMap * tileMap)
+HRESULT ghost::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
+	_attackManager = ATM;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
@@ -129,10 +131,11 @@ ghost::~ghost()
 {
 }
 
-HRESULT flower::init(int tileNum, tileMap * tileMap)
+HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
+	_attackManager = ATM;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
@@ -171,12 +174,13 @@ flower::~flower()
 }
 
 
-HRESULT eri::init(int tileNum, tileMap * tileMap)
+HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	_attackManager = ATM;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	_tileMap = tileMap;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
@@ -184,7 +188,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_CHARGE;
+	status = ACTION_SLASH_ATTACK;
 	gravity = 0;
 	hitTime = TIMEMANAGER->getWorldTime();
 	finalActionTime = TIMEMANAGER->getWorldTime();
@@ -214,7 +218,7 @@ void eri::update()
 
 void eri::render()
 {
-	Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
+	//Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
 	switch (status)
 	{
 	case ACTION_NONE:
@@ -275,6 +279,7 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
+			if(frameCount == 1)_attackManager->eriWaveAttack(x, y, dir);
 			if (frameCount > 3) 
 			{
 				finalActionTime = TIMEMANAGER->getWorldTime();
@@ -367,9 +372,6 @@ void eri::collisionTileCheck()
 
 void eri::eriAI()
 {
-	////보스 몬스터의 방향을 설정한다 현재 임시로 여기에 배치함.
-	//if (x > DATABASE->getPlayerX()) dir = LEFT;
-	//if (x < DATABASE->getPlayerX()) dir = RIGHT;
 
 	if (finalActionTime + 0.2f < TIMEMANAGER->getWorldTime())	//마지막 행동을 한지 3초가 지났다면
 	{
@@ -378,11 +380,11 @@ void eri::eriAI()
 		case ACTION_NONE:						//아무것도 아닌 상태일때
 			switch (RND->getFromIntTo(0, 5))
 			{
-			case 0: status = ACTION_BACKDASH; break;
-			case 1: status = ACTION_CHARGE; break;
+			//case 0: status = ACTION_BACKDASH; break;
+			//case 1: status = ACTION_CHARGE; break;
 			//case 2: status = ACTION_DASH; break;
-			case 3: status = ACTION_THROW_ATTACK; break;
-			case 4: status = ACTION_RUN; break;
+			//case 3: status = ACTION_THROW_ATTACK; break;
+			//case 4: status = ACTION_RUN; break;
 			case 5:	status = ACTION_SLASH_ATTACK; break;
 			}
 			break;
