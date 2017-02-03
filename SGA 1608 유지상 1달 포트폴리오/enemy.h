@@ -92,7 +92,7 @@ public:
 	void firstCollisionTileCheck();	//처음 모든타일과 충돌을 체크합니다.
 	void collisionTileCheck();		//이후 주변 타일과 충돌을 체크합니다.
 	void eriAI();					//보스몬스터 eri의 AI입니다.
-	void checkXAndMove(DIRECTION dir,int value);		//X좌표지점의 상태를 확인하고 이동시킴.
+	bool checkXAndMove(DIRECTION dir,int value);		//X좌표지점의 상태를 확인하고 이동시킴.
 
 	void eriMove();				// 보스용 이동 함수
 

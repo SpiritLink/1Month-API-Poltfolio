@@ -184,7 +184,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_NONE;
+	status = ACTION_CHARGE;
 	gravity = 0;
 	hitTime = TIMEMANAGER->getWorldTime();
 	finalActionTime = TIMEMANAGER->getWorldTime();
@@ -201,7 +201,7 @@ void eri::release()
 void eri::update()
 {
 	_hitArea = RectMakeCenter(x, y, 50, 50);
-	detectArea = RectMakeCenter(x, y, 1000, 300);
+	detectArea = RectMakeCenter(x, y, 1600, 300);
 	gravity += GRAVITY;		//보스 중력 처리
 	DATABASE->setEriX(x);	//싱글톤으로 좌표를 보낸다
 	DATABASE->setEriY(y);	//싱글톤으로 좌표를 보낸다
@@ -291,9 +291,7 @@ void eri::frameUpdate()
 			++frameCount;
 			if (frameCount > 2)
 			{
-				finalActionTime = TIMEMANAGER->getWorldTime();
 				frameCount = 0;
-				status = ACTION_NONE;
 			}
 
 		}
@@ -318,9 +316,7 @@ void eri::frameUpdate()
 			++frameCount;
 			if (frameCount > 2)
 			{
-				finalActionTime = TIMEMANAGER->getWorldTime();
 				frameCount = 0;
-				status = ACTION_NONE;
 			}
 		}
 		break;
@@ -371,20 +367,20 @@ void eri::collisionTileCheck()
 
 void eri::eriAI()
 {
-	//보스 몬스터의 방향을 설정한다 현재 임시로 여기에 배치함.
-	if (x > DATABASE->getPlayerX()) dir = LEFT;
-	if (x < DATABASE->getPlayerX()) dir = RIGHT;
+	////보스 몬스터의 방향을 설정한다 현재 임시로 여기에 배치함.
+	//if (x > DATABASE->getPlayerX()) dir = LEFT;
+	//if (x < DATABASE->getPlayerX()) dir = RIGHT;
 
 	if (finalActionTime + 0.2f < TIMEMANAGER->getWorldTime())	//마지막 행동을 한지 3초가 지났다면
 	{
 		switch (status)
 		{
-		case ACTION_NONE:
+		case ACTION_NONE:						//아무것도 아닌 상태일때
 			switch (RND->getFromIntTo(0, 5))
 			{
 			//case 0: status = ACTION_BACKDASH; break;
-			//case 1: status = ACTION_CHARGE; break;
-			case 2: status = ACTION_DASH; break;
+			case 1: status = ACTION_CHARGE; break;
+			//case 2: status = ACTION_DASH; break;
 			//case 3: status = ACTION_THROW_ATTACK; break;
 			//case 4: status = ACTION_RUN; break;
 			//case 5:	status = ACTION_SLASH_ATTACK; break;
@@ -393,8 +389,16 @@ void eri::eriAI()
 		case ACTION_BACKDASH:
 			break;
 		case ACTION_CHARGE:
+			if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime()) status = ACTION_DASH;
 			break;
 		case ACTION_DASH:
+			if (checkXAndMove(dir, ERIDASHSPEED) == false)
+			{
+				if (x > DATABASE->getPlayerX()) dir = LEFT;
+				if (x < DATABASE->getPlayerX()) dir = RIGHT;
+				status = ACTION_NONE;
+				finalActionTime = TIMEMANAGER->getWorldTime();
+			}
 			break;
 		case ACTION_JUMP:
 			break;
@@ -408,25 +412,42 @@ void eri::eriAI()
 	}
 }
 
-void eri::checkXAndMove(DIRECTION dir, int value)
+bool eri::checkXAndMove(DIRECTION dir, int value)
 {
 	switch (dir)
 	{
 	case LEFT:
 		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - value, y)))
 		{
-			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= value;
+			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND)
+			{
+				x -= value;
+				return true;
+			}
+			if (_tileMap->getTiles()[currentCollisionTile - 1].obj == OBJ_GROUND)
+				return false;
 		}
 		else
+		{
 			x -= value;
+			return true;
+		}
 		break;
 	case RIGHT:
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x - value, y)))
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + value, y)))
 		{
-			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += value;
+			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND)
+			{
+				x += value;
+				return true;
+			}
+			if (_tileMap->getTiles()[currentCollisionTile + 1].obj == OBJ_GROUND) return false;
 		}
 		else
+		{
 			x += value;
+			return true;
+		}
 		break;
 	}
 }
@@ -459,9 +480,6 @@ void eri::eriMove()
 	case ACTION_BACKDASH:
 		if (!(frameCount >= 2 && frameCount <= 5)) break;
 		checkXAndMove(dir, ERISPEED);	
-		break;
-	case ACTION_DASH:	
-		checkXAndMove(dir, ERIDASHSPEED);	
 		break;
 	}
 }
