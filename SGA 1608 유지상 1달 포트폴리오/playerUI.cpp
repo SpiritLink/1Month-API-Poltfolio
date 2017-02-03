@@ -5,6 +5,7 @@
 HRESULT playerUI::init()
 {
 	_hpIMG = IMAGEMANAGER->addFrameImage("hp", "IMAGE/UI/hp.bmp", 200, 50, 4, 1, true, RGB(0, 0, 0));
+	_heart = IMAGEMANAGER->addFrameImage("hear", "IMAGE/UI/heart.bmp", 84, 24, 3, 1, true, RGB(255, 255, 255));
 	return S_OK;
 }
 
@@ -20,18 +21,18 @@ void playerUI::update()
 
 void playerUI::render()
 {
-	if (HP <= 4)
+	if (HP <= 3)
 	{
-		_hpIMG->frameRender(getMemDC(), 20, 20, HP % 4, 0);
+		_heart->frameRender(getMemDC(), 20, 20, HP % 3, 0);
 	}
 	else
 	{
-		for (int i = 0; i < (HP / 4) + 1; ++i)
+		for (int i = 0; i < (HP / 3) + 1; ++i)
 		{
-			if (i != (HP / 4))
-				_hpIMG->frameRender(getMemDC(), 20 + _hpIMG->getFrameWidth() * i, 20, 0, 0);
+			if (i != (HP / 3))
+				_heart->frameRender(getMemDC(), 20 + _hpIMG->getFrameWidth() / 2 * i, 20, 0, 0);
 			else
-				_hpIMG->frameRender(getMemDC(), 20 + _hpIMG->getFrameWidth() * i, 20, HP % 4, 0);
+				_heart->frameRender(getMemDC(), 20 + _hpIMG->getFrameWidth() / 2 * i, 20, HP % 3, 0);
 		}
 	}
 }
