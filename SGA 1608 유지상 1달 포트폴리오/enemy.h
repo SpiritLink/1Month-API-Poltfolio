@@ -76,6 +76,7 @@ private:
 	ACTION status;				//상태를 표시할 용도
 	RECT detectArea;			//플레이어가 공격 범위에 있는지 확인하기 위한 용도
 
+	float finalActionTime;		//마지막 동작을 끝낸 시간을 기록한다. (패턴 사이에 텀을 두기 위해서)
 	float hitTime;				//공격을 받을때 여러개를 한번에 받지 못하게 처리한다.
 	bool invincible;			//무적 상태를 표시하는 변수
 
@@ -91,6 +92,7 @@ public:
 	void firstCollisionTileCheck();	//처음 모든타일과 충돌을 체크합니다.
 	void collisionTileCheck();		//이후 주변 타일과 충돌을 체크합니다.
 	void eriAI();					//보스몬스터 eri의 AI입니다.
+	void checkXAndMove(DIRECTION dir,int value);		//X좌표지점의 상태를 확인하고 이동시킴.
 
 	void eriMove();				// 보스용 이동 함수
 

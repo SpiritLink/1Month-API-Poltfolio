@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "enemy.h"
 
+#define ERISPEED 10
+#define ERIDASHSPEED 20
 
 HRESULT enemy::init(int tileNum, tileMap* _tileMap)
 {
@@ -182,9 +184,10 @@ HRESULT eri::init(int tileNum, tileMap * tileMap)
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1334, 8, 14, true, RGB(0, 0, 255));
 	dir = LEFT;
-	status = ACTION_BACKDASH;
+	status = ACTION_NONE;
 	gravity = 0;
 	hitTime = TIMEMANAGER->getWorldTime();
+	finalActionTime = TIMEMANAGER->getWorldTime();
 	invincible = false;	// 현재 무적상태가 아님
 
 	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
@@ -259,7 +262,12 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 5) frameCount = 0;
+			if (frameCount > 5)
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
 		}
 		break;
 	case ACTION_SLASH_ATTACK:
@@ -267,7 +275,13 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 3) frameCount = 0;			//최대 프레임일때
+			if (frameCount > 3) 
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
+
 		}
 		break;
 	case ACTION_CHARGE:
@@ -275,7 +289,13 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 2) frameCount = 0;
+			if (frameCount > 2)
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
+
 		}
 		break;
 	case ACTION_BACKDASH:
@@ -285,12 +305,9 @@ void eri::frameUpdate()
 			++frameCount;
 			if (frameCount > 7)
 			{
-				switch (dir)
-				{
-				case RIGHT: dir = LEFT; break;
-				case LEFT: dir = RIGHT; break;
-				}
+				finalActionTime = TIMEMANAGER->getWorldTime();
 				frameCount = 0;
+				status = ACTION_NONE;
 			}
 		}
 		break;
@@ -299,7 +316,12 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 2) frameCount = 0;
+			if (frameCount > 2)
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
 		}
 		break;
 	case ACTION_THROW_ATTACK:
@@ -307,7 +329,12 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount > 5) frameCount = 0;			//최대 프레임일때
+			if (frameCount > 5)
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
 		}
 		break;
 	}
@@ -344,6 +371,64 @@ void eri::collisionTileCheck()
 
 void eri::eriAI()
 {
+	//보스 몬스터의 방향을 설정한다 현재 임시로 여기에 배치함.
+	if (x > DATABASE->getPlayerX()) dir = LEFT;
+	if (x < DATABASE->getPlayerX()) dir = RIGHT;
+
+	if (finalActionTime + 0.2f < TIMEMANAGER->getWorldTime())	//마지막 행동을 한지 3초가 지났다면
+	{
+		switch (status)
+		{
+		case ACTION_NONE:
+			switch (RND->getFromIntTo(0, 5))
+			{
+			//case 0: status = ACTION_BACKDASH; break;
+			//case 1: status = ACTION_CHARGE; break;
+			case 2: status = ACTION_DASH; break;
+			//case 3: status = ACTION_THROW_ATTACK; break;
+			//case 4: status = ACTION_RUN; break;
+			//case 5:	status = ACTION_SLASH_ATTACK; break;
+			}
+			break;
+		case ACTION_BACKDASH:
+			break;
+		case ACTION_CHARGE:
+			break;
+		case ACTION_DASH:
+			break;
+		case ACTION_JUMP:
+			break;
+		case ACTION_RUN:
+			break;
+		case ACTION_SLASH_ATTACK:
+			break;
+		case ACTION_THROW_ATTACK:
+			break;
+		}
+	}
+}
+
+void eri::checkXAndMove(DIRECTION dir, int value)
+{
+	switch (dir)
+	{
+	case LEFT:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - value, y)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= value;
+		}
+		else
+			x -= value;
+		break;
+	case RIGHT:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x - value, y)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += value;
+		}
+		else
+			x += value;
+		break;
+	}
 }
 
 void eri::eriMove()
@@ -368,26 +453,16 @@ void eri::eriMove()
 
 	switch (status)
 	{
-	case ACTION_RUN:		//달리는 상황을 처리합니다.
-		switch (dir)
-		{
-		case LEFT: x -= 10; break;
-		case RIGHT: x += 10; break;
-		}
+	case ACTION_RUN:	
+		checkXAndMove(dir, ERISPEED);	
 		break;
-	case ACTION_BACKDASH:	//뒤로 대쉬하는 상황을 처리합니다.
-		switch (dir)
-		{
-		case LEFT:	if (frameCount >= 2 && frameCount <= 5) x += 10; break;
-		case RIGHT:	if (frameCount >= 2 && frameCount <= 5) x -= 10; break;
-		}
+	case ACTION_BACKDASH:
+		if (!(frameCount >= 2 && frameCount <= 5)) break;
+		checkXAndMove(dir, ERISPEED);	
 		break;
-	case ACTION_DASH:
-		switch (dir)
-		{
-		case LEFT: x -= 20; break;
-		case RIGHT: x += 20; break;
-		}
+	case ACTION_DASH:	
+		checkXAndMove(dir, ERIDASHSPEED);	
+		break;
 	}
 }
 
