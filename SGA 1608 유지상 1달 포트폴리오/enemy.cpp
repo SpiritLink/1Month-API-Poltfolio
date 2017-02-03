@@ -272,25 +272,8 @@ void eri::frameUpdate()
 			++frameCount;
 			if (frameCount > 5)
 			{
-				finalActionTime = TIMEMANAGER->getWorldTime();
 				frameCount = 0;
-				status = ACTION_NONE;
 			}
-		}
-		break;
-	case ACTION_SLASH_ATTACK:
-		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
-		{
-			currentTime = TIMEMANAGER->getWorldTime();
-			++frameCount;
-			if(frameCount == 1)_attackManager->eriWaveAttack(x, y, dir);
-			if (frameCount > 3) 
-			{
-				finalActionTime = TIMEMANAGER->getWorldTime();
-				frameCount = 0;
-				status = ACTION_NONE;
-			}
-
 		}
 		break;
 	case ACTION_CHARGE:
@@ -329,11 +312,27 @@ void eri::frameUpdate()
 			}
 		}
 		break;
+	case ACTION_SLASH_ATTACK:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount == 1)	_attackManager->eriWaveAttack(x, y, dir);
+			if (frameCount > 3)
+			{
+				finalActionTime = TIMEMANAGER->getWorldTime();
+				frameCount = 0;
+				status = ACTION_NONE;
+			}
+
+		}
+		break;
 	case ACTION_THROW_ATTACK:
 		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
+			if (frameCount == 1)		_attackManager->eriWaveAttack(x, y, dir);
 			if (frameCount > 5)
 			{
 				finalActionTime = TIMEMANAGER->getWorldTime();
@@ -387,55 +386,71 @@ void eri::collisionTileCheck()
 
 void eri::eriAI()
 {
-
-	if (finalActionTime + 0.2f < TIMEMANAGER->getWorldTime())	//마지막 행동을 한지 3초가 지났다면
+	switch (status)
 	{
-		switch (status)
+	case ACTION_NONE:
+		if (finalActionTime + 0.2f < TIMEMANAGER->getWorldTime()) //마지막 행동후 1초가 지났다면
 		{
-		case ACTION_NONE:						//아무것도 아닌 상태일때
-			switch (RND->getFromIntTo(0, 5))
+			switch (RND->getFromIntTo(0, 6))
 			{
 			case 0: status = ACTION_BACKDASH; break;
 			case 1: status = ACTION_CHARGE; break;
-			//case 2: status = ACTION_DASH; break;
-			//case 3: status = ACTION_THROW_ATTACK; break;
-			//case 4: status = ACTION_RUN; break;
+				//case 2: status = ACTION_DASH; break;
+				//case 3: status = ACTION_THROW_ATTACK; break;
+			case 4: status = ACTION_RUN; break;
 			case 5:	status = ACTION_SLASH_ATTACK; break;
+			case 6: status = ACTION_THROW_ATTACK; break;
 			}
-			break;
-		case ACTION_BACKDASH:
-			if (!(frameCount >= 2 && frameCount <= 5)) break;
-			checkXAndMove(dir, ERISPEED);
-			break;
-		case ACTION_CHARGE:
-			if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime()) status = ACTION_DASH;
-			break;
-		case ACTION_DASH:
-			if (checkXAndMove(dir, ERIDASHSPEED) == false)
-			{
-				status = ACTION_DIZZY;
-				finalActionTime = TIMEMANAGER->getWorldTime();
-			}
-			break;
-		case ACTION_JUMP:
-			break;
-		case ACTION_RUN:
-			checkXAndMove(dir, ERISPEED);
-			break;
-		case ACTION_SLASH_ATTACK:
-			break;
-		case ACTION_THROW_ATTACK:
-			break;
-		case ACTION_DIZZY:
-			if (finalActionTime + 1.5f < TIMEMANAGER->getWorldTime())
-			{
-				if (x > DATABASE->getPlayerX()) dir = LEFT;
-				if (x < DATABASE->getPlayerX()) dir = RIGHT;
-				status = ACTION_NONE;
-				finalActionTime = TIMEMANAGER->getWorldTime();
-			}
-			break;
+
+			finalActionTime = TIMEMANAGER->getWorldTime();
 		}
+		break;
+	case ACTION_BACKDASH:
+		if (!(frameCount >= 2 && frameCount <= 5)) break;
+		checkXAndMove(dir, ERISPEED);
+		break;
+	case ACTION_CHARGE:
+		if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime())	//차지를 2초동안 한뒤
+		{
+			switch (RND->getFromIntTo(0, 1))
+			{
+			case 0: status = ACTION_DASH; break;
+			case 1: status = ACTION_THROW_ATTACK;	break;
+			}
+			finalActionTime = TIMEMANAGER->getWorldTime();
+		}
+		break;
+	case ACTION_DASH:
+		if (checkXAndMove(dir, ERIDASHSPEED) == false)
+		{
+			status = ACTION_DIZZY;
+			finalActionTime = TIMEMANAGER->getWorldTime();
+		}
+		break;
+	case ACTION_JUMP:
+		break;
+	case ACTION_RUN:
+		if (checkXAndMove(dir, ERISPEED) == false || finalActionTime + 1.0f < TIMEMANAGER->getWorldTime())
+		{
+			if (x > DATABASE->getPlayerX()) dir = LEFT;
+			if (x < DATABASE->getPlayerX()) dir = RIGHT;
+			status = ACTION_NONE;
+			finalActionTime = TIMEMANAGER->getWorldTime();
+		}
+		break;
+	case ACTION_SLASH_ATTACK:
+		break;
+	case ACTION_THROW_ATTACK:
+		break;
+	case ACTION_DIZZY:
+		if (finalActionTime + 2.5f < TIMEMANAGER->getWorldTime())
+		{
+			if (x > DATABASE->getPlayerX()) dir = LEFT;
+			if (x < DATABASE->getPlayerX()) dir = RIGHT;
+			status = ACTION_NONE;
+			finalActionTime = TIMEMANAGER->getWorldTime();
+		}
+		break;
 	}
 }
 
