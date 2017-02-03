@@ -249,6 +249,10 @@ void eri::render()
 		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 12);
 		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 13);
 		break;
+	case ACTION_DIZZY:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 14);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 15);
+		break;
 	}
 	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
 	testFunction();			//실험용 함수입니다.
@@ -338,6 +342,17 @@ void eri::frameUpdate()
 			}
 		}
 		break;
+	case ACTION_DIZZY:
+		if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		{
+			currentTime = TIMEMANAGER->getWorldTime();
+			++frameCount;
+			if (frameCount > 7)
+			{
+				frameCount = 0;
+			}
+		}
+		break;
 	}
 }
 
@@ -398,9 +413,7 @@ void eri::eriAI()
 		case ACTION_DASH:
 			if (checkXAndMove(dir, ERIDASHSPEED) == false)
 			{
-				if (x > DATABASE->getPlayerX()) dir = LEFT;
-				if (x < DATABASE->getPlayerX()) dir = RIGHT;
-				status = ACTION_NONE;
+				status = ACTION_DIZZY;
 				finalActionTime = TIMEMANAGER->getWorldTime();
 			}
 			break;
@@ -412,6 +425,15 @@ void eri::eriAI()
 		case ACTION_SLASH_ATTACK:
 			break;
 		case ACTION_THROW_ATTACK:
+			break;
+		case ACTION_DIZZY:
+			if (finalActionTime + 1.5f < TIMEMANAGER->getWorldTime())
+			{
+				if (x > DATABASE->getPlayerX()) dir = LEFT;
+				if (x < DATABASE->getPlayerX()) dir = RIGHT;
+				status = ACTION_NONE;
+				finalActionTime = TIMEMANAGER->getWorldTime();
+			}
 			break;
 		}
 	}
@@ -491,6 +513,7 @@ void eri::testFunction()
 	case ACTION_BACKDASH: sprintf(str1, "ACTION_BACKDASH"); break;
 	case ACTION_DASH: sprintf(str1, "ACTION_DASH"); break;
 	case ACTION_THROW_ATTACK: sprintf(str1, "ACTION_THROW_ATTACK"); break;
+	case ACTION_DIZZY: sprintf(str1, "ACTION_DIZZY"); break;
 	}
 
 	sprintf(str2, "%d", currentCollisionTile);
