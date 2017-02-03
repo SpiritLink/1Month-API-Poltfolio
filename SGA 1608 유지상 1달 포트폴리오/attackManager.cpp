@@ -98,6 +98,45 @@ void attackManager::eriWaveAttack(float inputX, float inputY, DIRECTION Dir)
 	_vAttack.push_back(Attack);
 }
 
+void attackManager::eriKnivesAttack(float inputX, float inputY, DIRECTION Dir)
+{
+	attack* Attack1;
+	attack* Attack2;
+
+	Attack1 = new eriKnives;
+	Attack2 = new eriKnives;
+
+	switch (Dir)
+	{
+	case LEFT:
+		Attack1->init(inputX, inputY);
+		Attack1->setAngle(PI);
+		Attack1->setAttackType(ATTACK_ERI_KNIVES);
+
+		Attack2->init(inputX, inputY);
+		Attack2->setAngle(PI - PI / 6.0f);
+		Attack2->setAttackType(ATTACK_ERI_KNIVES);
+
+		_vAttack.push_back(Attack1);
+		_vAttack.push_back(Attack2);
+		break;
+	case RIGHT:
+		Attack1->init(inputX, inputY);
+		Attack1->setAngle(0);
+		Attack1->setAttackType(ATTACK_ERI_KNIVES);
+
+		Attack2->init(inputX, inputY);
+		Attack2->setAngle((2.0f * PI) - (PI / 6.0f));
+		Attack2->setAttackType(ATTACK_ERI_KNIVES);
+
+		_vAttack.push_back(Attack1);
+		_vAttack.push_back(Attack2);
+		break;
+	}
+
+	
+}
+
 attackManager::attackManager()
 {
 }

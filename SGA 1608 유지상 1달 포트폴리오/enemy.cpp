@@ -332,7 +332,7 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount == 1)		_attackManager->eriWaveAttack(x, y, dir);
+			if (frameCount == 1)		_attackManager->eriKnivesAttack(x, y, dir);
 			if (frameCount > 5)
 			{
 				finalActionTime = TIMEMANAGER->getWorldTime();

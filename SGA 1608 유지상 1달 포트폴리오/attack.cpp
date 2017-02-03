@@ -90,12 +90,14 @@ void playerThrow::update()
 	switch (_attackType)
 	{
 	case ATTACK_PLAYER_THROW_LEFT:
-		x -= 10;
+		x -= 20;
 		break;
 	case ATTACK_PLAYER_THROW_RIGHT:
-		x += 10;
+		x += 20;
 		break;
 	}
+
+	if (inputTime + 2.0f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }
 
 void playerThrow::render()
@@ -149,5 +151,42 @@ eriWave::eriWave()
 }
 
 eriWave::~eriWave()
+{
+}
+
+HRESULT eriKnives::init(float inputX, float inputY)
+{
+	inputTime = TIMEMANAGER->getWorldTime();
+	checkCollision = false;
+	x = inputX;
+	y = inputY;
+	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(255, 255, 255));
+
+	return S_OK;
+}
+
+void eriKnives::release()
+{
+}
+
+void eriKnives::update()
+{
+	x += cosf(angle) * 10.0f;
+	y += -sinf(angle) * 10.0f;
+	_RECT = RectMakeCenter(x, y, 10, 10);
+	if (inputTime + 2.5f < TIMEMANAGER->getWorldTime()) collisionTrue();
+}
+
+void eriKnives::render()
+{
+	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, angle / (PI / 6.0f), 0);
+}
+
+eriKnives::eriKnives()
+{
+}
+
+eriKnives::~eriKnives()
 {
 }

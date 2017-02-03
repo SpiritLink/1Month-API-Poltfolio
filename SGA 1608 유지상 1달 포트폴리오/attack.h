@@ -12,6 +12,8 @@ protected:
 	RECT _RECT;				//충돌렉트
 	float x, y;				//좌표
 	float speed;			//이동 속도
+
+	float angle;			//각도는 칼에서만 사용됩니다.
 	
 public:
 	virtual HRESULT init(float inputX, float inputY);
@@ -27,6 +29,7 @@ public:
 	void collisionTrue() { checkCollision = true; }
 	void addX(int value) { x += value; }
 	void addY(int value) { y += value; }
+	void setAngle(float _angle) { angle = _angle; }
 	attack();
 	virtual ~attack();
 };
@@ -66,4 +69,16 @@ public:
 
 	eriWave();
 	virtual ~eriWave();
+};
+
+class eriKnives : public attack
+{
+public:
+	virtual HRESULT init(float inputX, float inputY);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	eriKnives();
+	virtual ~eriKnives();
 };
