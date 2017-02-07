@@ -114,7 +114,7 @@ void player::playerMove()
 		if (!(Action & ACTION_JUMP))
 		{
 			Action = Action | ACTION_JUMP;
-			gravity = -10;								//중력을 바꿔준다.
+			gravity = -15;								//중력을 바꿔준다.
 		}
 	}
 	//플레이어와 타일의 충돌을 처리

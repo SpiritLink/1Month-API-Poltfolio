@@ -147,7 +147,7 @@ enum ATTACKTYPE
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
-#define GRAVITY 0.5f
+#define GRAVITY 1.0f
 
 //맵툴에서 사용되는 공용 구조체와 enum
 enum CTRL
