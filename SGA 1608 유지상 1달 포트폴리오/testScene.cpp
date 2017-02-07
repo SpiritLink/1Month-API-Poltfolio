@@ -214,7 +214,7 @@ void testScene::portal()
 		break;
 	case 14748:
 	case 14749:
-		_player->setPlayerTilePosition(13848);
+		_player->setPlayerTilePosition(13698);
 		_player->firstCollisionTileCheck();
 		break;
 	}

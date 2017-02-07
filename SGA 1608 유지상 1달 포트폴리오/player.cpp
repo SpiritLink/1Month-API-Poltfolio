@@ -89,30 +89,14 @@ void player::playerMove()
 	//중력처리
 	gravity += GRAVITY;
 
-	//플레이어와 타일의 충돌을 처리
-	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
-	{
-		if (gravity > 0) y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;		//중력이 밑으로 향할때
-		if (gravity < 0) y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;	//중력이 위로 향할때
-		if (Action & ACTION_JUMP) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
-		gravity = 0;
-	}
-
-	//중력 예외처리 (땅위에 서있을때)
-	if (gravity <= 1)
-	{
-		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
-			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity))) gravity = 0;
-	}
-
 	//키보드 입력을 처리
 	//타일과 부딪힌다면 움직이지 못하도록 처리.
 	if (keyStatus & KEYBOARD_LEFT)
 	{
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile-1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
 		{
-			if(_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
-		}	
+			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
+		}
 		else																						//이동해도 옆타일에 안닿는다면
 			x -= SPEED;																				//이동한다.
 	}
@@ -125,8 +109,6 @@ void player::playerMove()
 		else																						//이동해도 옆타일에 안닿는다면
 			x += SPEED;																				//이동한다.
 	}
-	//if (keyStatus & KEYBOARD_UP) y -= SPEED;
-	//if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 	if (keyStatus & KEYBOARD_X)
 	{
 		if (!(Action & ACTION_JUMP))
@@ -135,6 +117,25 @@ void player::playerMove()
 			gravity = -10;								//중력을 바꿔준다.
 		}
 	}
+	//플레이어와 타일의 충돌을 처리
+	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
+	{
+		if (gravity > 0) y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;		//중력이 밑으로 향할때
+		if (gravity < 0) y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;	//중력이 위로 향할때
+		if (Action & ACTION_JUMP) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
+		gravity = 0;
+	}
+
+
+	//중력 예외처리 (땅위에 서있을때)
+	if (gravity <= 1)
+	{
+		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
+			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity))) gravity = 0;
+	}
+
+
+
 
 	y += gravity;
 }
@@ -252,14 +253,14 @@ void player::testFunction()
 
 void player::playerStatusCheck()
 {
-	if (gravity > 0)
+	if (gravity > 1)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//점프 상태로 변경함
 		if (playerStatus & STATUS_JUMP) playerStatus -= STATUS_JUMP;	//착륙 상태를 제거한다.
 		if (playerStatus & STATUS_RUN) playerStatus -= STATUS_RUN;		//달림 상태를 제거한다.
 		if (playerStatus & STATUS_STAND) playerStatus -= STATUS_STAND;	//서있는 상태를 제거한다.
 	}
-	if (gravity < 0)
+	if (gravity < -1)
 	{
 		playerStatus = playerStatus | STATUS_JUMP;						//착륙 상태로 변경함.
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;	//점프 상태를 제거한다.
