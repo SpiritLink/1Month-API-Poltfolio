@@ -54,8 +54,8 @@ void mapTool::render()
 
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
-		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + ((i / TILEX) * 2), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+		_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 
 	for (int i = 0; i < SAMPLETILEY * SAMPLETILEX; ++i)
@@ -193,16 +193,16 @@ void mapTool::mouseClick()
 void mapTool::setup()
 {
 	_btnTerrainDraw = CreateWindow("button", "배경설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		1100, 380, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
+		1100, 500, 100, 30, _hWnd, HMENU(0), _hInstance, NULL);
 
 	_btnObjDraw = CreateWindow("button", "물체설치", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		1100, 410, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
+		1100, 530, 100, 30, _hWnd, HMENU(1), _hInstance, NULL);
 
 	_btnObjEraser = CreateWindow("button", "물체삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		1100, 470, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
+		1100, 560, 100, 30, _hWnd, HMENU(2), _hInstance, NULL);
 
 	_btnTerrainEraser = CreateWindow("button", "배경삭제", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-		1100, 440, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
+		1100, 590, 100, 30, _hWnd, HMENU(3), _hInstance, NULL);
 
 	_moveLeft = RectMake(0, WINSIZEY / 2 - 50, 50, 50);
 	_moveRight = RectMake(800, WINSIZEY / 2 - 50, 50, 50);

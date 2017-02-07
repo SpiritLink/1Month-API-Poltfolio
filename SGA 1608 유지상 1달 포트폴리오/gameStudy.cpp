@@ -30,7 +30,7 @@ HRESULT gameStudy::init()
 	SCENEMANAGER->addScene("field2Scene", new field2Scene);	//사냥터 2
 	SCENEMANAGER->addScene("bossScene", new bossScene);		//보스방
 
-	SCENEMANAGER->changeScene("testScene");					//현재 실험용 맵으로 진입한다.
+	SCENEMANAGER->changeScene("mapTool");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
 	return S_OK;
 }
