@@ -39,6 +39,9 @@ HRESULT testScene::init()
 
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());
+
+	_player->update();
+	cameraInit();
 	return S_OK;
 }
 
@@ -105,7 +108,7 @@ void testScene::render()
 	_tileMap->render();
 	_enemyManager->render();
 	_player->render();
-	if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
+	//if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
 
 	_attackManager->render();
 	_playerUI->render();
@@ -198,6 +201,92 @@ void testScene::cameraMove()
 	}
 }
 
+void testScene::cameraInit()
+{
+	//현재는 사실상 쓰이지 않고 있습니다.
+	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
+	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
+	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
+
+	//만약 화면을 벗어난다면
+	if (Background.right < WINSIZEX)
+	{
+		int diffrence = WINSIZEX - Background.right;
+		Background.right += diffrence;	//배경의 움직이는 정도를 조절
+		Background.left += diffrence;	//배경의 움직이는 정도를 조정
+		_tileMap->moveTileX(diffrence);
+		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+	}
+	if (Background.left > 0)
+	{
+		int diffrence = Background.left;
+		Background.right -= diffrence;
+		Background.left -= diffrence;
+		_player->addPlayerX(+diffrence);
+		_tileMap->moveTileX(-diffrence);
+	}
+	if (Background.top > 0)
+	{
+		int diffrence = Background.top;
+		Background.top -= diffrence;
+		Background.bottom -= diffrence;
+		_player->addPlayerY(diffrence);
+		_tileMap->moveTileY(-diffrence);
+	}
+
+	if (Background.bottom < WINSIZEY)
+	{
+		int diffrence = WINSIZEY - Background.bottom;
+		Background.top += diffrence;
+		Background.bottom += diffrence;
+		_player->addPlayerY(-diffrence);
+		_tileMap->moveTileY(+diffrence);
+	}
+
+	//X좌표 이동
+	if (DATABASE->getSourCamX() > DATABASE->getDestCamX())		//화면 오른쪽으로 움직일때
+	{
+		Background.left -= distanceX;
+		Background.right -= distanceX;
+		_player->addPlayerX(-distanceX);
+		_tileMap->moveTileX(-distanceX);
+		_attackManager->moveAttackX(-distanceX);
+		_enemyManager->addEnemyX(-distanceX);
+	}
+
+	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
+	{
+		Background.left += distanceX;
+		Background.right += distanceX;
+		_player->addPlayerX(distanceX);
+		_tileMap->moveTileX(distanceX);
+		_attackManager->moveAttackX(distanceX);
+		_enemyManager->addEnemyX(distanceX);
+	}
+
+	//Y좌표 이동
+	if (DATABASE->getSourCamY() > DATABASE->getDestCamY())		//화면 아래쪽으로 움직일때
+	{
+		Background.top -= distanceY;
+		Background.bottom -= distanceY;
+		_player->addPlayerY(-distanceY);
+		_tileMap->moveTileY(-distanceY);
+		_attackManager->moveAttackY(-distanceY);
+		_enemyManager->addEnemyY(-distanceY);
+	}
+
+	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
+	{
+		Background.top += distanceY;
+		Background.bottom += distanceY;
+		_player->addPlayerY(distanceY);
+		_tileMap->moveTileY(distanceY);
+		_attackManager->moveAttackY(distanceY);
+		_enemyManager->addEnemyY(distanceY);
+	}
+}
+
 void testScene::portal()
 {
 	//플레이어가 특정 타일에 닿으면 다른 타일로 이동시키는 함수.
@@ -206,16 +295,20 @@ void testScene::portal()
 
 	switch (_player->getCollisionTile())
 	{
-	case 17272:
+	case 17272:									//1스테이지에서 2스테이지로 넘기는 부분
 	case 17273:
 	case 17274:
 		_player->setPlayerTilePosition(16398);
 		_player->firstCollisionTileCheck();
+		_player->update();
+		cameraInit();
 		break;
-	case 14748:
+	case 14748:									//2스테이지 에서 3스테이지로 넘기는 부분
 	case 14749:
 		_player->setPlayerTilePosition(13698);
 		_player->firstCollisionTileCheck();
+		_player->update();
+		cameraInit();
 		break;
 	}
 }
