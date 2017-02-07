@@ -203,13 +203,20 @@ void testScene::portal()
 	//플레이어가 특정 타일에 닿으면 다른 타일로 이동시키는 함수.
 	//이동할수 있는 타일을 좀더 넉넉하게 설정해주자.
 	//충돌구간이 순간적으로 이동하기 때문에 첫 충돌을 한번더 실행시켜줘야 한다.
-	if (_player->getCollisionTile() == 17272 ||
-		_player->getCollisionTile() == 17273 ||
-		_player->getCollisionTile() == 17274)
+
+	switch (_player->getCollisionTile())
 	{
+	case 17272:
+	case 17273:
+	case 17274:
 		_player->setPlayerTilePosition(16398);
 		_player->firstCollisionTileCheck();
-		//이때 전체충돌도 한번 해줘야 한다.
+		break;
+	case 14748:
+	case 14749:
+		_player->setPlayerTilePosition(13848);
+		_player->firstCollisionTileCheck();
+		break;
 	}
 }
 
