@@ -5,6 +5,8 @@
 class playerUI : public gameNode
 {
 private:
+	image* _hpFrame;
+	image* _sealFrame;
 	image* _hpIMG;
 	image* _heart;
 	int HP;

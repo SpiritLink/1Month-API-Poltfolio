@@ -29,6 +29,7 @@ public:
 	virtual void render();
 	
 	void cameraMove();
+	void portal();
 	testScene();
 	virtual ~testScene();
 };

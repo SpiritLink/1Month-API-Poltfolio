@@ -38,6 +38,7 @@ void player::update()
 	keyboardInput();		//어떤 키보드 입력을 받았는지
 	playerStatusCheck();	//플레이어의 상태는 어떤지
 	playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
+	//testPlayerMove();
 
 	//
 
@@ -164,6 +165,14 @@ void player::playerAttack()
 			playerStatus = playerStatus | STATUS_ATTACK;
 		}
 	}
+}
+
+void player::testPlayerMove()
+{
+	if (keyStatus & KEYBOARD_LEFT) x -= SPEED;
+	if (keyStatus & KEYBOARD_RIGHT) x += SPEED;
+	if (keyStatus & KEYBOARD_UP) y -= SPEED;
+	if (keyStatus & KEYBOARD_DOWN) y += SPEED;
 }
 
 void player::testFunction()

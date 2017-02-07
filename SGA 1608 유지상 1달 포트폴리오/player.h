@@ -45,6 +45,7 @@ public:
 	void keyboardInput();	//키보드를 입력하면 비트연산하는 함수
 	void playerMove();		//플레이어의 움직임
 	void playerAttack();	//플레이어의 공격을 처리
+	void testPlayerMove();	//맵을 탐색하기 위한 테스트 함수
 
 	void testFunction();		//테스트중인 값을 확인하기 위한 함수
 	void playerStatusCheck();	//플레이어의 상태를 확인하고 상태를 저장하는 함수.
@@ -53,6 +54,7 @@ public:
 	int getPlayerY() { return y; }
 	void addPlayerX(int value) { x += value; }
 	void addPlayerY(int value) { y += value; }
+	int getCollisionTile() { return currentCollisionTile; }
 
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
 	void setAttackManagerMemoryAddress(attackManager* ATM) { _attackManager = ATM; }
