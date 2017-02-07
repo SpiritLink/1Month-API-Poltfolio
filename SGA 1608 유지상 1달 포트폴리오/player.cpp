@@ -314,9 +314,9 @@ void player::firstCollisionTileCheck()
 void player::collisionTileCheck()
 {
 	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
-	for (int i = currentCollisionTile - 2; i < currentCollisionTile + 2; ++i)
+	for (int i = currentCollisionTile - 1; i < currentCollisionTile + 2; ++i)
 	{
-		for (int j = -2; j < 3; ++j)
+		for (int j = -1; j < 2; ++j)
 		{
 			//캐릭터 주변 25개의 타일의 충돌을 계산한다. 이때 범위를 벗어나지 않도록 영역을 조절해 줘야 한다.
 			if (PtInRect(&_tileMap->getTiles()[i + j * TILEX].rc, PointMake(x, y)))
