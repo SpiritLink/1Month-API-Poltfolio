@@ -6,6 +6,8 @@
 #include "playerUI.h"
 #include "attackManager.h"
 #include "enemyManager.h"
+#include "collision.h"
+
 
 class testScene : public gameNode
 {
@@ -16,6 +18,7 @@ private:
 	image* _image;
 	player* _player;
 	playerUI* _playerUI;
+	collision* _collision;
 
 	float cameraX;
 	float cameraY;
