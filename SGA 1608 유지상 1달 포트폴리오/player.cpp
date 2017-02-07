@@ -121,14 +121,20 @@ void player::playerMove()
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
 	{
 		if (gravity > 0) y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;		//중력이 밑으로 향할때
-		if (gravity < 0) y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;	//중력이 위로 향할때
-		if (Action & ACTION_JUMP) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
+
+		if (gravity < 0)//중력이 위로 향할때 땅과 충돌하게 된다면
+		{
+			gravity = 1;
+			y = _tileMap->getTiles()[currentCollisionTile].rc.bottom + 1;
+		}
+		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
+		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
 		gravity = 0;
 	}
 
 
 	//중력 예외처리 (땅위에 서있을때)
-	if (gravity <= 1)
+	if (gravity <= 1 && gravity >= 0)
 	{
 		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
 			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity))) gravity = 0;
@@ -248,7 +254,7 @@ void player::testFunction()
 	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
 	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
 	TextOut(getMemDC(), 100, 540, str18, strlen(str18));
-	TextOut(getMemDC(), 300, 100, str20, strlen(str20));
+	//TextOut(getMemDC(), 300, 100, str20, strlen(str20));		//중점으로 부터 플레이어 까지의 거리
 }
 
 void player::playerStatusCheck()

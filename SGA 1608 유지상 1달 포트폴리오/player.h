@@ -5,7 +5,7 @@
 #include "attackManager.h"
 
 
-#define DEFAULT_SPEED 5
+#define DEFAULT_SPEED 6
 #define IMAGESIZEX 336
 #define IMAGESIZEY 576
 class player : public gameNode
