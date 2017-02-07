@@ -14,6 +14,7 @@ public:
 	virtual void update();
 	virtual void render();
 	
+	vector<attack*> getAttackVector() { return _vAttack; }
 	void moveAttackX(int value);
 	void moveAttackY(int value);
 

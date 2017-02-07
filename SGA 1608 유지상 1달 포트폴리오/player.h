@@ -55,6 +55,7 @@ public:
 	void addPlayerX(int value) { x += value; }
 	void addPlayerY(int value) { y += value; }
 	int getCollisionTile() { return currentCollisionTile; }
+	RECT getPlayerRect() { return PlayerRect;}
 
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
 	void setAttackManagerMemoryAddress(attackManager* ATM) { _attackManager = ATM; }

@@ -26,6 +26,8 @@ public:
 	void addEnemyX(int value);
 	void addEnemyY(int value);
 
+	vector<enemy*> getEnemyVector() { return _vEnemy; }
+
 	enemyManager();
 	virtual ~enemyManager();
 };

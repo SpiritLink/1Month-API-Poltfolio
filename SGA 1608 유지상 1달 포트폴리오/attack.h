@@ -24,6 +24,7 @@ public:
 	float getInputTime() { return inputTime; }
 	ATTACKTYPE getAttackType() { return _attackType; }
 	bool getCheckCollision() { return checkCollision; }
+	RECT getAttackRect() { return _RECT; }
 
 	void setAttackType(ATTACKTYPE Type) { _attackType = Type; }
 	void collisionTrue() { checkCollision = true; }

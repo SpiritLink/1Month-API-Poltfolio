@@ -30,7 +30,7 @@ HRESULT testScene::init()
 	_playerUI->init();
 
 	_collision = new collision;
-	_collision->init(_player, _attackManager, _enemyManager);
+	_collision->init();
 
 	cameraX = 0;
 	cameraY = 0;
@@ -75,7 +75,7 @@ void testScene::update()
 	_playerUI->update();
 	_attackManager->update();
 	_enemyManager->update();
-	_collision->update();
+	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{
