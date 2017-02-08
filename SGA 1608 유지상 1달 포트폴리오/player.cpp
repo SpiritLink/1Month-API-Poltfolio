@@ -40,19 +40,9 @@ void player::update()
 	playerStatusCheck();	//플레이어의 상태는 어떤지
 	playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
 	//testPlayerMove();
-
-	//
+	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
 	PlayerRect = RectMakeCenter(x, y, 5, 5);
-
-	DATABASE->setSourCamX(x);							//기준이 될 좌표를 플레이어 X좌표로 설정한다.
-	DATABASE->setSourCamY(y);							//기준이 될 좌표를 플레이어 y좌표로 설정한다.
-	DATABASE->setHP(HP);
-	DATABASE->setMP(MP);
-	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
-	DATABASE->setPlayerX(x);
-	DATABASE->setPlayerY(y);
-
 }
 
 void player::render()
@@ -292,6 +282,17 @@ void player::playerStatusCheck()
 
 	if (keyStatus & KEYBOARD_Z) playerAttack();
 
+}
+
+void player::sendDataToSingleton()
+{
+	DATABASE->setSourCamX(x);							//기준이 될 좌표를 플레이어 X좌표로 설정한다.
+	DATABASE->setSourCamY(y);							//기준이 될 좌표를 플레이어 y좌표로 설정한다.
+	DATABASE->setHP(HP);
+	DATABASE->setMP(MP);
+	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
+	DATABASE->setPlayerX(x);
+	DATABASE->setPlayerY(y);
 }
 
 void player::setPlayerTilePosition(int tileNum)
