@@ -18,6 +18,8 @@ private:
 	float x;
 	float y;
 	float currentTime;				//현재 시간을 저장하는 변수
+	float invincibleTime;			//무적 시간을 저장하는 변수
+	float countTime;
 	RECT PlayerRect;
 	DIRECTION direction;			//방향을 확인하는 변수
 	bool attackType;				//공격의 종류를 바꿔주는 변수
@@ -67,6 +69,7 @@ public:
 	void setTileMapMemoryAddress(tileMap* tm) { _tileMap = tm; }
 	void setAttackManagerMemoryAddress(attackManager* ATM) { _attackManager = ATM; }
 	void setPlayerTilePosition(int timeNum);	//플레이어를 타일 번호에 생성함.
+	void setPlayerHit(float countTime);
 	player();
 	virtual ~player();
 };

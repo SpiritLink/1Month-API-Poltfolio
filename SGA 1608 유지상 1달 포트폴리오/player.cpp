@@ -12,6 +12,8 @@ HRESULT player::init()
 	SPEED = DEFAULT_SPEED;
 	ATK = 1;
 	currentTime = TIMEMANAGER->getWorldTime();
+	invincibleTime = TIMEMANAGER->getWorldTime();
+	countTime = 0;
 
 	keyStatus = 0;
 	playerStatus = 0;
@@ -301,6 +303,16 @@ void player::setPlayerTilePosition(int tileNum)
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 }
 
+void player::setPlayerHit(float value)
+{
+	if (invincibleTime + value < TIMEMANAGER->getWorldTime())
+	{
+		invincibleTime = TIMEMANAGER->getWorldTime();
+		countTime = value;
+		HP--;
+	}
+}
+
 void player::firstCollisionTileCheck()
 {
 	for (int i = 0; i < TILEX * TILEY; ++i)
@@ -332,6 +344,21 @@ void player::collisionTileCheck()
 
 void player::playerRender()
 {
+	//플레이어의 상태에 따라 alpha값을 수정하는 부분
+	if (invincibleTime + countTime > TIMEMANAGER->getWorldTime())
+	{
+		int a = TIMEMANAGER->getWorldTime() / 0.2f;
+		switch (a % 2)
+		{
+		case 0:		alphaValue = 125;	break;
+		case 1:		alphaValue = 255;	break;
+		}
+	}
+	else
+	{
+		alphaValue = 255;
+	}
+
 	//프레임을 증가시키는 부분
 	if (playerStatus & STATUS_ATTACK && currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 	{

@@ -39,7 +39,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 		//모든 적과 플레이어가 충돌하면
 		if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect()))
 		{
-
+			_player->setPlayerHit(2.0f);
 		}
 	}
 }

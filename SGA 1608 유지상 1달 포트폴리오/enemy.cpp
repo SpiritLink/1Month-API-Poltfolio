@@ -330,7 +330,6 @@ void bomb::update()
 void bomb::render()
 {
 	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight() / 2);
-	
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 }
 
