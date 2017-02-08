@@ -41,6 +41,7 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("alien", "IMAGE/enemy/alien.bmp", 288, 32, 9, 1, true, RGB(0, 255, 255));
 	frameCount = 0;
+	HP = 3;
 	return S_OK;
 }
 
@@ -84,7 +85,7 @@ HRESULT ghost::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("ghost", "IMAGE/enemy/ghost.bmp", 256, 128, 4, 2, true, RGB(255, 0, 255));
 	frameCount = 0;
-
+	HP = 3;
 	//멤버변수 초기화
 	dir = LEFT;
 
@@ -143,6 +144,7 @@ HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("flower", "IMAGE/enemy/flower.bmp", 1344, 64, 21, 1, true, RGB(255, 0, 255));
 	frameCount = 0;
+	HP = 3;
 	return S_OK;
 }
 
@@ -187,6 +189,7 @@ HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("oko", "IMAGE/enemy/oko.bmp", 600, 50, 12, 1, true, RGB(0, 0, 0));
 	frameCount = 0;
+	HP = 9999;
 
 	//멤버 변수 초기화
 	status = 0;
@@ -315,6 +318,7 @@ HRESULT bomb::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	_image = IMAGEMANAGER->addImage("bomb", "IMAGE/enemy/bomb.bmp", 50, 50,true, RGB(0, 0, 0));
 	frameCount = 0;
 
+	HP = 99999;
 	return S_OK;
 }
 
@@ -352,6 +356,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	x = _tileMap->getTiles()[tileNum].rc.left;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
+	HP = 40;
 
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));

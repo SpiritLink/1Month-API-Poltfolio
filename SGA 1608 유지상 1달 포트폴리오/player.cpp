@@ -111,16 +111,7 @@ void player::playerMove()
 	}
 
 
-	//플레이어와 타일의 충돌을 처리
-	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
-	{
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
-		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
-		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
-		gravity = 0;
-	}
-
-	//중력을 계산하여 처리한다.
+	//플레이어 중력 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_NONE)
 	{
 		if (gravity < 0)	//중력이 화면 상단으로 향할때
@@ -164,6 +155,17 @@ void player::playerMove()
 			}
 		}
 	}
+
+	//플레이어와 타일의 충돌을 처리
+	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
+	{
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
+		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
+		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
+		gravity = 0;
+	}
+
+
 }
 
 void player::playerAttack()
