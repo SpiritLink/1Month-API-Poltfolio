@@ -38,7 +38,7 @@ HRESULT testScene::init()
 	_enemyManager->setAlien(21022);
 	_enemyManager->setEri(21022);
 	_enemyManager->setGhost(21024);
-	_enemyManager->setOko(20876);
+	_enemyManager->setOko(20570);
 
 
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));

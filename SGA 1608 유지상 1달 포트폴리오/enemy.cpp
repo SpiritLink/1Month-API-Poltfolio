@@ -264,6 +264,7 @@ void eri::render()
 
 HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 {
+	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
@@ -273,6 +274,11 @@ HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	_image = IMAGEMANAGER->addFrameImage("oko", "IMAGE/enemy/oko.bmp", 600, 50, 12, 1, true, RGB(0, 0, 255));
 	frameCount = 0;
 
+	//멤버 변수 초기화
+	status = 0;
+
+	//멤버 함수를 통한 초기화
+	firstCollisionTileCheck();
 	return S_OK;
 }
 
@@ -284,17 +290,95 @@ void oko::update()
 {
 	_detectArea = RectMake(x - _image->getFrameWidth() / 2 , y  - _image->getFrameHeight() / 2, 50, 400);
 	_hitArea = RectMakeCenter(x , y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
+	collisionTileCheck();	//충돌중인 타일을 확인한다.
 	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
 	{
 		frameCount++;
 		if (frameCount > 11) frameCount = 0;
 	}
+
+	//플레이어가 감지 영역에 닿는다면 상태를 1로 변경한다.
+	if (PtInRect(&_detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY())) && status == 0) status = 1;
+	okoMove();
 }
 
 void oko::render()
 {
-	Rectangle(getMemDC(), _detectArea.left, _detectArea.top, _detectArea.right, _detectArea.bottom);
+	//Rectangle(getMemDC(), _detectArea.left, _detectArea.top, _detectArea.right, _detectArea.bottom);
+	//Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
+}
+
+void oko::firstCollisionTileCheck()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		{
+			currentCollisionTile = i;
+			break;
+		}
+	}
+}
+
+void oko::collisionTileCheck()
+{
+	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
+	for (int i = currentCollisionTile - 1; i < currentCollisionTile + 2; ++i)
+	{
+		for (int j = -1; j < 2; ++j)
+		{
+			//캐릭터 주변 25개의 타일의 충돌을 계산한다. 이때 범위를 벗어나지 않도록 영역을 조절해 줘야 한다.
+			if (PtInRect(&_tileMap->getTiles()[i + j * TILEX].rc, PointMake(x, y)))
+			{
+				currentCollisionTile = i + j * TILEX;
+				break;
+			}
+		}
+	}
+}
+
+void oko::okoMove()
+{
+	switch (status)
+	{
+	case 0:
+		break;
+	case 1:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + 10)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj != OBJ_GROUND)
+			{
+				y += 10;
+			}
+			else
+			{
+				status = 2;
+			}
+		}
+		else
+		{
+			y += 10;
+		}
+		break;
+	case 2:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - 10)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj != OBJ_GROUND)
+			{
+				y -= 10;
+			}
+			else
+			{
+				status = 0;
+			}
+		}
+		else
+		{
+			y -= 10;
+		}
+		break;
+	}
 }
 
 oko::oko()
