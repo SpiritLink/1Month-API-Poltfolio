@@ -11,7 +11,7 @@ HRESULT testScene::init()
 	_image = IMAGEMANAGER->addImage("흰배경", "IMAGE/whiteBackground.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
 
 	_tileMap = new tileMap;
-	_tileMap->init("DATA/MAP/Field1.map");
+	_tileMap->init("DATA/MAP/Town.map");
 
 	_attackManager = new attackManager;
 	_attackManager->init();
@@ -40,6 +40,7 @@ HRESULT testScene::init()
 	_enemyManager->setGhost(21024);
 	_enemyManager->setOko(20570);
 	_enemyManager->setFlower(20270);
+	_enemyManager->setBomb(21329);
 
 
 	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));

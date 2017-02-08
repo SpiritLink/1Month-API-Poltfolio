@@ -67,6 +67,14 @@ void enemyManager::setOko(int tileNum)
 	_vEnemy.push_back(Enemy);
 }
 
+void enemyManager::setBomb(int tileNum)
+{
+	enemy* Enemy;
+	Enemy = new bomb;
+	Enemy->init(tileNum, _tileMap, _attackManager);
+	_vEnemy.push_back(Enemy);
+}
+
 void enemyManager::setEri(int tileNum)
 {
 	enemy* Enemy;

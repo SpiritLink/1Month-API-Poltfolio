@@ -22,6 +22,7 @@ public:
 	void setGhost(int tileNum);
 	void setFlower(int tileNum);
 	void setOko(int tileNum);
+	void setBomb(int tileNum);
 	void setEri(int tileNum);
 
 	void addEnemyX(int value);

@@ -302,6 +302,46 @@ oko::~oko()
 {
 }
 
+HRESULT bomb::init(int tileNum, tileMap * tileMap, attackManager * ATM)
+{
+	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	_attackManager = ATM;
+	x = _tileMap->getTiles()[tileNum].rc.left;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addImage("bomb", "IMAGE/enemy/bomb.bmp", 50, 50,true, RGB(0, 0, 0));
+	frameCount = 0;
+
+	return S_OK;
+}
+
+void bomb::release()
+{
+}
+
+void bomb::update()
+{
+	RectangleMakeCenter(getMemDC(), x, y, 10, 10);
+	_hitArea = RectMakeCenter(x, y, _image->getWidth(), _image->getHeight());
+}
+
+void bomb::render()
+{
+	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight() / 2);
+	
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+}
+
+bomb::bomb()
+{
+}
+
+bomb::~bomb()
+{
+}
+
 HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화

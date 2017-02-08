@@ -91,6 +91,18 @@ public:
 	oko();
 	virtual ~oko();
 };
+
+class bomb : public enemy
+{
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	bomb();
+	virtual ~bomb();
+};
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:
