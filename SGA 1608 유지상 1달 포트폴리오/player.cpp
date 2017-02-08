@@ -79,93 +79,104 @@ void player::keyboardInput()
 
 void player::playerMove()
 {
-	//중력처리
+	//중력을 항상 증가시킵니다.
 	gravity += GRAVITY;
-	//키보드 입력을 처리
-	//타일과 부딪힌다면 움직이지 못하도록 처리.
+	//키보드 좌 , 우 입력을 처리하는 부분입니다.
 	if (keyStatus & KEYBOARD_LEFT)
 	{
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		//중력과 함께 움직였을때 대각선 타일로 이동하는지 검사합니다.
+		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].rc, PointMake(x - SPEED, y + gravity)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj != OBJ_GROUND) x -= SPEED;
+		}
+		//대각선타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
+		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
 		{
 			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
 		}
+		//다른 타일로 이동 없이 타일 한개 내에서 움직인다면
 		else																						//이동해도 옆타일에 안닿는다면
 			x -= SPEED;																				//이동한다.
 	}
 	if (keyStatus & KEYBOARD_RIGHT)
 	{
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		//중력과 함께 움직였을때 대각선 타일로 이동하는지 검사합니다.
+		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].rc, PointMake(x + SPEED, y + gravity)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj != OBJ_GROUND) x += SPEED;
+		}
+		//대각선 타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
+		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
 		}
+		//다른 타일로 이동 없이 타일 한개 내에서 움직인다면.
 		else																						//이동해도 옆타일에 안닿는다면
 			x += SPEED;																				//이동한다.
 	}
 	if (keyStatus & KEYBOARD_X)
 	{
-		if (!(Action & ACTION_JUMP))
+		if (!(Action & ACTION_JUMP))					//이미 점프를 한 상태가 아니라면
 		{
-			Action = Action | ACTION_JUMP;
+			Action = Action | ACTION_JUMP;				//상태에 점프를 넣어줍니다.
 			gravity = -15;								//중력을 바꿔준다.
 		}
 	}
 
-
-	//플레이어 중력 처리
+	//중력에 따른 타일과의 충돌 처리 현재 타일이 아무것도 없는 타일이라면
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_NONE)
 	{
-		if (gravity < 0)	//중력이 화면 상단으로 향할때
-		{
+		//중력이 화면 상단으로 향할때
+		if (gravity < 0)
+		{	//중력만큼 이동해서 바로 위타일과 충돌하는지 확인합니다.
 			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y + gravity)))
-			{
+			{	//만약 위타일에 충돌했을때 위타일이 땅이라면
 				if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND)
-				{
-					gravity = 1;
+				{	//위타일의 바텀 + 1 좌표로 플레이어 y좌표를 고정시킵니다.
 					y = _tileMap->getTiles()[currentCollisionTile - TILEX].rc.bottom + 1;
 				}
 				else
-				{
+				{	//위타일이 땅이 아니라면 중력만큼 이동시킵니다.
 					y += gravity;
 				}
 			}
 			else
-			{
+			{	//중력만큼 이동해도 한타일내에서 움직인다면 이동시킵니다.
 				y += gravity;
 			}
 		}
 
-		if (gravity > 0)	//중력이 화면 하단으로 향할때
-		{
+		//중력이 화면 하단으로 향할때
+		if (gravity > 0)
+		{	//중력만큼 이동해서 바로 아래 타일과 충돌하는지 확인합니다.
 			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity)))
-			{
+			{	//만약 아래타일에 충돌했을때 아래타일이 땅이라면
 				if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND)
-				{
-					gravity = 0;
-					y = _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top - 1;
-					if (Action & ACTION_JUMP) Action -= ACTION_JUMP;
+				{	
+					gravity = 0;	//중력을 0으로 변경시킵니다.
+					y = _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top - 1;	//타일의 top - 1에 좌표를 고정합니다.
+					if (Action & ACTION_JUMP) Action -= ACTION_JUMP;					//점프를 다시 할수있게 상태를 변경시킵니다.
 				}
 				else
-				{
+				{//아래타일이 땅이 아니라면 중력만큼 이동합니다.
 					y += gravity;
 				}
 			}
 			else
-			{
+			{//중력만큼 이동해도 한 타일내에서 이동한다면 중력만큼 이동시킵니다.
 				y += gravity;
 			}
 		}
 	}
 
-	//플레이어와 타일의 충돌을 처리
+	//플레이어와 OBJ_GROUND타일의 충돌을 처리	(예외처리)
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
-	{
+	{	//y좌표를 타일의 top - 1에 고정시킵니다.
 		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
 		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
-		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;								//현재 점프중 상태이면 점프상태 제거								
-		gravity = 0;
+		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;//현재 점프중 상태이면 점프상태 제거								
+		gravity = 0;	//중력을 0으로 변경합니다.
 	}
-
-
 }
 
 void player::playerAttack()
