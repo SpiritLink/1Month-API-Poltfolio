@@ -50,7 +50,7 @@ void alien::release()
 
 void alien::update()
 {
-	_hitArea = RectMakeCenter(x, y, 30, 30);
+	_hitArea = RectMakeCenter(x, y, 20, 20);
 	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
@@ -61,8 +61,8 @@ void alien::update()
 
 void alien::render()
 {
-	_image->frameRender(getMemDC(), x, y,frameCount, 0);
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount, 0);
 }
 
 alien::alien()
@@ -97,7 +97,7 @@ void ghost::release()
 
 void ghost::update()
 {
-	_hitArea = RectMakeCenter(x, y, 30, 30);
+	_hitArea = RectMakeCenter(x, y, 30, 40);
 	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
@@ -116,10 +116,11 @@ void ghost::update()
 
 void ghost::render()
 {
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	switch (dir)
 	{
-	case RIGHT:_image->frameRender(getMemDC(), x, y, frameCount, 0); break;
-	case LEFT: _image->frameRender(getMemDC(), x, y, frameCount, 1); break;
+	case RIGHT:_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0); break;
+	case LEFT: _image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 1); break;
 	}
 }
 
@@ -259,6 +260,49 @@ void eri::render()
 	}
 	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
 	testFunction();			//실험용 함수입니다.
+}
+
+HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
+{
+	_tileMap = tileMap;
+	_attackManager = ATM;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addFrameImage("oko", "IMAGE/enemy/oko.bmp", 600, 50, 12, 1, true, RGB(0, 0, 255));
+	frameCount = 0;
+
+	return S_OK;
+}
+
+void oko::release()
+{
+}
+
+void oko::update()
+{
+	_detectArea = RectMakeCenter(x, y, 50, 400);
+	_hitArea = RectMakeCenter(x , y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
+	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
+	{
+		frameCount++;
+		if (frameCount > 11) frameCount = 0;
+	}
+}
+
+void oko::render()
+{
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
+}
+
+oko::oko()
+{
+}
+
+oko::~oko()
+{
 }
 
 void eri::frameUpdate()

@@ -52,11 +52,14 @@ void mapTool::render()
 			_tiles[i].objFrameX, _tiles[i].objFrameY);
 	}
 
-	//for (int i = 0; i < TILEX * TILEY; ++i)
-	//{
-	//	_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
-	//	_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
-	//}
+	if (KEYMANAGER->isToggleKey('M'))
+	{
+		for (int i = 0; i < TILEX * TILEY; ++i)
+		{
+			_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
+			_miniMapIMG->frameRender(getMemDC(), (WINSIZEX / 2) + ((i % TILEX) * 2), (WINSIZEY / 2) + 100 + ((i / TILEX) * 2), _tiles[i].objFrameX, _tiles[i].objFrameY);
+		}
+	}
 
 	for (int i = 0; i < SAMPLETILEY * SAMPLETILEX; ++i)
 	{

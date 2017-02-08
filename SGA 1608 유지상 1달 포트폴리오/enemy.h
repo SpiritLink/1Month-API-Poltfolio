@@ -70,6 +70,20 @@ public:
 	flower();
 	virtual ~flower();
 };
+
+class oko : public enemy
+{
+private:
+	RECT _detectArea;	//감지를 위한 Rect영역
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	oko();
+	virtual ~oko();
+};
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:

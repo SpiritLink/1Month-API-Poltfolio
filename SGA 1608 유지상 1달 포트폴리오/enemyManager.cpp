@@ -59,6 +59,14 @@ void enemyManager::setFlower(int tileNum)
 	_vEnemy.push_back(Enemy);
 }
 
+void enemyManager::setOko(int tileNum)
+{
+	enemy* Enemy;
+	Enemy = new oko;
+	Enemy->init(tileNum, _tileMap, _attackManager);
+	_vEnemy.push_back(Enemy);
+}
+
 void enemyManager::setEri(int tileNum)
 {
 	enemy* Enemy;
