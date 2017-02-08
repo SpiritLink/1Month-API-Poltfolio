@@ -282,7 +282,7 @@ void oko::release()
 
 void oko::update()
 {
-	_detectArea = RectMakeCenter(x, y, 50, 400);
+	_detectArea = RectMake(x - _image->getFrameWidth() / 2 , y  - _image->getFrameHeight() / 2, 50, 400);
 	_hitArea = RectMakeCenter(x , y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
 	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
 	{
@@ -293,7 +293,7 @@ void oko::update()
 
 void oko::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	Rectangle(getMemDC(), _detectArea.left, _detectArea.top, _detectArea.right, _detectArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
 }
 
