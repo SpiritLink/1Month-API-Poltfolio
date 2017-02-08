@@ -35,6 +35,15 @@ HRESULT townScene::init()
 
 	_player->update();
 	cameraInit();//카메라의 위치를 세팅합니다.
+
+	_enemyManager->setBomb(21548);
+	_enemyManager->setBomb(21549);
+	_enemyManager->setBomb(21550);
+	_enemyManager->setBomb(21551);
+	_enemyManager->setBomb(21552);
+
+	_enemyManager->setFlower(21101);
+
 	return S_OK;
 }
 

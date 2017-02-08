@@ -164,7 +164,8 @@ void flower::update()
 void flower::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
-	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight(), frameCount, 0);
+	RectangleMakeCenter(getMemDC(), x, y, 10, 10);
+	_image->frameRender(getMemDC(), x - (_image->getFrameWidth() / 2), y - _image->getFrameHeight(), frameCount, 0);
 }
 
 flower::flower()

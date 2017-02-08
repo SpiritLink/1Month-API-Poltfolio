@@ -81,7 +81,6 @@ void player::playerMove()
 {
 	//중력처리
 	gravity += GRAVITY;
-
 	//키보드 입력을 처리
 	//타일과 부딪힌다면 움직이지 못하도록 처리.
 	if (keyStatus & KEYBOARD_LEFT)
@@ -110,6 +109,8 @@ void player::playerMove()
 			gravity = -15;								//중력을 바꿔준다.
 		}
 	}
+
+
 	//플레이어와 타일의 충돌을 처리
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
 	{
@@ -125,18 +126,50 @@ void player::playerMove()
 		gravity = 0;
 	}
 
-
-	//중력 예외처리 (땅위에 서있을때)
-	if (gravity <= 1 && gravity >= 0)
+	//중력을 계산하여 처리한다.
+	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_NONE)
 	{
-		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND &&
-			PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity))) gravity = 0;
+		if (gravity < 0)	//중력이 화면 상단으로 향할때
+		{
+			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y + gravity)))
+			{
+				if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND)
+				{
+					gravity = 1;
+					y = _tileMap->getTiles()[currentCollisionTile - TILEX].rc.bottom + 1;
+				}
+				else
+				{
+					y += gravity;
+				}
+			}
+			else
+			{
+				y += gravity;
+			}
+		}
+
+		if (gravity > 0)	//중력이 화면 하단으로 향할때
+		{
+			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity)))
+			{
+				if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND)
+				{
+					gravity = 0;
+					y = _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top - 1;
+					if (Action & ACTION_JUMP) Action -= ACTION_JUMP;
+				}
+				else
+				{
+					y += gravity;
+				}
+			}
+			else
+			{
+				y += gravity;
+			}
+		}
 	}
-
-
-
-
-	y += gravity;
 }
 
 void player::playerAttack()
