@@ -740,8 +740,36 @@ void image::alphaRender(HDC hdc, int destX, int destY, int srcX, int srcY, int s
 
 void image::alphaFrameRender(HDC hdc, int destX, int destY, int currentFrameX, int currentFrameY, BYTE alpha)
 {
-	alphaRender(hdc, destX, destY, currentFrameX * _imageInfo->frameWidth,
-		currentFrameY * _imageInfo->frameHeight, (int)_imageInfo->frameWidth,(int)_imageInfo->frameHeight,alpha);
+	_blendFunc.SourceConstantAlpha = alpha;   //0 = 투명 ~~ 255 진한이미지
+
+	if (_trans)
+	{
+		//출력해야 될 DC에 그러져 있는 내용을 blend에 그린다
+		BitBlt(_blendImage->hMemDC, 0, 0, (int)_imageInfo->width, (int)_imageInfo->height, hdc, destX, destY, SRCCOPY);
+
+		//출력해야 될 이미지를 blend에 그린다
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, (int)_imageInfo->frameWidth, (int)_imageInfo->frameHeight, _imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth, currentFrameY * _imageInfo->frameHeight,
+			(int)_imageInfo->frameWidth, (int)_imageInfo->frameHeight, _transColor);
+
+		//blendDC를 출력해야 할 DC에 그린다
+		AlphaBlend(hdc, destX, destY, _imageInfo->width, _imageInfo->height, _blendImage->hMemDC, 0, 0,
+			_imageInfo->width, _imageInfo->height, _blendFunc);
+	}
+	else
+	{
+		//출력해야 될 DC에 그러져 있는 내용을 blend에 그린다
+		BitBlt(_blendImage->hMemDC, 0, 0, (int)_imageInfo->width, (int)_imageInfo->height, hdc, destX, destY, SRCCOPY);
+
+		//출력해야 될 이미지를 blend에 그린다
+		GdiTransparentBlt(_blendImage->hMemDC, 0, 0, (int)_imageInfo->frameWidth, (int)_imageInfo->frameHeight, _imageInfo->hMemDC,
+			currentFrameX * _imageInfo->frameWidth, currentFrameY * _imageInfo->frameHeight,
+			(int)_imageInfo->frameWidth, (int)_imageInfo->frameHeight, RGB(255, 0, 255));
+
+		//blendDC를 출력해야 할 DC에 그린다
+		AlphaBlend(hdc, destX, destY, _imageInfo->width, _imageInfo->height, _blendImage->hMemDC, 0, 0,
+			_imageInfo->width, _imageInfo->height, _blendFunc);
+	}
 }
 
 void image::alphaAniRender(HDC hdc, int destX, int destY, animation * ani, BYTE alpha)

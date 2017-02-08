@@ -271,7 +271,7 @@ HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	_image = IMAGEMANAGER->addFrameImage("oko", "IMAGE/enemy/oko.bmp", 600, 50, 12, 1, true, RGB(0, 0, 255));
+	_image = IMAGEMANAGER->addFrameImage("oko", "IMAGE/enemy/oko.bmp", 600, 50, 12, 1, true, RGB(0, 0, 0));
 	frameCount = 0;
 
 	//멤버 변수 초기화
@@ -345,7 +345,7 @@ void oko::okoMove()
 	case 0:
 		break;
 	case 1:
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + 10)))
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + _image->getFrameHeight() / 2)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj != OBJ_GROUND)
 			{
@@ -362,7 +362,7 @@ void oko::okoMove()
 		}
 		break;
 	case 2:
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - 10)))
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - _image->getFrameHeight() / 2)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj != OBJ_GROUND)
 			{
