@@ -40,8 +40,8 @@ void player::update()
 	collisionTileCheck();	//몇번 타일에 충돌중인지
 	keyboardInput();		//어떤 키보드 입력을 받았는지
 	playerStatusCheck();	//플레이어의 상태는 어떤지
-	playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
-	//testPlayerMove();
+	if(KEYMANAGER->isToggleKey('Y')) playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
+	if(!(KEYMANAGER->isToggleKey('Y'))) testPlayerMove();
 	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
 	PlayerRect = RectMakeCenter(x, y, 5, 5);
@@ -79,8 +79,8 @@ void player::keyboardInput()
 
 void player::playerMove()
 {
-	//중력을 항상 증가시킵니다.
-	gravity += GRAVITY;
+	//중력을 항상 증가시킵니다. (단 중력은 타일 한개의 크기 보다는 적게)
+	if(gravity < TILESIZE) gravity += GRAVITY;
 	//키보드 좌 , 우 입력을 처리하는 부분입니다.
 	if (keyStatus & KEYBOARD_LEFT)
 	{
@@ -88,6 +88,7 @@ void player::playerMove()
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].rc, PointMake(x - SPEED, y + gravity)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj != OBJ_GROUND) x -= SPEED;
+			//if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj == OBJ_GROUND) gravity = 0;
 		}
 		//대각선타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
 		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
@@ -104,6 +105,7 @@ void player::playerMove()
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].rc, PointMake(x + SPEED, y + gravity)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj != OBJ_GROUND) x += SPEED;
+			//if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj == OBJ_GROUND) gravity = 0;
 		}
 		//대각선 타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
 		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
@@ -134,6 +136,7 @@ void player::playerMove()
 				if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND)
 				{	//위타일의 바텀 + 1 좌표로 플레이어 y좌표를 고정시킵니다.
 					y = _tileMap->getTiles()[currentCollisionTile - TILEX].rc.bottom + 1;
+					gravity = 0;
 				}
 				else
 				{	//위타일이 땅이 아니라면 중력만큼 이동시킵니다.
@@ -399,14 +402,8 @@ void player::playerRender()
 		alphaValue = 255;
 	}
 
-	//프레임을 증가시키는 부분
-	if (playerStatus & STATUS_ATTACK && currentTime + 0.05f < TIMEMANAGER->getWorldTime())
-	{
-		currentTime = TIMEMANAGER->getWorldTime();
-		++frameCount;
-	}
-	
-	if(!(playerStatus & STATUS_ATTACK) && currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	//프레임을 증가시키는 부분 (모든프레임은 0.05초마다 증가합니다)
+	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
