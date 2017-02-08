@@ -202,7 +202,7 @@ void player::playerAttack()
 		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
 		{
 			SOUNDMANAGER->playSound("playerThrow", PointMake(x, y));
-			_attackManager->playerThrowAttack(x, y, direction);
+			_attackManager->playerThrowAttack(x, y - playerIMG->getFrameHeight() / 3, direction);
 			frameCount = 0;
 			Action = Action | ACTION_THROW_ATTACK;
 			playerStatus = playerStatus | STATUS_ATTACK;

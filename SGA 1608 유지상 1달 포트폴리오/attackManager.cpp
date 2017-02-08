@@ -115,9 +115,6 @@ void attackManager::eriKnivesAttack(float inputX, float inputY, DIRECTION Dir)
 		Attack2->init(inputX, inputY);
 		Attack2->setAngle(PI - PI / 6.0f);
 		Attack2->setAttackType(ATTACK_ERI_KNIVES);
-
-		_vAttack.push_back(Attack1);
-		_vAttack.push_back(Attack2);
 		break;
 	case RIGHT:
 		Attack1->init(inputX, inputY);
@@ -127,11 +124,11 @@ void attackManager::eriKnivesAttack(float inputX, float inputY, DIRECTION Dir)
 		Attack2->init(inputX, inputY);
 		Attack2->setAngle((2.0f * PI) - (PI / 6.0f));
 		Attack2->setAttackType(ATTACK_ERI_KNIVES);
-
-		_vAttack.push_back(Attack1);
-		_vAttack.push_back(Attack2);
 		break;
 	}
+
+	_vAttack.push_back(Attack1);
+	_vAttack.push_back(Attack2);
 
 	
 }

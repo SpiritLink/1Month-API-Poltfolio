@@ -75,7 +75,7 @@ HRESULT playerThrow::init(float inputX, float inputY)
 {
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	_image = IMAGEMANAGER->addFrameImage("shuriken", "IMAGE/attack/shuriken.bmp", 208, 52, 4, 1, true, RGB(255, 255, 255));
+	_image = IMAGEMANAGER->addFrameImage("shuriken", "IMAGE/attack/shuriken.bmp", 180, 30, 6, 1, true, RGB(255, 255, 255));
 	frameCount = 0;
 	checkCollision = false;
 	x = inputX;
@@ -89,11 +89,16 @@ void playerThrow::release()
 
 void playerThrow::update()
 {
-	_RECT = RectMakeCenter(x, y, 50, 50);
-	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
+	//충돌영역을 리사이즈 합니다.
+	_RECT = RectMakeCenter(x, y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
+	if (currentTime + 0.01f < TIMEMANAGER->getWorldTime())
 	{
-
+		currentTime = TIMEMANAGER->getWorldTime();
+		frameCount++;
+		if (frameCount > 5) frameCount = 0;
 	}
+
+	//공격의 종류에 따라 표창의 속도를 다르게 합니다.
 	switch (_attackType)
 	{
 	case ATTACK_PLAYER_THROW_LEFT:
@@ -104,12 +109,12 @@ void playerThrow::update()
 		break;
 	}
 
-	if (inputTime + 2.0f < TIMEMANAGER->getWorldTime()) collisionTrue();
+	if (inputTime + 4.0f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }
 
 void playerThrow::render()
 {
-	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
+	//Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount,0);
 }
 
@@ -168,7 +173,7 @@ HRESULT eriKnives::init(float inputX, float inputY)
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
-	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(255, 255, 255));
+	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(0, 0, 0));
 
 	return S_OK;
 }
@@ -179,8 +184,8 @@ void eriKnives::release()
 
 void eriKnives::update()
 {
-	x += cosf(angle) * 10.0f;
-	y += -sinf(angle) * 10.0f;
+	x += cosf(angle) * 15.0f;
+	y += -sinf(angle) * 15.0f;
 	_RECT = RectMakeCenter(x, y, 10, 10);
 	if (inputTime + 2.5f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }

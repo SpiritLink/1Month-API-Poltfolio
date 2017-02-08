@@ -507,7 +507,7 @@ void eri::frameUpdate()
 		{
 			currentTime = TIMEMANAGER->getWorldTime();
 			++frameCount;
-			if (frameCount == 1)		_attackManager->eriKnivesAttack(x, y, dir);
+			if (frameCount == 2)		_attackManager->eriKnivesAttack(x, y, dir);
 			if (frameCount > 5)
 			{
 				finalActionTime = TIMEMANAGER->getWorldTime();
@@ -587,6 +587,7 @@ void eri::eriAI()
 	case ACTION_CHARGE:
 		if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime())	//차지를 2초동안 한뒤
 		{
+			frameCount = 0;
 			switch (RND->getFromIntTo(0, 1))
 			{
 			case 0: status = ACTION_DASH; break;
