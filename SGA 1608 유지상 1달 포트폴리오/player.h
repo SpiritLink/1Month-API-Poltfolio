@@ -36,6 +36,8 @@ private:
 	int Action;			//AND , OR 연산을 통한 검출 현재 행동을 확인하는 변수
 
 	//->키보드에서 해당 값을 빼내야 할때 만약 keyStatus & LEFT 면 keyStatus - LEFT하도록 처리해야 할것 같다.
+
+	int alphaValue;
 public:
 	virtual HRESULT init();
 	virtual void release();
