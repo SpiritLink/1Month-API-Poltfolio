@@ -49,6 +49,9 @@ public:
 
 class playerThrow : public attack
 {
+private:
+	int frameCount;
+	float currentTime;
 public:
 	virtual HRESULT init(float inputX, float inputY);
 	virtual void release();

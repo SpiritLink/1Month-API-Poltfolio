@@ -74,6 +74,9 @@ playerSlash::~playerSlash()
 HRESULT playerThrow::init(float inputX, float inputY)
 {
 	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addFrameImage("shuriken", "IMAGE/attack/shuriken.bmp", 208, 52, 4, 1, true, RGB(255, 255, 255));
+	frameCount = 0;
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
@@ -87,6 +90,10 @@ void playerThrow::release()
 void playerThrow::update()
 {
 	_RECT = RectMakeCenter(x, y, 50, 50);
+	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
+	{
+
+	}
 	switch (_attackType)
 	{
 	case ATTACK_PLAYER_THROW_LEFT:
@@ -103,6 +110,7 @@ void playerThrow::update()
 void playerThrow::render()
 {
 	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount,0);
 }
 
 playerThrow::playerThrow()
