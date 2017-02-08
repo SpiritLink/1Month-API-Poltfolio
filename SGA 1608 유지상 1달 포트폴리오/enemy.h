@@ -26,8 +26,10 @@ public:
 
 	void addEnemyX(int value) { x += value; }
 	void addEnemyY(int value) { y += value; }
+	void addEnemyHP(int value) { HP += value; }
 	
 	RECT getEnemyRect() { return _hitArea; }	//적의 RECT를 반환한다.
+	int getEnemyHP() { return HP; }
 
 	enemy();
 	virtual ~enemy();

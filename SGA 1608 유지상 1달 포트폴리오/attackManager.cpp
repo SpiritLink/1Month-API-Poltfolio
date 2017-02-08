@@ -13,11 +13,6 @@ void attackManager::release()
 
 void attackManager::update()
 {
-	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
-	{
-		(*_viAttack)->update();
-	}
-
 	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end();)			//모든 공격을 확인한다.
 	{
 		if ((*_viAttack)->getCheckCollision() == true)						//이미 한번 충돌된 공격이라면
@@ -25,7 +20,11 @@ void attackManager::update()
 			(*_viAttack)->release();
 			_viAttack = _vAttack.erase(_viAttack);								//공격을 삭제한다.
 		}
-		else ++_viAttack;														//아니라면 다음 공격 확인
+		else
+		{
+			(*_viAttack)->update();
+			++_viAttack;														//아니라면 다음 공격 확인
+		}
 	}
 }
 

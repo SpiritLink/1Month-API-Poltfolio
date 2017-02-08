@@ -21,9 +21,14 @@ void enemyManager::release()
 
 void enemyManager::update()
 {
-	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
+	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end();)
 	{
-		(*_viEnemy)->update();
+		if ((*_viEnemy)->getEnemyHP() <= 0) _viEnemy = _vEnemy.erase(_viEnemy);
+		else
+		{
+			(*_viEnemy)->update();
+			++_viEnemy;
+		}
 	}
 }
 
