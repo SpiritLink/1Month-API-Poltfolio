@@ -35,7 +35,7 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	x = _tileMap->getTiles()[tileNum].rc.left;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -78,7 +78,7 @@ HRESULT ghost::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	x = _tileMap->getTiles()[tileNum].rc.left;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -137,11 +137,11 @@ HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
-	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	x =_tileMap->getTiles()[tileNum].rc.left;
+	y = _tileMap->getTiles()[tileNum].rc.bottom;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	_image = IMAGEMANAGER->addFrameImage("ghost", "IMAGE/enemy/flower.bmp", 1344, 64, 21, 1, true, RGB(255, 0, 255));
+	_image = IMAGEMANAGER->addFrameImage("flower", "IMAGE/enemy/flower.bmp", 1344, 64, 21, 1, true, RGB(255, 0, 255));
 	frameCount = 0;
 	return S_OK;
 }
@@ -152,7 +152,7 @@ void flower::release()
 
 void flower::update()
 {
-	_hitArea = RectMakeCenter(x, y, 30, 30);
+	_hitArea = RectMake(x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 10, _image->getFrameWidth() - 20, _image->getFrameHeight() - 10);
 	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
@@ -163,7 +163,8 @@ void flower::update()
 
 void flower::render()
 {
-	_image->frameRender(getMemDC(), x, y, frameCount, 0);
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight(), frameCount, 0);
 }
 
 flower::flower()
@@ -174,100 +175,12 @@ flower::~flower()
 {
 }
 
-
-HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
-{
-	//상속받은 변수 초기화
-	_tileMap = tileMap;
-	_attackManager = ATM;
-	inputTime = TIMEMANAGER->getWorldTime();
-	currentTime = TIMEMANAGER->getWorldTime();
-	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
-	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
-	frameCount = 0;
-
-	//멤버 변수 초기화
-	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));
-	chargeAura = IMAGEMANAGER->addFrameImage("chargeAura", "IMAGE/EFFECT/chargeAura(dark).bmp", 312, 52, 6, 1, true, RGB(0, 0, 0));
-	auraCount = 0;
-	dir = LEFT;
-	status = ACTION_CHARGE;
-	gravity = 0;
-	hitTime = TIMEMANAGER->getWorldTime();
-	finalActionTime = TIMEMANAGER->getWorldTime();
-	invincible = false;	// 현재 무적상태가 아님
-
-	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
-	return S_OK;
-}
-
-void eri::release()
-{
-}
-
-void eri::update()
-{
-	_hitArea = RectMakeCenter(x, y, 50, 50);
-	detectArea = RectMakeCenter(x, y, 1600, 300);
-	gravity += GRAVITY;		//보스 중력 처리
-	DATABASE->setEriX(x);	//싱글톤으로 좌표를 보낸다
-	DATABASE->setEriY(y);	//싱글톤으로 좌표를 보낸다
-	//공격 범위내에 들어온다면 보스 AI를 실행한다.
-	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
-	frameUpdate();
-	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
-	eriGravity();				//타일을 확인하고 중력을 처리합니다.
-}
-
-void eri::render()
-{
-	//Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
-	switch (status)
-	{
-	case ACTION_NONE:
-		if(dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 0);
-		if(dir == LEFT)		_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 1);
-		break;
-	case ACTION_RUN:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 2);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 3);
-		break;
-	case ACTION_SLASH_ATTACK:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 32, frameCount, 4);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 32, frameCount, 5);
-		break;
-	case ACTION_CHARGE:
-		chargeAura->frameRender(getMemDC(), x - chargeAura->getFrameWidth() / 2, y - chargeAura->getFrameHeight(), auraCount, 0);
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 6);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 7);
-		break;
-	case ACTION_BACKDASH:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 9);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 8);
-		break;
-	case ACTION_DASH:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 10);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 11);
-		break;
-	case ACTION_THROW_ATTACK:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 12);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 13);
-		break;
-	case ACTION_DIZZY:
-		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 14);
-		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 15);
-		break;
-	}
-	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
-	testFunction();			//실험용 함수입니다.
-}
-
 HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 {
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
+	x = _tileMap->getTiles()[tileNum].rc.left;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -288,8 +201,8 @@ void oko::release()
 
 void oko::update()
 {
-	_detectArea = RectMake(x - _image->getFrameWidth() / 2 , y  - _image->getFrameHeight() / 2, 50, 400);
-	_hitArea = RectMakeCenter(x , y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
+	_detectArea = RectMake(x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, 50, 400);
+	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth() - 10, _image->getFrameHeight() - 10);
 	collisionTileCheck();	//충돌중인 타일을 확인한다.
 	if (currentTime + 0.25f < TIMEMANAGER->getWorldTime())
 	{
@@ -387,6 +300,93 @@ oko::oko()
 
 oko::~oko()
 {
+}
+
+HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
+{
+	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	_attackManager = ATM;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	x = _tileMap->getTiles()[tileNum].rc.left;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	frameCount = 0;
+
+	//멤버 변수 초기화
+	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));
+	chargeAura = IMAGEMANAGER->addFrameImage("chargeAura", "IMAGE/EFFECT/chargeAura(dark).bmp", 312, 52, 6, 1, true, RGB(0, 0, 0));
+	auraCount = 0;
+	dir = LEFT;
+	status = ACTION_CHARGE;
+	gravity = 0;
+	hitTime = TIMEMANAGER->getWorldTime();
+	finalActionTime = TIMEMANAGER->getWorldTime();
+	invincible = false;	// 현재 무적상태가 아님
+
+	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
+	return S_OK;
+}
+
+void eri::release()
+{
+}
+
+void eri::update()
+{
+	_hitArea = RectMakeCenter(x, y, 50, 50);
+	detectArea = RectMakeCenter(x, y, 1600, 300);
+	gravity += GRAVITY;		//보스 중력 처리
+	DATABASE->setEriX(x);	//싱글톤으로 좌표를 보낸다
+	DATABASE->setEriY(y);	//싱글톤으로 좌표를 보낸다
+	//공격 범위내에 들어온다면 보스 AI를 실행한다.
+	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
+	frameUpdate();
+	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
+	eriGravity();				//타일을 확인하고 중력을 처리합니다.
+}
+
+void eri::render()
+{
+	//Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
+	switch (status)
+	{
+	case ACTION_NONE:
+		if(dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 0);
+		if(dir == LEFT)		_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 1);
+		break;
+	case ACTION_RUN:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 2);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 3);
+		break;
+	case ACTION_SLASH_ATTACK:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 32, frameCount, 4);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 32, frameCount, 5);
+		break;
+	case ACTION_CHARGE:
+		chargeAura->frameRender(getMemDC(), x - chargeAura->getFrameWidth() / 2, y - chargeAura->getFrameHeight(), auraCount, 0);
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 6);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 7);
+		break;
+	case ACTION_BACKDASH:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 9);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 8);
+		break;
+	case ACTION_DASH:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 10);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 11);
+		break;
+	case ACTION_THROW_ATTACK:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 12);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 13);
+		break;
+	case ACTION_DIZZY:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 14);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 15);
+		break;
+	}
+	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
+	testFunction();			//실험용 함수입니다.
 }
 
 void eri::frameUpdate()
