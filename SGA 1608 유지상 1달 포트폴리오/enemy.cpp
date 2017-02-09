@@ -357,8 +357,10 @@ HRESULT miniGhost::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("miniGhost", "IMAGE/enemy/miniGhost.bmp", 52, 27, 4, 1, true, RGB(0, 128, 128));
 	frameCount = 0;
-
 	HP = 2;
+
+	//멤버변수 초기화
+	fristCollisionTileCheck();
 	
 	return S_OK;
 }
@@ -376,12 +378,47 @@ void miniGhost::update()
 		frameCount++;
 		if (frameCount > 3) frameCount = 0;
 	}
+	miniGhostMove();		//miniGhost의 움직이는 함수
+	collisionTileCheck();	//충돌타일을 확인하는 함수
 }
 
 void miniGhost::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
+}
+
+void miniGhost::fristCollisionTileCheck()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		{
+			currentCollisionTile = i;
+			break;
+		}
+	}
+}
+
+void miniGhost::collisionTileCheck()
+{
+	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
+	for (int i = currentCollisionTile - 1; i < currentCollisionTile + 2; ++i)
+	{
+		for (int j = -1; j < 2; ++j)
+		{
+			//캐릭터 주변 25개의 타일의 충돌을 계산한다. 이때 범위를 벗어나지 않도록 영역을 조절해 줘야 한다.
+			if (PtInRect(&_tileMap->getTiles()[i + j * TILEX].rc, PointMake(x, y)))
+			{
+				currentCollisionTile = i + j * TILEX;
+				break;
+			}
+		}
+	}
+}
+
+void miniGhost::miniGhostMove()
+{
 }
 
 miniGhost::miniGhost()
