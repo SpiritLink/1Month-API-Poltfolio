@@ -13,8 +13,9 @@ private:
 	int playerCollisionTile;//플레이어가 충돌중인 타일 번호
 	float baseTime;			//기준시간 (업데이트 횟수를 적당히 줄이기 위해서)
 
-	float playerX;
-	float playerY;
+	float playerX;			//플레이어의 X좌표
+	float playerY;			//플레이어의 Y좌표
+	int backgroundCount;	//배경을 움직이기 위한 변수
 
 	float eriX;				//보스 기본공격 좌표 업데이트를 위한 변수
 	float eriY;				//보스 기본공격 좌표 업데이트를 위한 변수
@@ -41,10 +42,10 @@ public:
 	float getPlayerY() { return playerY; }
 	float getEriX() { return eriX; }
 	float getEriY() { return eriY; }
-
+	int getbackgroundCount() { return backgroundCount; }
 	bool getShowPlayer() { return showPlayer; }
-	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 
+	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
 	void setSourCamY(int Y) { sourCamY = Y; }	//기준점 (플레이어) Y를 설정
 	void setDestCamX(int X) { destCamX = X; }	//목적지점 (시야) X를 설정
@@ -57,6 +58,10 @@ public:
 	void setPlayerY(float y) { playerY = y; }
 	void setEriX(float x) { eriX = x; }
 	void setEriY(float y) { eriY = y; }
+
+	void addBackgroundCount(int value) { backgroundCount += value; }
+	
+	void initBackgroundCount() { backgroundCount = 0; }
 	database();
 	~database();
 };

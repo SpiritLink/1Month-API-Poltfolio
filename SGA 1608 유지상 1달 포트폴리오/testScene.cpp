@@ -44,8 +44,8 @@ HRESULT testScene::init()
 	_enemyManager->setMiniGhost(20270);
 
 
-	_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
-	Background = RectMake(0, 0, _test->getWidth(), _test->getHeight());
+	//_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
+	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 
 	_player->update();
 	cameraInit();
@@ -79,6 +79,7 @@ void testScene::update()
 	_playerUI->update();
 	_attackManager->update();
 	_enemyManager->update();
+	_tileMap->update();
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
@@ -113,9 +114,9 @@ void testScene::update()
 
 void testScene::render()
 {
-	_image->render(getMemDC());
-	Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
-	_test->render(getMemDC(), Background.left, Background.top);
+	//_image->render(getMemDC());
+	//Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
+	//_test->render(getMemDC(), Background.left, Background.top);
 	_tileMap->render();
 	_enemyManager->render();
 	_player->render();
@@ -133,6 +134,7 @@ void testScene::cameraMove()
 	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
+
 
 	//만약 화면을 벗어난다면
 	if (Background.right < WINSIZEX)
@@ -178,6 +180,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		DATABASE->addBackgroundCount(-distanceX / 10);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -188,6 +191,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
 	//Y좌표 이동

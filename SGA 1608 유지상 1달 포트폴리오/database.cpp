@@ -13,6 +13,7 @@ database::~database()
 
 HRESULT database::init()
 {
+	initBackgroundCount();
 	return S_OK;
 }
 

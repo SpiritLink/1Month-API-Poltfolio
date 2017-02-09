@@ -104,10 +104,9 @@ void player::playerMove()
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].rc, PointMake(x + SPEED, y + gravity)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj != OBJ_GROUND) x += SPEED;
-			//if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj == OBJ_GROUND) gravity = 0;
 		}
 		//대각선 타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
-		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
+		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 오른쪽 타일에 닿았을때						
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
 		}
@@ -242,10 +241,9 @@ void player::playerMove()
 		//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
 		else
 		{
-			//점프중인 상태가 걸려있다면 해제해준다.
-			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;
+			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;	//점프 상태를 해제
+			if (gravity > 0)	gravity = 0;					//중력 변경
 			y -= 1;
-			gravity = 0;
 		}
 		break;
 	}
