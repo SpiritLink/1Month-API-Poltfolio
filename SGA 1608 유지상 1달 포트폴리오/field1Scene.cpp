@@ -34,6 +34,11 @@ HRESULT field1Scene::init()
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);	//임계영역 설정을 위해서
 	_player->update();
 	cameraInit();
+
+	//적 배치 (나중에 함수로 분리하자)
+	_enemyManager->setFlower(21174);
+	_enemyManager->setBomb(17870);
+
 	return S_OK;
 }
 

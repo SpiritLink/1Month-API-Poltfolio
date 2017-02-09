@@ -346,6 +346,52 @@ bomb::~bomb()
 {
 }
 
+HRESULT miniGhost::init(int tileNum, tileMap * tileMap, attackManager * ATM)
+{
+	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	_attackManager = ATM;
+	x = _tileMap->getTiles()[tileNum].rc.left;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addFrameImage("miniGhost", "IMAGE/enemy/miniGhost.bmp", 52, 27, 4, 1, true, RGB(0, 128, 128));
+	frameCount = 0;
+
+	HP = 2;
+	
+	return S_OK;
+}
+
+void miniGhost::release()
+{
+}
+
+void miniGhost::update()
+{
+	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
+	if (currentTime + 0.2f < TIMEMANAGER->getWorldTime())
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		frameCount++;
+		if (frameCount > 3) frameCount = 0;
+	}
+}
+
+void miniGhost::render()
+{
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
+}
+
+miniGhost::miniGhost()
+{
+}
+
+miniGhost::~miniGhost()
+{
+}
+
 HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화

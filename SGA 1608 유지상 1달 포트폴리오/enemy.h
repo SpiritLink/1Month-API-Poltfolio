@@ -105,6 +105,18 @@ public:
 	bomb();
 	virtual ~bomb();
 };
+
+class miniGhost : public enemy
+{
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	miniGhost();
+	virtual ~miniGhost();
+};
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:

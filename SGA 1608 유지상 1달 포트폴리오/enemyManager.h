@@ -20,6 +20,7 @@ public:
 
 	void setAlien(int tileNum);
 	void setGhost(int tileNum);
+	void setMiniGhost(int tileNum);
 	void setFlower(int tileNum);
 	void setOko(int tileNum);
 	void setBomb(int tileNum);
