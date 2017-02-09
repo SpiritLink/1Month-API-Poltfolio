@@ -88,7 +88,6 @@ void player::playerMove()
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].rc, PointMake(x - SPEED, y + gravity)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj != OBJ_GROUND) x -= SPEED;
-			//if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj == OBJ_GROUND) gravity = 0;
 		}
 		//대각선타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
 		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
@@ -206,16 +205,11 @@ void player::playerMove()
 			}
 		}
 		break;
-		//플레이어와 OBJ_GROUND타일의 충돌을 처리 (예외처리)
-	case OBJ_GROUND:
-		//y좌표를 타일의 top - 1에 고정시킵니다.
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
-		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
-		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;//현재 점프중 상태이면 점프상태 제거								
-		gravity = 0;	//중력을 0으로 변경합니다.
+	case OBJ_GROUND:												//GROUND 타일 처리
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;	//좌표	변경
+		gravity = 0;												//중력	변경
 		break;
-		//플레이어와 OBJ_PIXEL타일의 충돌을 처리 (예외처리) -> 이부분은 픽셀충돌로 처리되었습니다.
-	case OBJ_PIXEL:
+	case OBJ_PIXEL:													//PIXEL 타일 처리
 		//현재 위치한 타일 내에서 플레이어의 좌표를 구합니다.
 		int playerTileX, playerTileY;
 		playerTileX = x - _tileMap->getTiles()[currentCollisionTile].rc.left;
@@ -255,60 +249,6 @@ void player::playerMove()
 		}
 		break;
 	}
-	//if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_NONE)
-	//{
-	//}
-
-	////플레이어와 OBJ_GROUND타일의 충돌을 처리	(예외처리)
-	//if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_GROUND)
-	//{	//y좌표를 타일의 top - 1에 고정시킵니다.
-	//	y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;
-	//	//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
-	//	if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;//현재 점프중 상태이면 점프상태 제거								
-	//	gravity = 0;	//중력을 0으로 변경합니다.
-	//}
-
-	////플레이어와 OBJ_PIXEL타일의 충돌을 처리 (예외처리) -> 이부분은 픽셀충돌로 처리되었습니다.
-	//if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_PIXEL)
-	//{
-	//	//현재 위치한 타일 내에서 플레이어의 좌표를 구합니다.
-	//	int playerTileX, playerTileY;
-	//	playerTileX = x - _tileMap->getTiles()[currentCollisionTile].rc.left;
-	//	playerTileY = y - _tileMap->getTiles()[currentCollisionTile].rc.top;
-
-	//	//타일의 frameX, frameY를 이용해 이미지에서 찾을 부분의 기준을 정합니다.
-	//	//이미지는 현재 1:1비율로 사용되고 있기 때문에 좌표도 변형없이 그대로 적용해줍니다.
-	//	int imageX, imageY;
-	//	imageX = _tileMap->getTileObjX(currentCollisionTile) * TILESIZE;
-	//	imageY = _tileMap->getTileObjY(currentCollisionTile) * TILESIZE;
-
-	//	//픽셀충돌 연산에 사용할 좌표를 구합니다.
-	//	int pixelX, pixelY;
-	//	pixelX = playerTileX + imageX;
-	//	pixelY = playerTileY + imageY;
-
-	//	//색상의 정보를 저장할 임시 변수
-	//	COLORREF color;
-
-	//	//원하는 좌표의 색상 정보를 이미지에서 얻어옵니다
-	//	color = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, pixelY);
-
-	//	//좌표의 RGB값을 개별로 저장합니다
-	//	int r = GetRValue(color);
-	//	int g = GetGValue(color);
-	//	int b = GetBValue(color);
-
-	//	//이미지가 없는 부분이라면 y는 중력값 만큼 이동해 줍니다.
-	//	if (r == 0 && g == 0 && b == 0)		y += gravity;
-	//	//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
-	//	else
-	//	{
-	//		//점프중인 상태가 걸려있다면 해제해준다.
-	//		if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;
-	//		y -= 1;
-	//		gravity = 0;
-	//	}
-	//}
 }
 
 void player::playerAttack()
