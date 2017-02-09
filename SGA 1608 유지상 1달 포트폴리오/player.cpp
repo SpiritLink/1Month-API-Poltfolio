@@ -168,28 +168,28 @@ void player::playerMove()
 					int playerTileX, playerTileY;
 					playerTileX = x - _tileMap->getTiles()[currentCollisionTile + TILEX].rc.left;
 					playerTileY = y + gravity - _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top;
-					COLORREF color;
-					switch (_tileMap->getTileObjY(currentCollisionTile + TILEX))
-					{
-					case 1:
-						switch (_tileMap->getTileObjX(currentCollisionTile + TILEX))
-						{
-						case 12: color = GetPixel(IMAGEMANAGER->findImage("12-1")->getMemDC(), playerTileX, playerTileY);	break;
-						case 13: color = GetPixel(IMAGEMANAGER->findImage("13-1")->getMemDC(), playerTileX, playerTileY);	break;
-						}
-						break;
-					case 2:
-						switch (_tileMap->getTileObjX(currentCollisionTile + TILEX))
-						{
-						case 11: color = GetPixel(IMAGEMANAGER->findImage("11-2")->getMemDC(), playerTileX, playerTileY);	break;
-						case 12: color = GetPixel(IMAGEMANAGER->findImage("12-2")->getMemDC(), playerTileX, playerTileY);	break;
-						}
-						break;
-					}
 
+					//타일의 frameX, frameY를 이용해 이미지에서 찾을 부분의 기준을 정합니다.
+					//이미지는 현재 1:1비율로 사용되고 있기 때문에 좌표도 변형없이 그대로 적용해줍니다.
+					int imageX, imageY;
+					imageX = _tileMap->getTileObjX(currentCollisionTile + TILEX) * TILESIZE;
+					imageY = _tileMap->getTileObjY(currentCollisionTile + TILEX) * TILESIZE;
+
+					//픽셀충돌 연산에 사용할 좌표를 구합니다.
+					int pixelX, pixelY;
+					pixelX = playerTileX + imageX;
+					pixelY = playerTileY + imageY;
+
+					//색상의 정보를 받아올 임시변수를 생성합니다.
+					COLORREF color;
+					color = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, pixelY);
+					//이미지가 있는 부분이 아니라면 중력만큼 이동합니다.
 					if (GetRValue(color) == 0 && GetGValue(color) == 0 && GetBValue(color) == 0) y += gravity;
+					//이미지가 있는 부분이라면 y좌표를 변경합니다.
 					else
 					{
+						//현재 점프가 불가능한 상태라면 가능한 상태로 변경합니다.
+						if (Action & ACTION_JUMP) Action -= ACTION_JUMP;
 						y -= 1;
 						gravity = -1;
 					}
@@ -218,41 +218,39 @@ void player::playerMove()
 	//플레이어와 OBJ_PIXEL타일의 충돌을 처리 (예외처리) -> 이부분은 픽셀충돌로 처리되었습니다.
 	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_PIXEL)
 	{
-		//한 타일 내에서 플레이어의 좌표를 구합니다.
-		//중력이 적용되있다는 전제가 깔려있기 때문에 계산좌표에도 미리 중력을 적용시킵니다.
+		//현재 위치한 타일 내에서 플레이어의 좌표를 구합니다.
 		int playerTileX, playerTileY;
 		playerTileX = x - _tileMap->getTiles()[currentCollisionTile].rc.left;
 		playerTileY = y - _tileMap->getTiles()[currentCollisionTile].rc.top;
+
+		//타일의 frameX, frameY를 이용해 이미지에서 찾을 부분의 기준을 정합니다.
+		//이미지는 현재 1:1비율로 사용되고 있기 때문에 좌표도 변형없이 그대로 적용해줍니다.
+		int imageX, imageY;
+		imageX = _tileMap->getTileObjX(currentCollisionTile) * TILESIZE;
+		imageY = _tileMap->getTileObjY(currentCollisionTile) * TILESIZE;
+
+		//픽셀충돌 연산에 사용할 좌표를 구합니다.
+		int pixelX, pixelY;
+		pixelX = playerTileX + imageX;
+		pixelY = playerTileY + imageY;
+
+		//색상의 정보를 저장할 임시 변수
 		COLORREF color;
-		switch (_tileMap->getTileObjY(currentCollisionTile))
-		{
-			//이부분을 타일 x , 타일 y 만큼을 통해 좌표를 이동해서 찾을수 있을것 같다.
-		case 1:
-			switch (_tileMap->getTileObjX(currentCollisionTile))
-			{
-			case 12: color = GetPixel(IMAGEMANAGER->findImage("12-1")->getMemDC(), playerTileX, playerTileY);	break;
-			case 13: color = GetPixel(IMAGEMANAGER->findImage("13-1")->getMemDC(), playerTileX, playerTileY);	break;
-			}
-			break;
-		case 2:
-			switch (_tileMap->getTileObjX(currentCollisionTile))
-			{
-			case 11: color = GetPixel(IMAGEMANAGER->findImage("11-2")->getMemDC(), playerTileX, playerTileY);	break;
-			case 12: color = GetPixel(IMAGEMANAGER->findImage("12-2")->getMemDC(), playerTileX, playerTileY);	break;
-			}
-			break;
-		}
+
+		//원하는 좌표의 색상 정보를 이미지에서 얻어옵니다
+		color = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, pixelY);
+
+		//좌표의 RGB값을 개별로 저장합니다
 		int r = GetRValue(color);
 		int g = GetGValue(color);
 		int b = GetBValue(color);
 
-		if (r == 0 && g == 0 && b == 0)
-		{
-			y += gravity;
-		}
+		//이미지가 없는 부분이라면 y는 중력값 만큼 이동해 줍니다.
+		if (r == 0 && g == 0 && b == 0)		y += gravity;
+		//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
 		else
 		{
-			//만약 점프중인 상태가 걸려있다면 해제해준다.
+			//점프중인 상태가 걸려있다면 해제해준다.
 			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;
 			y -= 1;
 			gravity = 0;
