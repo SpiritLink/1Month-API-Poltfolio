@@ -43,6 +43,7 @@ HRESULT tileMap::init(const char* fileName)
 	playerYTileNumber = 0;
 	valueX = 0;
 	valueY = 0;
+	skyX = 0;
 	return S_OK;
 }
 
@@ -57,6 +58,7 @@ void tileMap::update()
 	valueY = playerYTileNumber * 2.4f;	//240퍼센트 적용
 	valueX = DATABASE->getbackgroundCount();
 
+	++skyX;
 	_Ground = RectMake(0, valueY, WINSIZEX, WINSIZEY);		//땅 영역
 	_Sky = RectMake(0, valueY - 600, WINSIZEX, WINSIZEY);	//하늘 영역
 }
@@ -64,11 +66,11 @@ void tileMap::update()
 void tileMap::render()
 {
 	//배경 렌더 (loop렌더를 이용한다);
-	_BgSky->loopRender(getMemDC(), &_Sky, 0, 0);	//오른쪽 두 변수를 조정해주자.
+	_BgSky->loopRender(getMemDC(), &_Sky, skyX, 0);	//오른쪽 두 변수를 조정해주자.
 
-	_BgSky->loopRender(getMemDC(), &_Ground, 0, 0);
-	_BgMt3->loopRender(getMemDC(), &_Ground, valueX, 0);
-	_BgMt2->loopRender(getMemDC(), &_Ground, valueX, 0);
+	_BgSky->loopRender(getMemDC(), &_Ground, skyX, 0);
+	_BgMt3->loopRender(getMemDC(), &_Ground, -(valueX / 2), 0);
+	_BgMt2->loopRender(getMemDC(), &_Ground, -(valueX), 0);
 	_BgMt1->loopRender(getMemDC(), &_Ground, valueX, 0);
 	//타일 렌더
 	for (int i = 0; i < TILEX * TILEY; ++i)
