@@ -11,7 +11,13 @@ HRESULT tileMap::init(const char* fileName)
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
-	
+	//pixel충돌을 위한 이미지 세팅
+	IMAGEMANAGER->addImage("11-2", "IMAGE/Tile/11-2.bmp", 50, 50, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("12-1", "IMAGE/Tile/12-1.bmp", 50, 50, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("12-2", "IMAGE/Tile/12-2.bmp", 50, 50, false, RGB(0, 0, 0));
+	IMAGEMANAGER->addImage("13-1", "IMAGE/Tile/13-1.bmp", 50, 50, false, RGB(0, 0, 0));
+
+
 	//미니맵 이미지 세팅
 	_miniMapIMG = IMAGEMANAGER->addFrameImage("miniMap", "IMAGE/tile/tile.bmp", SAMPLETILEX * 2, SAMPLETILEY * 2, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	_miniRedTile = IMAGEMANAGER->addImage("miniRedTile", "IMAGE/tile/redTile.bmp", 2, 2, false, RGB(0, 0, 0));

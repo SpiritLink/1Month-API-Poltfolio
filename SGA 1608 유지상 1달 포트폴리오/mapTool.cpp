@@ -36,6 +36,8 @@ void mapTool::update()
 	if (SendMessage(_btnObjDraw, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJDRAW;
 	if (SendMessage(_btnObjEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_OBJERASER;
 	if (SendMessage(_btnTerrainEraser, BM_GETCHECK, BST_CHECKED, 0)) _ctrlSelect = CTRL_TERRAINERASER;
+
+	if (KEYMANAGER->isOnceKeyDown('E')) changeOBJType();
 	mouseClick();
 }
 
@@ -309,7 +311,6 @@ void mapTool::defaultMapRect()
 
 OBJECT mapTool::objSelect(int frameX, int frameY)
 {
-	if (frameX == 0 && frameY == 2) return OBJ_BLOCK2;
 	return OBJ_GROUND;
 }
 
@@ -338,4 +339,30 @@ void mapTool::save(const char * fileName)
 
 	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
 	CloseHandle(file);
+}
+
+void mapTool::changeOBJType()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		switch (_tiles[i].objFrameY)
+		{
+		case 0:
+			break;
+		case 1:
+			switch (_tiles[i].objFrameX)
+			{
+			case 12:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 13:	_tiles[i].obj = OBJ_PIXEL;	break;
+			}
+			break;
+		case 2:
+			switch (_tiles[i].objFrameX)
+			{
+			case 11:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 12:	_tiles[i].obj = OBJ_PIXEL;	break;
+			}
+			break;
+		}
+	}
 }

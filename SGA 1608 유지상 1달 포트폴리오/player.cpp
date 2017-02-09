@@ -133,7 +133,8 @@ void player::playerMove()
 		{	//중력만큼 이동해서 바로 위타일과 충돌하는지 확인합니다.
 			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y + gravity)))
 			{	//만약 위타일에 충돌했을때 위타일이 땅이라면
-				if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND)
+				if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND ||
+					_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_PIXEL)
 				{	//위타일의 바텀 + 1 좌표로 플레이어 y좌표를 고정시킵니다.
 					y = _tileMap->getTiles()[currentCollisionTile - TILEX].rc.bottom + 1;
 					gravity = 0;
@@ -153,16 +154,49 @@ void player::playerMove()
 		if (gravity > 0)
 		{	//중력만큼 이동해서 바로 아래 타일과 충돌하는지 확인합니다.
 			if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + gravity)))
-			{	//만약 아래타일에 충돌했을때 아래타일이 땅이라면
-				if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND)
-				{	
+			{	//만약 좌표가 아래타일로 넘어간다면
+				switch (_tileMap->getTiles()[currentCollisionTile + TILEX].obj)
+				{
+				case OBJ_GROUND:
 					gravity = 0;	//중력을 0으로 변경시킵니다.
 					y = _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top - 1;	//타일의 top - 1에 좌표를 고정합니다.
 					if (Action & ACTION_JUMP) Action -= ACTION_JUMP;					//점프를 다시 할수있게 상태를 변경시킵니다.
-				}
-				else
-				{//아래타일이 땅이 아니라면 중력만큼 이동합니다.
+					break;
+				case OBJ_PIXEL:
+					//한 타일 내에서 플레이어의 좌표를 구합니다.
+					//중력이 적용되있다는 전제가 깔려있기 때문에 계산좌표에도 미리 중력을 적용시킵니다.
+					int playerTileX, playerTileY;
+					playerTileX = x - _tileMap->getTiles()[currentCollisionTile + TILEX].rc.left;
+					playerTileY = y + gravity - _tileMap->getTiles()[currentCollisionTile + TILEX].rc.top;
+					COLORREF color;
+					switch (_tileMap->getTileObjY(currentCollisionTile + TILEX))
+					{
+					case 1:
+						switch (_tileMap->getTileObjX(currentCollisionTile + TILEX))
+						{
+						case 12: color = GetPixel(IMAGEMANAGER->findImage("12-1")->getMemDC(), playerTileX, playerTileY);	break;
+						case 13: color = GetPixel(IMAGEMANAGER->findImage("13-1")->getMemDC(), playerTileX, playerTileY);	break;
+						}
+						break;
+					case 2:
+						switch (_tileMap->getTileObjX(currentCollisionTile + TILEX))
+						{
+						case 11: color = GetPixel(IMAGEMANAGER->findImage("11-2")->getMemDC(), playerTileX, playerTileY);	break;
+						case 12: color = GetPixel(IMAGEMANAGER->findImage("12-2")->getMemDC(), playerTileX, playerTileY);	break;
+						}
+						break;
+					}
+
+					if (GetRValue(color) == 0 && GetGValue(color) == 0 && GetBValue(color) == 0) y += gravity;
+					else
+					{
+						y -= 1;
+						gravity = -1;
+					}
+					break;
+				case OBJ_NONE:
 					y += gravity;
+					break;
 				}
 			}
 			else
@@ -179,6 +213,50 @@ void player::playerMove()
 		//플레이어가 땅에 충돌하고 있고 그 타일 위가 아무것도 없는 상태일때 (무한 점프 현상을 해결하기 위한 예외처리)
 		if (Action & ACTION_JUMP && _tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_NONE) Action -= ACTION_JUMP;//현재 점프중 상태이면 점프상태 제거								
 		gravity = 0;	//중력을 0으로 변경합니다.
+	}
+
+	//플레이어와 OBJ_PIXEL타일의 충돌을 처리 (예외처리) -> 이부분은 픽셀충돌로 처리되었습니다.
+	if (_tileMap->getTiles()[currentCollisionTile].obj == OBJ_PIXEL)
+	{
+		//한 타일 내에서 플레이어의 좌표를 구합니다.
+		//중력이 적용되있다는 전제가 깔려있기 때문에 계산좌표에도 미리 중력을 적용시킵니다.
+		int playerTileX, playerTileY;
+		playerTileX = x - _tileMap->getTiles()[currentCollisionTile].rc.left;
+		playerTileY = y - _tileMap->getTiles()[currentCollisionTile].rc.top;
+		COLORREF color;
+		switch (_tileMap->getTileObjY(currentCollisionTile))
+		{
+			//이부분을 타일 x , 타일 y 만큼을 통해 좌표를 이동해서 찾을수 있을것 같다.
+		case 1:
+			switch (_tileMap->getTileObjX(currentCollisionTile))
+			{
+			case 12: color = GetPixel(IMAGEMANAGER->findImage("12-1")->getMemDC(), playerTileX, playerTileY);	break;
+			case 13: color = GetPixel(IMAGEMANAGER->findImage("13-1")->getMemDC(), playerTileX, playerTileY);	break;
+			}
+			break;
+		case 2:
+			switch (_tileMap->getTileObjX(currentCollisionTile))
+			{
+			case 11: color = GetPixel(IMAGEMANAGER->findImage("11-2")->getMemDC(), playerTileX, playerTileY);	break;
+			case 12: color = GetPixel(IMAGEMANAGER->findImage("12-2")->getMemDC(), playerTileX, playerTileY);	break;
+			}
+			break;
+		}
+		int r = GetRValue(color);
+		int g = GetGValue(color);
+		int b = GetBValue(color);
+
+		if (r == 0 && g == 0 && b == 0)
+		{
+			y += gravity;
+		}
+		else
+		{
+			//만약 점프중인 상태가 걸려있다면 해제해준다.
+			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;
+			y -= 1;
+			gravity = 0;
+		}
 	}
 }
 

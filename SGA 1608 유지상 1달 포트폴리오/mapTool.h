@@ -51,6 +51,8 @@ public:
 	void load(const char * fileName);
 	void save(const char * fileName);
 
+	void changeOBJType();	//기존의 오브젝트 종류를 변경하기 위한 설정
+
 	mapTool();
 	virtual ~mapTool();
 };

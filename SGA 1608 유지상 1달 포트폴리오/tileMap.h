@@ -17,6 +17,9 @@ public:
 	void moveTileY(int value);
 	void miniMapRender();
 
+	int getTileObjX(int tileNum) {	return _tiles[tileNum].objFrameX;	}
+	int getTileObjY(int tileNum) {	return _tiles[tileNum].objFrameY;	}
+
 	tagTile* getTiles() { return _tiles; }
 
 	tileMap();
