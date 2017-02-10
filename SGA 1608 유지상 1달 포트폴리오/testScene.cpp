@@ -51,6 +51,9 @@ HRESULT testScene::init()
 	_enemyManager->setBomb(12924);
 	_enemyManager->setAlien(10378);
 	_enemyManager->setAlien(10526);
+	_enemyManager->setOko(9642);
+	_enemyManager->setOko(9644);
+	_enemyManager->setOko(9646);
 	//_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 
