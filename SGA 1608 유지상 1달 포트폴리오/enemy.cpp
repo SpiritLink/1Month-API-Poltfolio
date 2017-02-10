@@ -487,11 +487,13 @@ void rotateCube::release()
 
 void rotateCube::update()
 {
+	_hitArea = RectMakeCenter(x, y, 30, 30);
 }
 
 void rotateCube::render()
 {
-	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight());
+	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
+	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight() / 2);
 }
 
 rotateCube::rotateCube()
