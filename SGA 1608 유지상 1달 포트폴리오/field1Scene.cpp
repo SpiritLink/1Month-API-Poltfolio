@@ -66,13 +66,14 @@ void field1Scene::release()
 void field1Scene::update()
 {
 	//업데이트 순서
-	_player->update();			//1.플레이어
-	_enemyManager->update();	//2.적
-	_attackManager->update();	//3.공격
+	_tileMap->update();			//1.맵
+	_player->update();			//2.플레이어
+	_enemyManager->update();	//3.적
+	_attackManager->update();	//4.공격
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());	//충돌
-	_playerUI->update();		//5.UI
-	cameraMove();				//6.카메라 (이동)
-	portal();					//7.포탈 (특정 A좌표 -> 특정 B좌표 이동)
+	_playerUI->update();		//6.UI
+	cameraMove();				//7.카메라 (이동)
+	portal();					//8.포탈 (특정 A좌표 -> 특정 B좌표 이동)
 }
 
 void field1Scene::render()
@@ -92,6 +93,7 @@ void field1Scene::cameraMove()
 	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
+
 
 	//만약 화면을 벗어난다면
 	if (Background.right < WINSIZEX)
@@ -137,6 +139,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		DATABASE->addBackgroundCount(-distanceX / 10);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -147,6 +150,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
 	//Y좌표 이동
