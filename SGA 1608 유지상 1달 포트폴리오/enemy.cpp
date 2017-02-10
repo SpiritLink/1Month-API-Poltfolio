@@ -494,9 +494,12 @@ void rotateCube::release()
 void rotateCube::update()
 {
 	_hitArea = RectMakeCenter(x, y, 30, 30);
-	if (patternTime + 0.3f < TIMEMANAGER->getWorldTime()) pattern = true;
-	else pattern = false;
-	collisionTileCheck();					//충돌되고 있는 타일을 체크합니다.
+	pattern = (patternTime + 0.3f < TIMEMANAGER->getWorldTime()) ? true : false;
+	if (updateTime + 0.1f < TIMEMANAGER->getWorldTime())
+	{
+		updateTime = TIMEMANAGER->getWorldTime();	//업데이트 시간 변경
+		collisionTileCheck();						//충돌되고 있는 타일을 체크합니다.
+	}
 	rotateCubeMove();
 }
 

@@ -78,7 +78,6 @@ class oko : public enemy
 private:
 	RECT _detectArea;	//감지를 위한 Rect영역
 	int status;			//멈춤 , 하강 , 상승 상태 변경을 위한 변수
-
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
