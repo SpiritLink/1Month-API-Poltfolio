@@ -618,7 +618,6 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	hitTime = TIMEMANAGER->getWorldTime();
 	finalActionTime = TIMEMANAGER->getWorldTime();
 	invincible = false;	// 현재 무적상태가 아님
-	updateTime = TIMEMANAGER->getWorldTime();
 
 	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
 	return S_OK;
@@ -638,11 +637,7 @@ void eri::update()
 	//공격 범위내에 들어온다면 보스 AI를 실행한다.
 	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
 	frameUpdate();
-	if (updateTime + 0.1f < TIMEMANAGER->getWorldTime())
-	{
-		updateTime = TIMEMANAGER->getWorldTime();
-		collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
-	}
+	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
 	eriGravity();				//타일을 확인하고 중력을 처리합니다.
 }
 

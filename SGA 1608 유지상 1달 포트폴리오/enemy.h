@@ -163,9 +163,6 @@ private:
 
 	image* chargeAura;			//보스 전용 차지 이펙트
 	int auraCount;				//오라 프레임을 넘기기 위한 전용 카운트
-
-	float updateTime;
-
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();

@@ -23,7 +23,7 @@ HRESULT testScene::init()
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(5890);
+	_player->setPlayerTilePosition(15136);
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -36,7 +36,6 @@ HRESULT testScene::init()
 	cameraY = 0;
 
 	_enemyManager->setAlien(21022);
-	_enemyManager->setEri(21022);
 	_enemyManager->setGhost(21024);
 	_enemyManager->setOko(20570);
 	_enemyManager->setFlower(20270);
@@ -54,6 +53,7 @@ HRESULT testScene::init()
 	_enemyManager->setOko(9642);
 	_enemyManager->setOko(9644);
 	_enemyManager->setOko(9646);
+	_enemyManager->setEri(15718);
 	//_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 
@@ -339,13 +339,15 @@ void testScene::portal()
 		_player->setPlayerTilePosition(5873);
 		_player->firstCollisionTileCheck();
 		_player->update();
+		cameraInit();
 		break;
 	case 5872:
 	case 5722:
 	case 5572:
-		_player->setPlayerTilePosition(14987);
+		_player->setPlayerTilePosition(15137);
 		_player->firstCollisionTileCheck();
 		_player->update();
+		cameraInit();
 		break;
 	}
 }

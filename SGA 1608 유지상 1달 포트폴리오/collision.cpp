@@ -18,7 +18,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 	vector<enemy*> _vEnemy = VE;
 	vector<attack*> _vAttack = VA;
 
-	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (currentTime + 0.07f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 
