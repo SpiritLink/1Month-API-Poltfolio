@@ -11,11 +11,6 @@ HRESULT tileMap::init(const char* fileName)
 
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
-	//pixel충돌을 위한 이미지 세팅
-	IMAGEMANAGER->addImage("11-2", "IMAGE/Tile/11-2.bmp", 50, 50, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("12-1", "IMAGE/Tile/12-1.bmp", 50, 50, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("12-2", "IMAGE/Tile/12-2.bmp", 50, 50, false, RGB(0, 0, 0));
-	IMAGEMANAGER->addImage("13-1", "IMAGE/Tile/13-1.bmp", 50, 50, false, RGB(0, 0, 0));
 
 
 	//미니맵 이미지 세팅
@@ -44,6 +39,7 @@ HRESULT tileMap::init(const char* fileName)
 	valueX = 0;
 	valueY = 0;
 	skyX = 0;
+	correctionY = 0;
 	return S_OK;
 }
 
@@ -57,10 +53,11 @@ void tileMap::update()
 	playerYTileNumber = TILEX - (DATABASE->getCollisionTile() / TILEX);
 	valueY = playerYTileNumber * 2.4f;	//240퍼센트 적용
 	valueX = DATABASE->getbackgroundCount();
+	correctionY = (DATABASE->getPlayerY() / TILESIZE) * 2.4f;
 
 	++skyX;
-	_Ground = RectMake(0, valueY, WINSIZEX, WINSIZEY);		//땅 영역
-	_Sky = RectMake(0, valueY - 600, WINSIZEX, WINSIZEY);	//하늘 영역
+	_Ground = RectMake(0, valueY + correctionY, WINSIZEX, WINSIZEY);		//땅 영역
+	_Sky = RectMake(0, valueY - 600 + correctionY, WINSIZEX, WINSIZEY);	//하늘 영역
 }
 
 void tileMap::render()
@@ -69,9 +66,10 @@ void tileMap::render()
 	_BgSky->loopRender(getMemDC(), &_Sky, skyX, 0);	//오른쪽 두 변수를 조정해주자.
 
 	_BgSky->loopRender(getMemDC(), &_Ground, skyX, 0);
-	_BgMt3->loopRender(getMemDC(), &_Ground, -(valueX / 2), 0);
-	_BgMt2->loopRender(getMemDC(), &_Ground, -(valueX), 0);
-	_BgMt1->loopRender(getMemDC(), &_Ground, valueX, 0);
+	_BgMt3->loopRender(getMemDC(), &_Ground, -(valueX / 6), 0);
+	_BgMt2->loopRender(getMemDC(), &_Ground, -(valueX / 3), 0);
+	_BgMt1->loopRender(getMemDC(), &_Ground, valueX / 3, 0);
+
 	//타일 렌더
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{

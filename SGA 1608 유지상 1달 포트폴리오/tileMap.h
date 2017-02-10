@@ -20,6 +20,7 @@ private:
 	int valueX;		//배경을 움직이기 위해 필요한 변수
 	int valueY;		//배경을 움직이기 위해 필요한 변수
 	int skyX;		//하늘을 움직이기 위해 필요한 변수 (플레이어가 움직이지 않아도 배경은 움직여야 한다.)
+	int correctionY;		//카메라 움직임시 Y축 보정을 주기위한 변수
 public:
 	virtual HRESULT init(const char* fileName);
 	virtual void release();
