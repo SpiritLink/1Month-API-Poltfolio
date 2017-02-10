@@ -42,7 +42,7 @@ HRESULT testScene::init()
 	_enemyManager->setFlower(20270);
 	_enemyManager->setBomb(21329);
 	_enemyManager->setMiniGhost(20270);
-
+	_enemyManager->setRotateCube(21312);
 
 	//_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);

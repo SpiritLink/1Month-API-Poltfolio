@@ -37,7 +37,10 @@ HRESULT field1Scene::init()
 
 	//적 배치 (나중에 함수로 분리하자)
 	_enemyManager->setFlower(21174);
-	_enemyManager->setBomb(17870);
+	_enemyManager->setFlower(17864);
+	_enemyManager->setOko(17870);
+	_enemyManager->setMiniGhost(18461);
+	_enemyManager->setMiniGhost(18460);
 
 	return S_OK;
 }

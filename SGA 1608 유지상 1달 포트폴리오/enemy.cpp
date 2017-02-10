@@ -155,7 +155,7 @@ void flower::release()
 void flower::update()
 {
 	_hitArea = RectMake(x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 10, _image->getFrameWidth() - 20, _image->getFrameHeight() - 10);
-	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
@@ -262,7 +262,7 @@ void oko::okoMove()
 	case 0:
 		break;
 	case 1:
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + _image->getFrameHeight() / 2)))
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + TILESIZE / 2)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj != OBJ_GROUND)
 			{
@@ -279,7 +279,7 @@ void oko::okoMove()
 		}
 		break;
 	case 2:
-		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - _image->getFrameHeight() / 2)))
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - TILESIZE / 2)))
 		{
 			if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj != OBJ_GROUND)
 			{
@@ -361,7 +361,7 @@ HRESULT miniGhost::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 
 	//멤버변수 초기화
 	fristCollisionTileCheck();
-	
+	status = 0;
 	return S_OK;
 }
 
@@ -379,7 +379,7 @@ void miniGhost::update()
 		if (frameCount > 3) frameCount = 0;
 	}
 	miniGhostMove();		//miniGhost의 움직이는 함수
-	collisionTileCheck();	//충돌타일을 확인하는 함수
+	collisionTileCheck();								//타일 충돌을 업데이트
 }
 
 void miniGhost::render()
@@ -419,6 +419,43 @@ void miniGhost::collisionTileCheck()
 
 void miniGhost::miniGhostMove()
 {
+	switch (status)
+	{
+	case 0:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + TILEX].rc, PointMake(x, y + _image->getFrameHeight() / 2)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj != OBJ_GROUND)
+			{
+				y += 10;
+			}
+			else
+			{
+				status = 1;
+			}
+		}
+		else
+		{
+			y += 10;
+		}
+		break;
+	case 1:
+		if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - TILEX].rc, PointMake(x, y - _image->getFrameHeight() / 2)))
+		{
+			if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj != OBJ_GROUND)
+			{
+				y -= 10;
+			}
+			else
+			{
+				status = 0;
+			}
+		}
+		else
+		{
+			y -= 10;
+		}
+		break;
+	}
 }
 
 miniGhost::miniGhost()
@@ -428,6 +465,43 @@ miniGhost::miniGhost()
 miniGhost::~miniGhost()
 {
 }
+
+HRESULT rotateCube::init(int tileNum, tileMap * tileMap, attackManager * ATM)
+{
+	//상속받은 변수 초기화
+	_tileMap = tileMap;
+	_attackManager = ATM;
+	x = _tileMap->getTiles()[tileNum].rc.left;
+	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
+	inputTime = TIMEMANAGER->getWorldTime();
+	currentTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addImage("rotateCube", "IMAGE/enemy/rotateCube.bmp", 33, 33, true, RGB(0, 0, 0));
+	frameCount = 0;
+	HP = 2;
+	return S_OK;
+}
+
+void rotateCube::release()
+{
+}
+
+void rotateCube::update()
+{
+}
+
+void rotateCube::render()
+{
+	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight());
+}
+
+rotateCube::rotateCube()
+{
+}
+
+rotateCube::~rotateCube()
+{
+}
+
 
 HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
@@ -451,6 +525,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	hitTime = TIMEMANAGER->getWorldTime();
 	finalActionTime = TIMEMANAGER->getWorldTime();
 	invincible = false;	// 현재 무적상태가 아님
+	updateTime = TIMEMANAGER->getWorldTime();
 
 	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
 	return S_OK;
@@ -470,7 +545,11 @@ void eri::update()
 	//공격 범위내에 들어온다면 보스 AI를 실행한다.
 	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY()))) eriAI();
 	frameUpdate();
-	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
+	if (updateTime + 0.1f < TIMEMANAGER->getWorldTime())
+	{
+		updateTime = TIMEMANAGER->getWorldTime();
+		collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
+	}
 	eriGravity();				//타일을 확인하고 중력을 처리합니다.
 }
 

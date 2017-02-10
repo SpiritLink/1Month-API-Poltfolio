@@ -88,6 +88,14 @@ void enemyManager::setBomb(int tileNum)
 	_vEnemy.push_back(Enemy);
 }
 
+void enemyManager::setRotateCube(int tileNum)
+{
+	enemy* Enemy;
+	Enemy = new rotateCube;
+	Enemy->init(tileNum, _tileMap, _attackManager);
+	_vEnemy.push_back(Enemy);
+}
+
 void enemyManager::setEri(int tileNum)
 {
 	enemy* Enemy;

@@ -4,6 +4,7 @@
 
 HRESULT collision::init()
 {
+	currentTime = TIMEMANAGER->getWorldTime();
 	return S_OK;
 }
 
@@ -16,45 +17,51 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 	_player = PL;
 	vector<enemy*> _vEnemy = VE;
 	vector<attack*> _vAttack = VA;
-	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
+
+	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
-		switch ((*_viAttack)->getAttackType())
+		currentTime = TIMEMANAGER->getWorldTime();
+
+		for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
 		{
-		case ATTACK_PLAYER_SLASH_LEFT:
-		case ATTACK_PLAYER_SLASH_RIGHT:
-		case ATTACK_PLAYER_THROW_LEFT:
-		case ATTACK_PLAYER_THROW_RIGHT:
-			//플레이어 공격과 적이 충돌하면
-			for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
+			switch ((*_viAttack)->getAttackType())
 			{
-				if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect()))
+			case ATTACK_PLAYER_SLASH_LEFT:
+			case ATTACK_PLAYER_SLASH_RIGHT:
+			case ATTACK_PLAYER_THROW_LEFT:
+			case ATTACK_PLAYER_THROW_RIGHT:
+				//플레이어 공격과 적이 충돌하면
+				for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 				{
-					(*_viAttack)->collisionTrue();
-					(*_viEnemy)->addEnemyHP(-1);
+					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect()))
+					{
+						(*_viAttack)->collisionTrue();
+						(*_viEnemy)->addEnemyHP(-1);
+					}
 				}
+
+				break;
+			case ATTACK_ERI_WAVE_RIGHT:
+			case ATTACK_ERI_WAVE_LEFT:
+			case ATTACK_ERI_KNIVES:
+				//적 공격과 플레이어가 충돌하면
+				if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &_player->getPlayerRect()))
+				{
+					_player->setPlayerHit(2.0f);
+					(*_viAttack)->collisionTrue();
+				}
+				break;
 			}
 
-			break;
-		case ATTACK_ERI_WAVE_RIGHT:
-		case ATTACK_ERI_WAVE_LEFT:
-		case ATTACK_ERI_KNIVES:
-			//적 공격과 플레이어가 충돌하면
-			if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &_player->getPlayerRect()))
-			{
-				_player->setPlayerHit(2.0f);
-				(*_viAttack)->collisionTrue();
-			}
-			break;
 		}
 
-	}
-
-	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
-	{
-		//모든 적과 플레이어가 충돌하면
-		if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect()))
+		for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 		{
-			_player->setPlayerHit(2.0f);
+			//모든 적과 플레이어가 충돌하면
+			if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect()))
+			{
+				_player->setPlayerHit(2.0f);
+			}
 		}
 	}
 }

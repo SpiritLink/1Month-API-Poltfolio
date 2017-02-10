@@ -111,6 +111,7 @@ class miniGhost : public enemy
 private:
 	int status;					//멈춤 , 하강 , 상승 상태 변경을 위한 변수
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
+
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
@@ -122,6 +123,18 @@ public:
 	void miniGhostMove();
 	miniGhost();
 	virtual ~miniGhost();
+};
+
+class rotateCube : public enemy
+{
+public:
+	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	rotateCube();
+	virtual ~rotateCube();
 };
 class eri : public enemy		//첫번째 보스 몬스터
 {
@@ -139,6 +152,8 @@ private:
 
 	image* chargeAura;			//보스 전용 차지 이펙트
 	int auraCount;				//오라 프레임을 넘기기 위한 전용 카운트
+
+	float updateTime;
 
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
