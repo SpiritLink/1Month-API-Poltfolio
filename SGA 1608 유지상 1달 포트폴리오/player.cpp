@@ -87,12 +87,31 @@ void player::playerMove()
 		//중력과 함께 움직였을때 대각선 타일로 이동하는지 검사합니다.
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].rc, PointMake(x - SPEED, y + gravity)))
 		{
-			if (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj != OBJ_GROUND) x -= SPEED;
+			switch (_tileMap->getTiles()[currentCollisionTile - 1 - TILEX].obj)
+			{
+			case OBJ_GROUND:
+				break;
+			case OBJ_PIXEL:
+				break;
+			case OBJ_NONE: 
+				x -= SPEED;
+				break;
+			}
 		}
 		//대각선타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
 		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile - 1].rc, PointMake(x - SPEED, y)))	//이동하고 나서 좌표가 왼쪽 타일에 닿았을때						
 		{
-			if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND) x -= SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
+			switch (_tileMap->getTiles()[currentCollisionTile - 1].obj)
+			{
+			case OBJ_GROUND:
+				break;
+			case OBJ_PIXEL://이때 y좌표를 픽셀확인후 이동시켜줘야 한다.
+				x -= SPEED;
+				break;
+			case OBJ_NONE:
+				x -= SPEED;
+				break;
+			}
 		}
 		//다른 타일로 이동 없이 타일 한개 내에서 움직인다면
 		else																						//이동해도 옆타일에 안닿는다면
@@ -100,15 +119,34 @@ void player::playerMove()
 	}
 	if (keyStatus & KEYBOARD_RIGHT)
 	{
-		//중력과 함께 움직였을때 대각선 타일로 이동하는지 검사합니다.
+		//중력과 함께 움직였을때 오른위 타일로 이동하는지 검사합니다.
 		if (gravity < 0 && PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].rc, PointMake(x + SPEED, y + gravity)))
 		{
-			if (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj != OBJ_GROUND) x += SPEED;
+			switch (_tileMap->getTiles()[currentCollisionTile + 1 - TILEX].obj)
+			{
+			case OBJ_GROUND:
+				break;
+			case OBJ_PIXEL:
+				break;
+			case OBJ_NONE: 
+				x += SPEED;
+				break;
+			}
 		}
 		//대각선 타일로 이동하지 않는다면 옆타일로 이동하는지 확인합니다.
 		else if (PtInRect(&_tileMap->getTiles()[currentCollisionTile + 1].rc, PointMake(x + SPEED, y)))	//이동하고 나서 좌표가 오른쪽 타일에 닿았을때						
 		{
-			if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND) x += SPEED;		//타일의 종류가 땅이 아니라면																		//이동한다
+			switch (_tileMap->getTiles()[currentCollisionTile + 1].obj)
+			{
+			case OBJ_GROUND:
+				break;
+			case OBJ_PIXEL://이때 여기서 오른타일의 픽셀을 확인하고 y좌표를 변동시켜 줘야한다.
+				x += SPEED;
+				break;
+			case OBJ_NONE:
+				x += SPEED;
+				break;
+			}
 		}
 		//다른 타일로 이동 없이 타일 한개 내에서 움직인다면.
 		else																						//이동해도 옆타일에 안닿는다면
@@ -205,7 +243,7 @@ void player::playerMove()
 		}
 		break;
 	case OBJ_GROUND:												//GROUND 타일 처리
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;	//좌표	변경
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 2;	//좌표	변경
 		gravity = 0;												//중력	변경
 		break;
 	case OBJ_PIXEL:													//PIXEL 타일 처리
@@ -237,13 +275,30 @@ void player::playerMove()
 		int b = GetBValue(color);
 
 		//이미지가 없는 부분이라면 y는 중력값 만큼 이동해 줍니다.
+		//여기서 중력이 1일때 떨리면서 내려가는 현상을 수정해줘야 할듯.
 		if (r == 0 && g == 0 && b == 0)		y += gravity;
 		//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
 		else
 		{
 			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;	//점프 상태를 해제
 			if (gravity > 0)	gravity = 0;					//중력 변경
-			y -= 1;
+
+			for (int i = imageY + TILESIZE; i > imageY; --i)
+			{
+				COLORREF tempColor;
+				tempColor = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, i);
+
+				int tempR = GetRValue(tempColor);
+				int tempG = GetGValue(tempColor);
+				int tempB = GetBValue(tempColor);
+
+				if (tempR == 0 && tempG == 0 && tempB == 0)
+				{
+					y = _tileMap->getTiles()[currentCollisionTile].rc.top + (i % 50);
+					gravity = 0;
+					break;
+				}
+			}
 		}
 		break;
 	}
