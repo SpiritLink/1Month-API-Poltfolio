@@ -23,7 +23,7 @@ HRESULT testScene::init()
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(13248);
+	_player->setPlayerTilePosition(5890);
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -334,6 +334,18 @@ void testScene::portal()
 		_player->firstCollisionTileCheck();
 		_player->update();
 		cameraInit();
+		break;
+	case 15289:
+		_player->setPlayerTilePosition(5873);
+		_player->firstCollisionTileCheck();
+		_player->update();
+		break;
+	case 5872:
+	case 5722:
+	case 5572:
+		_player->setPlayerTilePosition(14987);
+		_player->firstCollisionTileCheck();
+		_player->update();
 		break;
 	}
 }
