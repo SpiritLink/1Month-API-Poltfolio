@@ -23,7 +23,7 @@ HRESULT testScene::init()
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(20557);
+	_player->setPlayerTilePosition(13248);
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -42,7 +42,6 @@ HRESULT testScene::init()
 	_enemyManager->setFlower(20270);
 	_enemyManager->setBomb(21329);
 	_enemyManager->setMiniGhost(20270);
-	_enemyManager->setRotateCube(21312);
 	_enemyManager->setRotateCube(13250);
 	_enemyManager->setRotateCube(12947);
 

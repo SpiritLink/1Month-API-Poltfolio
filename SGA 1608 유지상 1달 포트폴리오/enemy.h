@@ -127,15 +127,27 @@ public:
 
 class rotateCube : public enemy
 {
+private:
+	int status;
+	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
+	float patternTime;			//패턴 조정을 위한 변수
+	bool pattern;				//패턴 변경을 확인하기 위한 변수
+	float updateTime;			//업데이트 시간 조절을 위한 변수
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
+	void initStatus();				//타일의 상태를 확인하고 어느방향으로 움직일지 결정합니다.
+	void firstCollisionTileCheck();
+	void collisionTileCheck();
+	void rotateCubeMove();
+
 	rotateCube();
 	virtual ~rotateCube();
 };
+
 class eri : public enemy		//첫번째 보스 몬스터
 {
 private:

@@ -478,6 +478,12 @@ HRESULT rotateCube::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	_image = IMAGEMANAGER->addImage("rotateCube", "IMAGE/enemy/rotateCube.bmp", 33, 33, true, RGB(0, 0, 0));
 	frameCount = 0;
 	HP = 2;
+
+	//멤버변수 초기화
+	firstCollisionTileCheck();
+	initStatus();
+	patternTime = TIMEMANAGER->getWorldTime();
+	pattern = false;
 	return S_OK;
 }
 
@@ -488,12 +494,94 @@ void rotateCube::release()
 void rotateCube::update()
 {
 	_hitArea = RectMakeCenter(x, y, 30, 30);
+	if (patternTime + 0.3f < TIMEMANAGER->getWorldTime()) pattern = true;
+	else pattern = false;
+	collisionTileCheck();					//충돌되고 있는 타일을 체크합니다.
+	rotateCubeMove();
 }
 
 void rotateCube::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight() / 2);
+}
+
+void rotateCube::initStatus()
+{
+	//자신을 기준으로 땅이 어디에 위치해 있냐에 따라 진행방향을 결정합니다.
+	status = -1;				//init이 제대로 됬는지 안됬는지 확인하기 위해 -1을 먼저 삽입합니다.
+	if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj == OBJ_GROUND) status = 0;	//밑 타일이 땅이면
+	if (_tileMap->getTiles()[currentCollisionTile - 1].obj == OBJ_GROUND) status = 1;		//왼쪽 타일이 땅이면
+	if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj == OBJ_GROUND) status = 2;	//위쪽 타일이 땅이면
+	if (_tileMap->getTiles()[currentCollisionTile + 1].obj == OBJ_GROUND) status = 3;		//오른쪽 타일이 땅이면
+}
+
+void rotateCube::firstCollisionTileCheck()
+{
+	for (int i = 0; i < TILEX * TILEY; ++i)
+	{
+		if (PtInRect(&_tileMap->getTiles()[i].rc, PointMake(x, y)))
+		{
+			currentCollisionTile = i;
+			break;
+		}
+	}
+}
+
+void rotateCube::collisionTileCheck()
+{
+	//충돌연산을 더 줄일 방법에 대해 생각해 보자.
+	for (int i = currentCollisionTile - 1; i < currentCollisionTile + 2; ++i)
+	{
+		for (int j = -1; j < 2; ++j)
+		{
+			//캐릭터 주변 25개의 타일의 충돌을 계산한다. 이때 범위를 벗어나지 않도록 영역을 조절해 줘야 한다.
+			if (PtInRect(&_tileMap->getTiles()[i + j * TILEX].rc, PointMake(x, y)))
+			{
+				currentCollisionTile = i + j * TILEX;
+				break;
+			}
+		}
+	}
+}
+
+void rotateCube::rotateCubeMove()
+{
+	switch (status)
+	{
+	case 0:			//오른쪽으로 움직일때
+		x += 5;
+		if (_tileMap->getTiles()[currentCollisionTile + TILEX].obj != OBJ_GROUND && pattern)
+		{
+			patternTime = TIMEMANAGER->getWorldTime();
+			status = 1;
+		}
+		break;
+	case 1:			//밑으로 움직일때
+		y += 5;
+		if (_tileMap->getTiles()[currentCollisionTile - 1].obj != OBJ_GROUND&& pattern)
+		{
+			patternTime = TIMEMANAGER->getWorldTime();
+			status = 2;
+		}
+		break;
+	case 2:			//왼쪽으로 움직일때
+		x -= 5;
+		if (_tileMap->getTiles()[currentCollisionTile - TILEX].obj != OBJ_GROUND&& pattern)
+		{
+			patternTime = TIMEMANAGER->getWorldTime();
+			status = 3;
+		}
+		break;
+	case 3:			//위쪽으로 움직일때
+		y -= 5;
+		if (_tileMap->getTiles()[currentCollisionTile + 1].obj != OBJ_GROUND&& pattern)
+		{
+			patternTime = TIMEMANAGER->getWorldTime();
+			status = 0;
+		}
+		break;
+	}
 }
 
 rotateCube::rotateCube()
