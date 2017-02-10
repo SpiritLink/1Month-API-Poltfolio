@@ -44,7 +44,13 @@ HRESULT testScene::init()
 	_enemyManager->setMiniGhost(20270);
 	_enemyManager->setRotateCube(13250);
 	_enemyManager->setRotateCube(12947);
-
+	_enemyManager->setMiniGhost(12335);
+	_enemyManager->setMiniGhost(12484);
+	_enemyManager->setBomb(12922);
+	_enemyManager->setBomb(12923);
+	_enemyManager->setBomb(12924);
+	_enemyManager->setAlien(10378);
+	_enemyManager->setAlien(10526);
 	//_test = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 

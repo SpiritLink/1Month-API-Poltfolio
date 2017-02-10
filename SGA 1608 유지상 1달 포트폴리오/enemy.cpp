@@ -39,7 +39,7 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	_image = IMAGEMANAGER->addFrameImage("alien", "IMAGE/enemy/alien.bmp", 288, 32, 9, 1, true, RGB(0, 255, 255));
+	_image = IMAGEMANAGER->addFrameImage("alien", "IMAGE/enemy/alien.bmp", 576, 64, 9, 1, true, RGB(0, 255, 255));
 	frameCount = 0;
 	HP = 3;
 	return S_OK;
@@ -51,7 +51,7 @@ void alien::release()
 
 void alien::update()
 {
-	_hitArea = RectMakeCenter(x, y, 20, 20);
+	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth() - 30, _image->getFrameHeight() - 20);
 	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
@@ -311,7 +311,7 @@ HRESULT bomb::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = _tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -351,7 +351,7 @@ HRESULT miniGhost::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = _tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
