@@ -173,7 +173,7 @@ HRESULT eriKnives::init(float inputX, float inputY)
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
-	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(0, 0, 0));
+	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(255, 255, 255));
 
 	return S_OK;
 }

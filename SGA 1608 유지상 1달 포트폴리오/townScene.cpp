@@ -31,10 +31,8 @@ HRESULT townScene::init()
 	_collision->init();
 
 	_backIMG = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
-	Background = RectMake(0, 0, _backIMG->getWidth(), _backIMG->getHeight());
+	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 
-	_player->update();
-	cameraInit();//카메라의 위치를 세팅합니다.
 
 	_enemyManager->setBomb(21548);
 	_enemyManager->setBomb(21549);
@@ -43,6 +41,9 @@ HRESULT townScene::init()
 	_enemyManager->setBomb(21552);
 
 	_enemyManager->setFlower(21101);
+
+	_player->update();
+	cameraInit();//카메라의 위치를 세팅합니다.
 
 	return S_OK;
 }
@@ -73,6 +74,7 @@ void townScene::update()
 {
 	_player->update();
 	_playerUI->update();
+	_tileMap->update();
 	_attackManager->update();
 	_enemyManager->update();
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
@@ -81,7 +83,7 @@ void townScene::update()
 
 void townScene::render()
 {
-	_backIMG->render(getMemDC(),Background.left, Background.top);
+	//_backIMG->render(getMemDC(),Background.left, Background.top);
 	_tileMap->render();
 	_enemyManager->render();
 	_player->render();
