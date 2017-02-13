@@ -12,6 +12,8 @@ private:
 	int HP;
 	int MP;
 
+	float currentTime;
+
 public:
 	virtual HRESULT init();
 	virtual void release();

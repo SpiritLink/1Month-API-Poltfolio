@@ -18,8 +18,8 @@ HRESULT player::init()
 	keyStatus = 0;
 	playerStatus = 0;
 
-	MAXHP = 6;
-	HP = 6;
+	MAXHP = 8;
+	HP = 8;
 	MP = 4;
 	direction = RIGHT;
 	Action = ACTION_NONE;

@@ -32,7 +32,9 @@ void attackManager::render()
 {
 	for (_viAttack = _vAttack.begin(); _viAttack != _vAttack.end(); ++_viAttack)
 	{
-		(*_viAttack)->render();
+		if ((*_viAttack)->getAttackX() > -TILESIZE && (*_viAttack)->getAttackX() < WINSIZEX + TILESIZE &&
+			(*_viAttack)->getAttackY() > -TILESIZE && (*_viAttack)->getAttackY() < WINSIZEY + TILESIZE)
+		{	(*_viAttack)->render();	}
 	}
 }
 

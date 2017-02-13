@@ -25,6 +25,8 @@ public:
 	ATTACKTYPE getAttackType() { return _attackType; }
 	bool getCheckCollision() { return checkCollision; }
 	RECT getAttackRect() { return _RECT; }
+	float getAttackX() { return x; }
+	float getAttackY() { return y; }
 
 	void setAttackType(ATTACKTYPE Type) { _attackType = Type; }
 	void collisionTrue() { checkCollision = true; }
