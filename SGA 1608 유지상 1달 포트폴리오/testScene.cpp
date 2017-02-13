@@ -23,7 +23,7 @@ HRESULT testScene::init()
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(15136);
+	_player->setPlayerTilePosition(21020);
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;

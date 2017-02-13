@@ -141,7 +141,56 @@ void player::playerMove()
 			case OBJ_GROUND:
 				break;
 			case OBJ_PIXEL://이때 여기서 오른타일의 픽셀을 확인하고 y좌표를 변동시켜 줘야한다.
+			{
+				int playerTileX, playerTileY;
+				playerTileX = x + SPEED - _tileMap->getTiles()[currentCollisionTile + 1].rc.left;
+				playerTileY = y - _tileMap->getTiles()[currentCollisionTile].rc.top;
+
+				//타일의 frameX, frameY를 이용해 이미지에서 찾을 부분의 기준을 정합니다.
+				//이미지는 현재 1:1비율로 사용되고 있기 때문에 좌표도 변형없이 그대로 적용해줍니다.
+				int imageX, imageY;
+				imageX = _tileMap->getTileObjX(currentCollisionTile + 1) * TILESIZE;
+				imageY = _tileMap->getTileObjY(currentCollisionTile) * TILESIZE;
+
+				//픽셀충돌 연산에 사용할 좌표를 구합니다.
+				int pixelX, pixelY;
+				pixelX = playerTileX + imageX;
+				pixelY = playerTileY + imageY;
+
+				//색상의 정보를 저장할 임시 변수
+				COLORREF color;
+
+				//원하는 좌표의 색상 정보를 이미지에서 얻어옵니다
+				color = GetPixel(IMAGEMANAGER->findImage("tilePIXEL")->getMemDC(), pixelX, pixelY);
+
+				//좌표의 RGB값을 개별로 저장합니다
+				int r = GetRValue(color);
+				int g = GetGValue(color);
+				int b = GetBValue(color);
+
+				//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
+				if(r != 0 || g != 0 || b != 0)
+				{
+					for (int i = imageY + playerTileY; i > imageY - TILESIZE; --i)
+					{
+						COLORREF tempColor;
+						tempColor = GetPixel(IMAGEMANAGER->findImage("tilePIXEL")->getMemDC(), pixelX, i);
+
+						int tempR = GetRValue(tempColor);
+						int tempG = GetGValue(tempColor);
+						int tempB = GetBValue(tempColor);
+
+						if (tempR != 0 || tempG != 0 || tempB != 0)
+						{
+							y = _tileMap->getTiles()[currentCollisionTile].rc.top + (i % 50);
+							gravity = 0;
+							break;
+						}
+					}
+				}
 				x += SPEED;
+			}
+
 				break;
 			case OBJ_NONE:
 				x += SPEED;
@@ -243,7 +292,7 @@ void player::playerMove()
 		}
 		break;
 	case OBJ_GROUND:												//GROUND 타일 처리
-		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 2;	//좌표	변경
+		y = _tileMap->getTiles()[currentCollisionTile].rc.top - 1;	//좌표	변경
 		gravity = 0;												//중력	변경
 		break;
 	case OBJ_PIXEL:													//PIXEL 타일 처리
@@ -267,7 +316,7 @@ void player::playerMove()
 		COLORREF color;
 
 		//원하는 좌표의 색상 정보를 이미지에서 얻어옵니다
-		color = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, pixelY);
+		color = GetPixel(IMAGEMANAGER->findImage("tilePIXEL")->getMemDC(), pixelX, pixelY);
 
 		//좌표의 RGB값을 개별로 저장합니다
 		int r = GetRValue(color);
@@ -276,25 +325,32 @@ void player::playerMove()
 
 		//이미지가 없는 부분이라면 y는 중력값 만큼 이동해 줍니다.
 		//여기서 중력이 1일때 떨리면서 내려가는 현상을 수정해줘야 할듯.
-		if (r == 0 && g == 0 && b == 0)		y += gravity;
+		if (r != 0 && g != 0 && b != 0)		y += gravity;
 		//이미지가 있는 부분이라면 y의 좌표를 변경합니다.
 		else
 		{
 			if (Action & ACTION_JUMP)	Action -= ACTION_JUMP;	//점프 상태를 해제
 			if (gravity > 0)	gravity = 0;					//중력 변경
 
-			for (int i = imageY + TILESIZE; i > imageY; --i)
+			for (int i = imageY + playerTileY; i > imageY - TILESIZE; --i)
 			{
 				COLORREF tempColor;
-				tempColor = GetPixel(IMAGEMANAGER->findImage("tileMap")->getMemDC(), pixelX, i);
+				tempColor = GetPixel(IMAGEMANAGER->findImage("tilePIXEL")->getMemDC(), pixelX, i);
 
 				int tempR = GetRValue(tempColor);
 				int tempG = GetGValue(tempColor);
 				int tempB = GetBValue(tempColor);
 
-				if (tempR == 0 && tempG == 0 && tempB == 0)
+				if ((tempR != 0 || tempG != 0 || tempB != 0) && i > imageY)
 				{
 					y = _tileMap->getTiles()[currentCollisionTile].rc.top + (i % 50);
+					gravity = 0;
+					break;
+				}
+
+				if ((tempR != 0 || tempG != 0 || tempB != 0) && i < imageY)
+				{
+					y = _tileMap->getTiles()[currentCollisionTile - TILEX].rc.top + (i % 50);
 					gravity = 0;
 					break;
 				}
@@ -391,8 +447,13 @@ void player::testFunction()
 	if (Action & ACTION_THROW_ATTACK)				sprintf(str18, "ACTION_THROW");
 	else if (!(Action & ACTION_THROW_ATTACK))		sprintf(str18, " ");
 
-	sprintf(str20, "%0.3f", getDistance(WINSIZEX / 2, (WINSIZEY / 4) * 3, x, y));
-
+	switch (_tileMap->getTiles()[currentCollisionTile].obj)
+	{
+	case OBJ_NONE: sprintf(str20, "OBJ_NONE"); break;
+	case OBJ_GROUND:	sprintf(str20, "OBJ_GROUND"); break;
+	case OBJ_PIXEL:		sprintf(str20, "OBJ_PIXEL"); break;
+	}
+	
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
 	TextOut(getMemDC(), 320, 20, str2, strlen(str2));
@@ -412,7 +473,7 @@ void player::testFunction()
 	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
 	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
 	TextOut(getMemDC(), 100, 540, str18, strlen(str18));
-	//TextOut(getMemDC(), 300, 100, str20, strlen(str20));		//중점으로 부터 플레이어 까지의 거리
+	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str20, strlen(str20));		//중점으로 부터 플레이어 까지의 거리
 }
 
 void player::playerStatusCheck()

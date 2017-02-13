@@ -12,6 +12,8 @@ HRESULT tileMap::init(const char* fileName)
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	CloseHandle(file);
 
+	//충돌처리용 이미지 로드
+	IMAGEMANAGER->addFrameImage("tilePIXEL", "IMAGE/tile/TilePIXEL.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, false, RGB(0, 0, 0));
 
 	//미니맵 이미지 세팅
 	_miniMapIMG = IMAGEMANAGER->addFrameImage("miniMap", "IMAGE/tile/tile.bmp", SAMPLETILEX * 2, SAMPLETILEY * 2, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
