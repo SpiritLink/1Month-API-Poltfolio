@@ -29,6 +29,7 @@ HRESULT player::init()
 	SOUNDMANAGER->addSound("playerSlash", "SOUND/punch2.wav", false, false);
 	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
 	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
+	SOUNDMANAGER->addSound("jump", "SOUND/jump.wav", false, false);
 	return S_OK;
 }
 
@@ -205,6 +206,7 @@ void player::playerMove()
 	{
 		if (!(Action & ACTION_JUMP))					//이미 점프를 한 상태가 아니라면
 		{
+			SOUNDMANAGER->playSound("jump", PointMake(x, y));
 			Action = Action | ACTION_JUMP;				//상태에 점프를 넣어줍니다.
 			gravity = -15;								//중력을 바꿔준다.
 		}
