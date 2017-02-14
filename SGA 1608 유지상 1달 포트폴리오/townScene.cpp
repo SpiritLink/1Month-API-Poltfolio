@@ -44,7 +44,6 @@ HRESULT townScene::init()
 
 	_player->update();
 	cameraInit();//카메라의 위치를 세팅합니다.
-
 	return S_OK;
 }
 
@@ -100,6 +99,7 @@ void townScene::cameraMove()
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
 
+
 	//만약 화면을 벗어난다면
 	if (Background.right < WINSIZEX)
 	{
@@ -108,6 +108,7 @@ void townScene::cameraMove()
 		Background.left += diffrence;	//배경의 움직이는 정도를 조정
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_enemyManager->addEnemyX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -116,6 +117,7 @@ void townScene::cameraMove()
 		Background.left -= diffrence;
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
+		_enemyManager->addEnemyX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -124,6 +126,7 @@ void townScene::cameraMove()
 		Background.bottom -= diffrence;
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
+		_enemyManager->addEnemyY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -133,6 +136,7 @@ void townScene::cameraMove()
 		Background.bottom += diffrence;
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
+		_enemyManager->addEnemyY(diffrence);
 	}
 
 	//X좌표 이동
@@ -144,6 +148,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		DATABASE->addBackgroundCount(-distanceX / 10);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -154,6 +159,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
 	//Y좌표 이동
@@ -176,7 +182,6 @@ void townScene::cameraMove()
 		_attackManager->moveAttackY(distanceY / 10);
 		_enemyManager->addEnemyY(distanceY / 10);
 	}
-
 }
 
 void townScene::cameraInit()

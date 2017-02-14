@@ -35,7 +35,7 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = _tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right ) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -79,7 +79,7 @@ HRESULT ghost::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x = _tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -138,7 +138,7 @@ HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	//상속받은 변수 초기화
 	_tileMap = tileMap;
 	_attackManager = ATM;
-	x =_tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
 	y = _tileMap->getTiles()[tileNum].rc.bottom;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
@@ -603,7 +603,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	_attackManager = ATM;
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
-	x = _tileMap->getTiles()[tileNum].rc.left;
+	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right )/ 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
 	HP = 40;

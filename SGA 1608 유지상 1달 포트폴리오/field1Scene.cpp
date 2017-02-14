@@ -106,6 +106,7 @@ void field1Scene::cameraMove()
 		Background.left += diffrence;	//배경의 움직이는 정도를 조정
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_enemyManager->addEnemyX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -114,6 +115,7 @@ void field1Scene::cameraMove()
 		Background.left -= diffrence;
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
+		_enemyManager->addEnemyX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -122,6 +124,7 @@ void field1Scene::cameraMove()
 		Background.bottom -= diffrence;
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
+		_enemyManager->addEnemyY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -131,6 +134,7 @@ void field1Scene::cameraMove()
 		Background.bottom += diffrence;
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
+		_enemyManager->addEnemyY(diffrence);
 	}
 
 	//X좌표 이동
