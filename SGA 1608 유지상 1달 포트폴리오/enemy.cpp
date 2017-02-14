@@ -401,7 +401,13 @@ void miniGhost::release()
 void miniGhost::update()
 {
 	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
-	if (currentTime + 0.2f < TIMEMANAGER->getWorldTime())
+	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime() && !(alive))
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		frameCount++;
+		if (frameCount > 9) die = true;
+	}
+	if (currentTime + 0.2f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		frameCount++;
@@ -415,6 +421,8 @@ void miniGhost::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
+	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
+		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
 }
 
 void miniGhost::fristCollisionTileCheck()

@@ -44,7 +44,7 @@ void player::update()
 	if(!(KEYMANAGER->isToggleKey('Y'))) testPlayerMove();
 	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
-	PlayerRect = RectMakeCenter(x, y, 5, 5);
+	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY + 10, PLAYERAREAX, PLAYERAREAY);
 }
 
 void player::render()

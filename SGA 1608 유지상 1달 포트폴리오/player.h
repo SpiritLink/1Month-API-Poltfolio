@@ -8,6 +8,8 @@
 #define DEFAULT_SPEED 6
 #define IMAGESIZEX 336
 #define IMAGESIZEY 576
+#define PLAYERAREAX 20
+#define PLAYERAREAY	40
 class player : public gameNode
 {
 private:
