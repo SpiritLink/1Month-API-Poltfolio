@@ -1,11 +1,8 @@
 #include "stdafx.h"
 #include "gameStudy.h"
-#include "testScene.h"
 #include "mapTool.h"
-#include "townScene.h"
-#include "field1Scene.h"
-#include "field2Scene.h"
-#include "bossScene.h"
+#include "ingameScene.h"
+
 
 gameStudy::gameStudy()
 {
