@@ -24,10 +24,15 @@ void enemyManager::update()
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end();)
 	{
 		//죽고나서 렌더가 끝났는지 확인하고 지우게 처리해야 할듯
-		if ((*_viEnemy)->getEnemyHP() <= 0) _viEnemy = _vEnemy.erase(_viEnemy);
+		if ((*_viEnemy)->getEnemyDie()) _viEnemy = _vEnemy.erase(_viEnemy);
 		else
 		{
 			(*_viEnemy)->update();
+			if ((*_viEnemy)->getEnemyHP() <= 0 && (*_viEnemy)->getEnemyAlive())		//피가 0이하로 떨어지면 죽는 모션을 연출하게 한다.
+			{
+				(*_viEnemy)->setAliveFalse();
+				(*_viEnemy)->setFrameCountZero();
+			}
 			++_viEnemy;
 		}
 	}
@@ -37,6 +42,7 @@ void enemyManager::render()
 {
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 	{
+		//좌표를 벗어난다면 렌더하지 않게 변경하자.
 		(*_viEnemy)->render();
 	}
 }

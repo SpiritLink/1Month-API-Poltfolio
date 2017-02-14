@@ -35,6 +35,7 @@ public:
 	RECT getEnemyRect() { return _hitArea; }	//적의 RECT를 반환한다.
 	int getEnemyHP() { return HP; }
 	bool getEnemyDie() { return die; };
+	bool getEnemyAlive() { return alive; }
 
 	enemy();
 	virtual ~enemy();

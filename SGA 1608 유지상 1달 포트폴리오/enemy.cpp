@@ -6,7 +6,6 @@
 
 HRESULT enemy::init(int tileNum, tileMap* _tileMap, attackManager* ATM)
 {
-	IMAGEMANAGER->addFrameImage("boomEffect", "IMAGE/EFFECT/boomEffect.bmp", 590, 59, 10, 1, true, RGB(255, 255, 255));
 	return S_OK;
 }
 
@@ -44,6 +43,7 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	frameCount = 0;
 	HP = 3;
 	die = false;
+	alive = true;
 	return S_OK;
 }
 
@@ -89,6 +89,7 @@ HRESULT ghost::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	frameCount = 0;
 	HP = 3;
 	die = false;
+	alive = true;
 	//멤버변수 초기화
 	dir = LEFT;
 	
@@ -140,6 +141,7 @@ ghost::~ghost()
 HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 {
 	//상속받은 변수 초기화
+	IMAGEMANAGER->addFrameImage("boomEffect", "IMAGE/EFFECT/boomEffect.bmp", 590, 59, 10, 1, true, RGB(255, 255, 255));
 	_tileMap = tileMap;
 	_attackManager = ATM;
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2;
@@ -150,6 +152,7 @@ HRESULT flower::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	frameCount = 0;
 	HP = 3;
 	die = false;
+	alive = true;
 	return S_OK;
 }
 
@@ -164,7 +167,11 @@ void flower::update()
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		if (frameCount > 20) frameCount = 0;
+		switch (alive)
+		{
+		case true:		if (frameCount > 20) frameCount = 0;	break;
+		case false:		if (frameCount > 9) die = true;			break;
+		}
 	}
 }
 
@@ -173,6 +180,8 @@ void flower::render()
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	RectangleMakeCenter(getMemDC(), x, y, 10, 10);
 	_image->frameRender(getMemDC(), x - (_image->getFrameWidth() / 2), y - _image->getFrameHeight(), frameCount, 0);
+	if(!(alive))IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2, 
+		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2,frameCount, 0);
 }
 
 flower::flower()
@@ -196,6 +205,7 @@ HRESULT oko::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	frameCount = 0;
 	HP = 9999;
 	die = false;
+	alive = true;
 	//멤버 변수 초기화
 	status = 0;
 
@@ -323,6 +333,7 @@ HRESULT bomb::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	_image = IMAGEMANAGER->addImage("bomb", "IMAGE/enemy/bomb.bmp", 50, 50,true, RGB(0, 0, 0));
 	frameCount = 0;
 	die = false;
+	alive = true;
 	HP = 99999;
 	return S_OK;
 }
@@ -364,6 +375,7 @@ HRESULT miniGhost::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	frameCount = 0;
 	HP = 2;
 	die = false;
+	alive = true;
 
 	//멤버변수 초기화
 	fristCollisionTileCheck();
@@ -485,6 +497,8 @@ HRESULT rotateCube::init(int tileNum, tileMap * tileMap, attackManager * ATM)
 	frameCount = 0;
 	HP = 2;
 	die = false;
+	alive = true;
+
 	//멤버변수 초기화
 	firstCollisionTileCheck();
 	initStatus();
@@ -614,6 +628,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	frameCount = 0;
 	HP = 40;
 	die = false;
+	alive = true;
 
 	//멤버 변수 초기화
 	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));
