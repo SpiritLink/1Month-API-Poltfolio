@@ -58,7 +58,11 @@ void alien::update()
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		if (frameCount > 8) frameCount = 0;
+		switch (alive)
+		{
+		case true:		if (frameCount > 8) frameCount = 0;	break;
+		case false: if (frameCount > 9) die = true;			break;
+		}
 	}
 }
 
@@ -66,6 +70,8 @@ void alien::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount, 0);
+	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
+		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
 }
 
 alien::alien()
@@ -108,14 +114,17 @@ void ghost::update()
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		if (frameCount > 3)
+		switch (alive)
 		{
+		case true:		
+			if (frameCount > 3) frameCount = 0;
 			switch (dir)
 			{
 			case RIGHT: dir = LEFT; break;
 			case LEFT: dir = RIGHT; break;
 			}
-			frameCount = 0;
+			break;
+		case false:		if (frameCount > 9) die = true;			break;
 		}
 	}
 }
@@ -128,6 +137,8 @@ void ghost::render()
 	case RIGHT:_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0); break;
 	case LEFT: _image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 1); break;
 	}
+	if (!(alive))IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
+		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
 }
 
 ghost::ghost()
@@ -179,9 +190,9 @@ void flower::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	RectangleMakeCenter(getMemDC(), x, y, 10, 10);
-	_image->frameRender(getMemDC(), x - (_image->getFrameWidth() / 2), y - _image->getFrameHeight(), frameCount, 0);
-	if(!(alive))IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2, 
-		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2,frameCount, 0);
+	_image->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2, y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight(), frameCount, 0);
+	if(!(alive))IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), _hitArea.left, 
+		_hitArea.top,frameCount, 0);
 }
 
 flower::flower()
