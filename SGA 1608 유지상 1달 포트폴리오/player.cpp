@@ -26,8 +26,9 @@ HRESULT player::init()
 	frameCount = 0;
 
 	alphaValue = 255;
-	SOUNDMANAGER->addSound("playerSlash", "SOUND/hit.wav", false, false);
+	SOUNDMANAGER->addSound("playerSlash", "SOUND/punch2.wav", false, false);
 	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
+	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
 	return S_OK;
 }
 

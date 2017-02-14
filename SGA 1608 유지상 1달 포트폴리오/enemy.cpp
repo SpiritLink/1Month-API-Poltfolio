@@ -54,15 +54,18 @@ void alien::release()
 void alien::update()
 {
 	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth() - 30, _image->getFrameHeight() - 20);
-	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		switch (alive)
-		{
-		case true:		if (frameCount > 8) frameCount = 0;	break;
-		case false: if (frameCount > 9) die = true;			break;
-		}
+		if (frameCount > 8) frameCount = 0;
+	}
+
+	if (currentTime + 0.02f < TIMEMANAGER->getWorldTime() && !(alive))
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+		if (frameCount > 9) die = true;
 	}
 }
 
@@ -109,22 +112,16 @@ void ghost::release()
 void ghost::update()
 {
 	_hitArea = RectMakeCenter(x, y, 30, 40);
-	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		switch (alive)
-		{
-		case true:		
-			if (frameCount > 3) frameCount = 0;
-			switch (dir)
-			{
-			case RIGHT: dir = LEFT; break;
-			case LEFT: dir = RIGHT; break;
-			}
-			break;
-		case false:		if (frameCount > 9) die = true;			break;
-		}
+	}
+	if (currentTime + 0.02f < TIMEMANAGER->getWorldTime() && !(alive))
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+		if (frameCount > 9) die = true;
 	}
 }
 
