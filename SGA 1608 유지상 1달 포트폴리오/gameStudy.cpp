@@ -2,7 +2,7 @@
 #include "gameStudy.h"
 #include "mapTool.h"
 #include "ingameScene.h"
-
+#include "MenuScene.h"
 
 gameStudy::gameStudy()
 {
@@ -20,14 +20,15 @@ HRESULT gameStudy::init()
 
 	//------------------------------------------
 	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
+	SCENEMANAGER->addScene("menuScene", new MenuScene);		//게임시작전 메뉴를 선택하는 화면
 	SCENEMANAGER->addScene("testScene", new testScene);		//각종 실험을 위한 CPP
 	SCENEMANAGER->addScene("mapTool", new mapTool);			//맵을 만드는 도구
 	SCENEMANAGER->addScene("townScene", new townScene);		//마을
 	SCENEMANAGER->addScene("field1Scene", new field1Scene);	//사냥터 1
 	SCENEMANAGER->addScene("field2Scene", new field2Scene);	//사냥터 2
 	SCENEMANAGER->addScene("bossScene", new bossScene);		//보스방
-
-	SCENEMANAGER->changeScene("testScene");					//현재 실험용 맵으로 진입한다.
+	
+	SCENEMANAGER->changeScene("menuScene");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
 	return S_OK;
 }
