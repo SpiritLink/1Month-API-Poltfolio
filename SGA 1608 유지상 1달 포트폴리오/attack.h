@@ -54,6 +54,7 @@ class playerThrow : public attack
 private:
 	int frameCount;
 	float currentTime;
+	bool alive;
 public:
 	virtual HRESULT init(float inputX, float inputY);
 	virtual void release();

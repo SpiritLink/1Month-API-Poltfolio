@@ -60,7 +60,6 @@ void playerSlash::update()
 
 void playerSlash::render()
 {
-	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 }
 
 playerSlash::playerSlash()
@@ -76,10 +75,12 @@ HRESULT playerThrow::init(float inputX, float inputY)
 	inputTime = TIMEMANAGER->getWorldTime();
 	currentTime = TIMEMANAGER->getWorldTime();
 	_image = IMAGEMANAGER->addFrameImage("shuriken", "IMAGE/attack/shuriken.bmp", 180, 30, 6, 1, true, RGB(255, 255, 255));
+	IMAGEMANAGER->addFrameImage("playerThrowEffect", "IMAGE/effect/playerThrowEffect.bmp", 640, 128, 5, 1, true, RGB(0, 0, 0));
 	frameCount = 0;
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
+	alive = true;
 	return S_OK;
 }
 
@@ -99,15 +100,8 @@ void playerThrow::update()
 	}
 
 	//공격의 종류에 따라 표창의 속도를 다르게 합니다.
-	switch (_attackType)
-	{
-	case ATTACK_PLAYER_THROW_LEFT:
-		x -= 20;
-		break;
-	case ATTACK_PLAYER_THROW_RIGHT:
-		x += 20;
-		break;
-	}
+	if (_attackType == ATTACK_PLAYER_THROW_LEFT && alive) x -= 20;
+	if (_attackType == ATTACK_PLAYER_THROW_RIGHT && alive) x += 20;
 
 	if (inputTime + 4.0f < TIMEMANAGER->getWorldTime()) collisionTrue();
 }

@@ -68,7 +68,6 @@ void alien::update()
 
 void alien::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount, 0);
 	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
 		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
@@ -131,7 +130,6 @@ void ghost::update()
 
 void ghost::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	switch (dir)
 	{
 	case RIGHT:_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0); break;
@@ -174,22 +172,24 @@ void flower::release()
 void flower::update()
 {
 	_hitArea = RectMake(x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 10, _image->getFrameWidth() - 20, _image->getFrameHeight() - 10);
-	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+		
+	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		++frameCount;
-		switch (alive)
-		{
-		case true:		if (frameCount > 20) frameCount = 0;	break;
-		case false:		if (frameCount > 9) die = true;			break;
-		}
+		if (frameCount > 20) frameCount = 0;
+	}
+
+	if (currentTime + 0.02f < TIMEMANAGER->getWorldTime() && !(alive))
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+		if (frameCount > 9) die = true;
 	}
 }
 
 void flower::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
-	RectangleMakeCenter(getMemDC(), x, y, 10, 10);
 	_image->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2, y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight(), frameCount, 0);
 	if(!(alive))IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), _hitArea.left, 
 		_hitArea.top,frameCount, 0);
@@ -247,8 +247,6 @@ void oko::update()
 
 void oko::render()
 {
-	//Rectangle(getMemDC(), _detectArea.left, _detectArea.top, _detectArea.right, _detectArea.bottom);
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
 }
 
@@ -401,7 +399,7 @@ void miniGhost::release()
 void miniGhost::update()
 {
 	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth(), _image->getFrameHeight());
-	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime() && !(alive))
+	if (currentTime + 0.02f < TIMEMANAGER->getWorldTime() && !(alive))
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
 		frameCount++;
@@ -419,7 +417,6 @@ void miniGhost::update()
 
 void miniGhost::render()
 {
-	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0);
 	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
 		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
