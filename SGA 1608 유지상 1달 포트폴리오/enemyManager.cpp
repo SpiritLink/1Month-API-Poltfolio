@@ -23,6 +23,7 @@ void enemyManager::update()
 {
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end();)
 	{
+		//죽고나서 렌더가 끝났는지 확인하고 지우게 처리해야 할듯
 		if ((*_viEnemy)->getEnemyHP() <= 0) _viEnemy = _vEnemy.erase(_viEnemy);
 		else
 		{

@@ -192,7 +192,6 @@ void eriKnives::update()
 
 void eriKnives::render()
 {
-	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, angle / (PI / 6.0f), 0);
 }
 

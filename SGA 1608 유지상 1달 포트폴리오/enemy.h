@@ -17,6 +17,8 @@ protected:
 	float x, y;						//좌표
 	int HP;							//체력
 	int frameCount;					//프레임 카운트
+	bool die;						//죽었는지 확인하는 변수
+	bool alive;						//살아있는지 확인하는 변수 ->죽는 과정을 확인하기 위해 별도로 추가
 	
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
@@ -27,9 +29,12 @@ public:
 	void addEnemyX(int value) { x += value; }
 	void addEnemyY(int value) { y += value; }
 	void addEnemyHP(int value) { HP += value; }
-	
+	void setAliveFalse() { alive = false; }
+	void setFrameCountZero() { frameCount = 0; }
+
 	RECT getEnemyRect() { return _hitArea; }	//적의 RECT를 반환한다.
 	int getEnemyHP() { return HP; }
+	bool getEnemyDie() { return die; };
 
 	enemy();
 	virtual ~enemy();
