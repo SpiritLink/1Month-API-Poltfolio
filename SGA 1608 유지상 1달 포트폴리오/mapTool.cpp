@@ -354,6 +354,8 @@ void mapTool::changeOBJType()
 			{
 			case 12:	_tiles[i].obj = OBJ_PIXEL;	break;
 			case 13:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 15:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 16:	_tiles[i].obj = OBJ_PIXEL;	break;
 			}
 			break;
 		case 2:
@@ -361,6 +363,8 @@ void mapTool::changeOBJType()
 			{
 			case 11:	_tiles[i].obj = OBJ_PIXEL;	break;
 			case 12:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 16:	_tiles[i].obj = OBJ_PIXEL;	break;
+			case 17:	_tiles[i].obj = OBJ_PIXEL;	break;
 			}
 			break;
 		}
