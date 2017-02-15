@@ -57,10 +57,10 @@ void MenuScene::render()
 
 void MenuScene::keyboardInput()
 {
-	if (!(showLogo) && KEYMANAGER->isOnceKeyDown(VK_DOWN) && SelectMenu < 3)	SelectMenu++;
-	if (!(showLogo) && KEYMANAGER->isOnceKeyDown(VK_UP) && SelectMenu > 0) SelectMenu--;
-	if (!(showLogo) && KEYMANAGER->isOnceKeyDown(VK_RIGHT) && SelectMenu < 4)	SelectMenu++;
-	if (!(showLogo) && KEYMANAGER->isOnceKeyDown(VK_LEFT) && SelectMenu > 3) SelectMenu--;
+	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_DOWN) && SelectMenu < 3)	SelectMenu++;
+	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_UP) && SelectMenu > 0) SelectMenu--;
+	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_RIGHT) && SelectMenu < 4)	SelectMenu++;
+	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_LEFT) && SelectMenu > 3) SelectMenu--;
 }
 
 void MenuScene::changeScene()
@@ -77,7 +77,13 @@ void MenuScene::changeScene()
 		if (alphaValue < 254 && !(fadeOut)) alphaValue += 4;
 		if (!(fadeOut) && alphaValue >= 250) fadeOut = true;
 		if (alphaValue > 1 && fadeOut) alphaValue -= 4;
-		if (fadeOut && alphaValue <= 10) showLogo = false;
+		if (fadeOut && alphaValue <= 10)
+		{
+			fadeOut = false;
+			alphaValue = 255;
+			showLogo = false;
+			showMenu = true;
+		}
 	}
 }
 

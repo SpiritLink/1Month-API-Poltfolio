@@ -149,6 +149,9 @@ enum ATTACKTYPE
 #define TILESIZEX (TILESIZE * TILEX)
 #define TILESIZEY (TILESIZE * TILEY)
 
+#define DEFAULT_HP 6
+#define DEFAULT_MAXHP 6
+#define DEFAULT_MP 0
 #define GRAVITY 1.0f
 
 //맵툴에서 사용되는 공용 구조체와 enum

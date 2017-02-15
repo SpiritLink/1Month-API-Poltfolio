@@ -2,6 +2,61 @@
 #include "database.h"
 
 
+void database::saveDataToFile()
+{
+	vector<string> arrString;
+	char temp[100];
+
+	arrString.push_back((char*)itoa(_sceneNumber,temp,10));
+	arrString.push_back((char*)itoa(playerCollisionTile, temp, 10));
+	arrString.push_back((char*)itoa(MAXHP, temp, 10));
+	arrString.push_back((char*)itoa(HP, temp, 10));
+	arrString.push_back((char*)itoa(MP, temp, 10));
+
+	switch (_saveCount)
+	{
+	case 0:	TXTMANAGER->save("DATA/SAVE/save1.data", arrString);	break;
+	case 1: TXTMANAGER->save("DATA/SAVE/save2.data", arrString);	break;
+	case 2: TXTMANAGER->save("DATA/SAVE/save3.data", arrString);	break;
+	}
+}
+
+void database::loadDataFromFile()
+{
+	vector<string> arrString;
+
+	switch (_saveCount)
+	{
+	case 0: arrString = TXTMANAGER->load("DATA/SAVE/save1.data");	break;
+	case 1:	arrString = TXTMANAGER->load("DATA/SAVE/save2.data");	break;
+	case 2:	arrString = TXTMANAGER->load("DATA/SAVE/save3.data");	break;
+	}
+
+	if (arrString.empty())
+	{
+		//초기 충돌타일 설정
+		_sceneNumber = 1;
+		playerCollisionTile = 20709;
+		MAXHP = DEFAULT_MAXHP;
+		HP = DEFAULT_HP;
+		MP = DEFAULT_MP;
+	}
+	else
+	{
+		for (int i = 0; i < arrString.size(); ++i)
+		{
+			switch (i)
+			{
+			case 0:	_sceneNumber = (int)atoi(arrString[i].c_str()); break;
+			case 1:	playerCollisionTile = (int)atoi(arrString[i].c_str()); break;
+			case 2:	MAXHP = (int)atoi(arrString[i].c_str()); break;
+			case 3:	HP = (int)atoi(arrString[i].c_str()); break;
+			case 4:	MP = (int)atoi(arrString[i].c_str()); break;
+			}
+		}
+	}
+}
+
 database::database()
 {
 }

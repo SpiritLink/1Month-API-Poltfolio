@@ -813,6 +813,7 @@ bossScene::~bossScene()
 
 HRESULT testScene::init()
 {
+	DATABASE->loadDataFromFile();	//파일로부터 플레이어의 데이터를 불러와 셋팅합니다. 앞으로 플레이어의 초기화에 필요합니다.
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY / 2);
@@ -820,7 +821,7 @@ HRESULT testScene::init()
 	_image = IMAGEMANAGER->addImage("흰배경", "IMAGE/whiteBackground.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
 
 	_tileMap = new tileMap;
-	_tileMap->init("DATA/MAP/Field1.map");
+	_tileMap->init("DATA/MAP/Town.map");
 
 	_attackManager = new attackManager;
 	_attackManager->init();
@@ -828,11 +829,12 @@ HRESULT testScene::init()
 	_enemyManager = new enemyManager;
 	_enemyManager->init(_tileMap, _attackManager);
 
+	//플레이어를 초기화 하기 전에 싱글톤에 데이터를 로드 해줘야 합니다.
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(21020);
+	_player->setPlayerTilePosition(DATABASE->getCollisionTile());
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -925,6 +927,11 @@ void testScene::update()
 		DATABASE->setDestCamY((WINSIZEY / 4) * 3);		//대상이 고정되기 원하는 Y좌표 위치
 	}
 
+	if (KEYMANAGER->isOnceKeyDown('H'))
+	{
+		_saveCount = 2;
+		DATABASE->saveDataToFile();
+	}
 	//좌표 설정이 끝난뒤에 Camera함수에 진입합니다.
 	cameraMove();
 	portal();

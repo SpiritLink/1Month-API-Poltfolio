@@ -5,8 +5,16 @@
 HRESULT player::init()
 {
 	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 18, true, RGB(0, 0, 255));
+	//x = DATABASE->getPlayerX();	//싱글톤으로 부터
+	//y = DATABASE->getPlayerY();	//싱글톤으로 부터
+	//MAXHP = DATABASE->getMaxHP();
+	//HP = DATABASE->getHP();
+	//MP = DATABASE->getMP();
 	x = WINSIZEX / 2;
 	y = WINSIZEY / 2;
+	MAXHP = 6;
+	HP = 6;
+	MP = 3;
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	SPEED = DEFAULT_SPEED;
@@ -17,9 +25,6 @@ HRESULT player::init()
 	keyStatus = 0;
 	playerStatus = 0;
 
-	MAXHP = 8;
-	HP = 8;
-	MP = 4;
 	direction = RIGHT;
 	Action = ACTION_NONE;
 	frameCount = 0;
@@ -522,6 +527,7 @@ void player::sendDataToSingleton()
 	DATABASE->setCollisionTile(currentCollisionTile);	//기준이 될 타일을 플레이어 충돌 타일번호로 설정한다.
 	DATABASE->setPlayerX(x);
 	DATABASE->setPlayerY(y);
+	DATABASE->setMaxHP(MAXHP);
 }
 
 void player::setPlayerTilePosition(int tileNum)
