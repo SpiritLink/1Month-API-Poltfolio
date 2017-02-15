@@ -932,15 +932,11 @@ void testScene::update()
 
 void testScene::render()
 {
-	//_image->render(getMemDC());
-	//Rectangle(getMemDC(), Background.left, Background.top, Background.right, Background.bottom);
-	//_test->render(getMemDC(), Background.left, Background.top);
 	_tileMap->render();
 	_enemyManager->render();
 	_player->render();
-	//if (KEYMANAGER->isToggleKey(VK_SHIFT)) _tileMap->miniMapRender();
-
 	_attackManager->render();
+	EFFECTMANAGER->render();
 	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }

@@ -408,8 +408,11 @@ void miniGhost::update()
 		frameCount++;
 		if (frameCount > 3) frameCount = 0;
 	}
-	miniGhostMove();		//miniGhost의 움직이는 함수
-	collisionTileCheck();								//타일 충돌을 업데이트
+	if (alive)
+	{
+		miniGhostMove();		//miniGhost의 움직이는 함수
+		collisionTileCheck();								//타일 충돌을 업데이트
+	}
 }
 
 void miniGhost::render()

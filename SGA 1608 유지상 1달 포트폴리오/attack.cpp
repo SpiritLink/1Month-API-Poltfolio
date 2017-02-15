@@ -8,6 +8,7 @@ HRESULT attack::init(float inputX, float inputY)
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
+	die = false;
 	return S_OK;
 }
 
@@ -38,6 +39,7 @@ HRESULT playerSlash::init(float inputX, float inputY)
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
+	die = false;
 	return S_OK;
 }
 
@@ -56,6 +58,7 @@ void playerSlash::update()
 	}
 
 	if (inputTime + 0.1f < TIMEMANAGER->getWorldTime()) collisionTrue();
+	if (checkCollision) die = true;
 }
 
 void playerSlash::render()
@@ -81,6 +84,7 @@ HRESULT playerThrow::init(float inputX, float inputY)
 	x = inputX;
 	y = inputY;
 	alive = true;
+	die = false;
 	return S_OK;
 }
 
@@ -100,16 +104,19 @@ void playerThrow::update()
 	}
 
 	//공격의 종류에 따라 표창의 속도를 다르게 합니다.
-	if (_attackType == ATTACK_PLAYER_THROW_LEFT && alive) x -= 20;
-	if (_attackType == ATTACK_PLAYER_THROW_RIGHT && alive) x += 20;
+	if (_attackType == ATTACK_PLAYER_THROW_LEFT && !(checkCollision)) x -= 20;
+	if (_attackType == ATTACK_PLAYER_THROW_RIGHT && !(checkCollision)) x += 20;
 
 	if (inputTime + 4.0f < TIMEMANAGER->getWorldTime()) collisionTrue();
+	if (checkCollision && frameCount > 4) die = true;
 }
 
 void playerThrow::render()
 {
 	//Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount,0);
+	if (checkCollision) IMAGEMANAGER->findImage("playerThrowEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("playerThrowEffect")->getFrameWidth() / 2, 
+		y - IMAGEMANAGER->findImage("playerThrowEffect")->getFrameHeight() / 2, frameCount, 0);
 }
 
 playerThrow::playerThrow()
@@ -126,6 +133,7 @@ HRESULT eriWave::init(float inputX, float inputY)
 	checkCollision = false;
 	x = inputX;
 	y = inputY;
+	die = false;
 	return S_OK;
 }
 
@@ -168,7 +176,7 @@ HRESULT eriKnives::init(float inputX, float inputY)
 	x = inputX;
 	y = inputY;
 	_image = IMAGEMANAGER->addFrameImage("knives", "IMAGE/attack/knives.bmp", 768, 64, 12, 1, true, RGB(0, 0, 0));
-
+	die = false;
 	return S_OK;
 }
 
@@ -182,6 +190,7 @@ void eriKnives::update()
 	y += -sinf(angle) * 15.0f;
 	_RECT = RectMakeCenter(x, y, 10, 10);
 	if (inputTime + 2.5f < TIMEMANAGER->getWorldTime()) collisionTrue();
+	if (checkCollision) die = true;
 }
 
 void eriKnives::render()
