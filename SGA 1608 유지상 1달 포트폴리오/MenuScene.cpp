@@ -12,6 +12,7 @@ HRESULT MenuScene::init()
 	IMAGEMANAGER->addImage("name", "IMAGE/UI/name.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("title", "IMAGE/UI/title.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("keyBoard", "IMAGE/UI/keyboard.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
+	IMAGEMANAGER->addFrameImage("heart", "IMAGE/UI/heart2.bmp", 84, 24, 3, 1, true, RGB(255, 255, 255));
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;
 	showLogo = false;
@@ -70,13 +71,15 @@ void MenuScene::render()
 
 		//폰트@!!!!!
 		char str[128];
-
+		char slot1[128];
+		char slot2[128];
+		char slot3[128];
 		HFONT oldFont;
 		HFONT font1;
 
 		font1 = CreateFont(
 			30,					//문자높이
-			20,					//문자폭
+			15,					//문자폭
 			00,					//문자 기울기
 			00,					//문자 방향
 			FW_NORMAL,			//문자 굵기
@@ -93,32 +96,50 @@ void MenuScene::render()
 		SetTextColor(getMemDC(), RGB(216, 213, 199));
 		oldFont = (HFONT)SelectObject(getMemDC(), font1);
 		sprintf(str, "New Game");
+		sprintf(slot1, "slot1");
+		sprintf(slot2, "slot2");
+		sprintf(slot3, "slot3");
 
 		if (!(MAXHP[0] == -1 || HP[0] == -1 || MP[0] == -1))	//첫번째 값이 비어있는 값이 아니라면
 		{
-
+			for (int i = 0; i < (HP[0] - 1) / 3 + 1; ++i)
+			{
+				TextOut(getMemDC(), 50, 65, slot1, strlen(slot1));
+				if (i != (HP[0] - 1) / 3) IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170+ IMAGEMANAGER->findImage("heart")->getFrameWidth() / 2 * i, 40, 0, 0);
+				else IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170 + IMAGEMANAGER->findImage("heart")->getFrameWidth() * i, 40, HP[0] % 3, 0);
+			}
 		}
 		else if (MAXHP[0] == -1 || HP[0] == -1 || MP[0] == -1)		//첫번째 값이 비어있는 값이라면
 		{
-			TextOut(getMemDC(), 100, 65, str, strlen(str));
+			TextOut(getMemDC(), 50, 65, str, strlen(str));
 		}
 
 		if (!(MAXHP[1] == -1 || HP[1] == -1 || MP[1] == -1))	//두번째 값이 비어있는 값이 아니라면
 		{
-
+			TextOut(getMemDC(), 50, 210, slot2, strlen(slot2));
+			for (int i = 0; i < (HP[1] - 1) / 3 + 1; ++i)
+			{
+				if (i != (HP[1] - 1) / 3) IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170 + IMAGEMANAGER->findImage("heart")->getFrameWidth() / 2 * i, 180, 0, 0);
+				else IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170 + IMAGEMANAGER->findImage("heart")->getFrameWidth() * i, 180, HP[1] % 3, 0);
+			}
 		}
 		else if (MAXHP[1] == -1 || HP[1] == -1 || MP[1] == -1)		//두번째 값이 비어있는 값이라면
 		{
-			TextOut(getMemDC(), 100, 210, str, strlen(str));
+			TextOut(getMemDC(), 50, 210, str, strlen(str));
 		}
 
 		if (!(MAXHP[2] == -1 || HP[2] == -1 || MP[2] == -1))	//세번째 값이 비어있는 값이 아니라면
 		{
-
+			TextOut(getMemDC(), 50, 360, slot3, strlen(slot3));
+			for (int i = 0; i < (HP[2] - 1) / 3 + 1; ++i)
+			{
+				if (i != (HP[2] - 1) / 3) IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170 + IMAGEMANAGER->findImage("heart")->getFrameWidth() / 2 * i, 330, 0, 0);
+				else IMAGEMANAGER->findImage("heart")->frameRender(getMemDC(), 170 + IMAGEMANAGER->findImage("heart")->getFrameWidth() * i, 330, HP[2] % 3, 0);
+			}
 		}
 		else if (MAXHP[2] == -1 || HP[2] == -1 || MP[2] == -1)		//세번째 값이 비어있는 값이라면
 		{
-			TextOut(getMemDC(), 100, 360, str, strlen(str));
+			TextOut(getMemDC(), 50, 360, str, strlen(str));
 		}
 
 		SelectObject(getMemDC(), oldFont);
@@ -217,9 +238,11 @@ void MenuScene::initData()
 		{
 			switch (j)
 			{
-			case 2:	MAXHP[i] = (int)atoi(arrString[i].c_str()); break;
-			case 3:	HP[i] = (int)atoi(arrString[i].c_str()); break;
-			case 4:	MP[i] = (int)atoi(arrString[i].c_str()); break;
+			case 0: continue; break;
+			case 1: continue; break;
+			case 2:	MAXHP[i] = (int)atoi(arrString[j].c_str()); break;
+			case 3:	HP[i] = (int)atoi(arrString[j].c_str()); break;
+			case 4:	MP[i] = (int)atoi(arrString[j].c_str()); break;
 			}
 		}
 	}

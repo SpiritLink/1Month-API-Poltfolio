@@ -370,6 +370,8 @@ void field1Scene::release()
 
 void field1Scene::update()
 {
+	//임시 테스트
+	if (KEYMANAGER->isOnceKeyDown('G')) DATABASE->saveDataToFile();
 	//업데이트 순서
 	_tileMap->update();			//1.맵
 	_player->update();			//2.플레이어
