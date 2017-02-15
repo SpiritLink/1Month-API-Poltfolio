@@ -4,6 +4,7 @@
 
 HRESULT MenuScene::init()
 {
+	initData();
 	IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("saveArea", "IMAGE/UI/SaveArea.bmp", 800, 150, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("selectArea", "IMAGE/UI/SelectArea.bmp", 200, 51, true, RGB(255, 0, 0));
@@ -18,6 +19,7 @@ HRESULT MenuScene::init()
 	SelectMenu = 0;
 	alphaValue = 0;
 	fadeOut = false;
+	
 	return S_OK;
 }
 
@@ -113,6 +115,32 @@ void MenuScene::changeScene()
 			alphaValue = 255;
 			showLogo = false;
 			showMenu = true;
+		}
+	}
+}
+
+void MenuScene::initData()
+{
+	//오류인지 확인하기 위해 -1값을 삽입했습니다.
+	for (int i = 0; i < 3; ++i)
+	{
+		MAXHP[i] = -1;
+		HP[i] = -1;
+		MP[i] = -1;
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		vector<string> arrString;
+		arrString = DATABASE->loadDataFromFile(i);
+		for (int j = 0; j < arrString.size(); ++j)
+		{
+			switch (j)
+			{
+			case 2:	MAXHP[i] = (int)atoi(arrString[i].c_str()); break;
+			case 3:	HP[i] = (int)atoi(arrString[i].c_str()); break;
+			case 4:	MP[i] = (int)atoi(arrString[i].c_str()); break;
+			}
 		}
 	}
 }

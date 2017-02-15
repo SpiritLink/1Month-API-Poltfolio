@@ -12,14 +12,20 @@ private:
 	int alphaValue;		//메뉴 알파렌더를 위한 변수
 	bool fadeOut;		//화면이 어두워지게 할지 밝게 할지 결정
 	float currentTime;	//시간을 저장하는 변수값
+
+	int MAXHP[3];		//세이브 목록에 표시하기 위한 변수
+	int HP[3];			//세이브 목록에 표시하기 위한 변수
+	int MP[3];			//세이브 목록에 표시하기 위한 변수
 public:
 
-	void keyboardInput();
-	void changeScene();
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
 	virtual void render();
+
+	void keyboardInput();
+	void changeScene();
+	void initData();	//파일에서 데이터를 읽어 들인뒤 지역변수에 저장합니다.
 	MenuScene();
 	virtual ~MenuScene();
 };
