@@ -48,7 +48,7 @@ void MenuScene::render()
 		if (SelectMenu != 1)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
 		if (SelectMenu != 2)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
 		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
-		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMesmDC(), 300, 500);
+		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 300, 500);
 		if (SelectMenu != 5)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 550, 500);
 
 		switch (SelectMenu)
@@ -93,7 +93,22 @@ void MenuScene::keyboardInput()
 			showMenu = false;
 			showKey = true;
 			break;
-		case 5:	break;		//게임 시작
+		case 5:
+		{
+			switch (selectFile)
+			{
+			case 0:	_saveCount = 0;	break;
+			case 1:	_saveCount = 1;	break;
+			case 2:	_saveCount = 2;	break;
+			}
+			DATABASE->loadDataFromFile();
+			_sceneNumber = 2;
+			switch (_sceneNumber)
+			{
+			case 1:	SCENEMANAGER->changeScene("townScene");	return;
+			case 2:	SCENEMANAGER->changeScene("field1Scene");	return;
+			}
+		}break;		//게임 시작
 		}
 	}
 

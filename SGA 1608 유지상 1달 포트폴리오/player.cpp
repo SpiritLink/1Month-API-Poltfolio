@@ -61,21 +61,21 @@ void player::render()
 
 void player::keyboardInput()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))	keyStatus = keyStatus | KEYBOARD_LEFT;
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))keyStatus += KEYBOARD_RIGHT;
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))	keyStatus += KEYBOARD_UP;
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))	keyStatus += KEYBOARD_DOWN;
-	if (KEYMANAGER->isOnceKeyDown('Z'))		keyStatus += KEYBOARD_Z;
-	if (KEYMANAGER->isOnceKeyDown('X'))		keyStatus += KEYBOARD_X;
-	if (KEYMANAGER->isOnceKeyDown('C'))		keyStatus += KEYBOARD_C;
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && !(keyStatus & KEYBOARD_LEFT))	keyStatus = keyStatus | KEYBOARD_LEFT;
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && !(keyStatus & KEYBOARD_RIGHT))keyStatus = keyStatus | KEYBOARD_RIGHT;
+	if (KEYMANAGER->isOnceKeyDown(VK_UP) && !(keyStatus & KEYBOARD_UP))		keyStatus = keyStatus | KEYBOARD_UP;
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && !(keyStatus & KEYBOARD_DOWN))	keyStatus = keyStatus | KEYBOARD_DOWN;
+	if (KEYMANAGER->isOnceKeyDown('Z') && !(keyStatus & KEYBOARD_Z))		keyStatus = keyStatus | KEYBOARD_Z;
+	if (KEYMANAGER->isOnceKeyDown('X') && !(keyStatus & KEYBOARD_X))		keyStatus = keyStatus | KEYBOARD_X;
+	if (KEYMANAGER->isOnceKeyDown('C') && !(keyStatus & KEYBOARD_C))		keyStatus = keyStatus | KEYBOARD_C;
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT))	keyStatus -= KEYBOARD_LEFT;
-	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT))	keyStatus -= KEYBOARD_RIGHT;
-	if (KEYMANAGER->isOnceKeyUp(VK_UP))		keyStatus -= KEYBOARD_UP;
-	if (KEYMANAGER->isOnceKeyUp(VK_DOWN))	keyStatus -= KEYBOARD_DOWN;
-	if (KEYMANAGER->isOnceKeyUp('Z'))		keyStatus -= KEYBOARD_Z;
-	if (KEYMANAGER->isOnceKeyUp('X'))		keyStatus -= KEYBOARD_X;
-	if (KEYMANAGER->isOnceKeyUp('C'))		keyStatus -= KEYBOARD_C;
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && keyStatus & KEYBOARD_LEFT)	keyStatus -= KEYBOARD_LEFT;
+	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT) && keyStatus & KEYBOARD_RIGHT)	keyStatus -= KEYBOARD_RIGHT;
+	if (KEYMANAGER->isOnceKeyUp(VK_UP) && keyStatus & KEYBOARD_UP)		keyStatus -= KEYBOARD_UP;
+	if (KEYMANAGER->isOnceKeyUp(VK_DOWN) && keyStatus & KEYBOARD_DOWN)	keyStatus -= KEYBOARD_DOWN;
+	if (KEYMANAGER->isOnceKeyUp('Z') && keyStatus & KEYBOARD_Z)		keyStatus -= KEYBOARD_Z;
+	if (KEYMANAGER->isOnceKeyUp('X') && keyStatus & KEYBOARD_X)		keyStatus -= KEYBOARD_X;
+	if (KEYMANAGER->isOnceKeyUp('C') && keyStatus & KEYBOARD_C)		keyStatus -= KEYBOARD_C;
 
 	//실험목적, 현재 키를 누르면 방향이 바로 삽입된다.
 	if (keyStatus & KEYBOARD_LEFT) direction = LEFT;

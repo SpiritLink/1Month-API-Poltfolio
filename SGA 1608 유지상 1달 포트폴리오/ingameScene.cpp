@@ -593,6 +593,20 @@ void field1Scene::portal()
 		_player->update();
 		cameraInit();
 		break;
+	case 15289:
+		_player->setPlayerTilePosition(5873);
+		_player->firstCollisionTileCheck();
+		_player->update();
+		cameraInit();
+		break;
+	case 5872:
+	case 5722:
+	case 5572:
+		_player->setPlayerTilePosition(15137);
+		_player->firstCollisionTileCheck();
+		_player->update();
+		cameraInit();
+		break;
 	}
 }
 
