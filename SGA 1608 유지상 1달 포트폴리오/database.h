@@ -64,6 +64,7 @@ public:
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.
 	void loadDataFromFile();	//플레이어의 정보를 파일로부터 불러오는 함수입니다.
+	vector<string> loadDataFromFile(int value);	//플레이어의 정보를 불러온뒤 반환하는 함수입니다.
 	void addBackgroundCount(int value) { backgroundCount += value; }
 	
 	void initBackgroundCount() { backgroundCount = 0; }

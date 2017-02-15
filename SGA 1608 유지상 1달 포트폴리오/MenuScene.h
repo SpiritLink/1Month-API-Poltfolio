@@ -5,6 +5,7 @@ class MenuScene : public gameNode
 {
 private:
 	int SelectMenu;
+	int selectFile;		//현재 고른 세이브 파일을 표시해줍니다.
 	bool showName;		//맨처음 회사이름을 나타냄
 	bool showLogo;		//그다음 게임로고를 나타냄
 	bool showMenu;		//그다음 메뉴화면을 나타냄

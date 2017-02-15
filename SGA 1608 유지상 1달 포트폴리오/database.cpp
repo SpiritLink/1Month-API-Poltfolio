@@ -57,6 +57,19 @@ void database::loadDataFromFile()
 	}
 }
 
+vector<string> database::loadDataFromFile(int value)
+{
+	vector<string> arrString;
+
+	switch (value)
+	{
+	case 0: arrString = TXTMANAGER->load("DATA/SAVE/save1.data");	break;
+	case 1:	arrString = TXTMANAGER->load("DATA/SAVE/save2.data");	break;
+	case 2:	arrString = TXTMANAGER->load("DATA/SAVE/save3.data");	break;
+	}
+	return arrString;
+}
+
 database::database()
 {
 }

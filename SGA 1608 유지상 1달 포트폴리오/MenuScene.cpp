@@ -6,6 +6,7 @@ HRESULT MenuScene::init()
 {
 	initData();
 	IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
+	IMAGEMANAGER->addImage("redCircle", "IMAGE/UI/redCircle.bmp", 30, 30, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("saveArea", "IMAGE/UI/SaveArea.bmp", 800, 150, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("selectArea", "IMAGE/UI/SelectArea.bmp", 200, 51, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("name", "IMAGE/UI/name.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
@@ -19,6 +20,7 @@ HRESULT MenuScene::init()
 	SelectMenu = 0;
 	alphaValue = 0;
 	fadeOut = false;
+	selectFile = -1;
 	
 	return S_OK;
 }
@@ -46,7 +48,7 @@ void MenuScene::render()
 		if (SelectMenu != 1)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
 		if (SelectMenu != 2)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
 		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
-		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 300, 500);
+		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMesmDC(), 300, 500);
 		if (SelectMenu != 5)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 550, 500);
 
 		switch (SelectMenu)
@@ -57,6 +59,13 @@ void MenuScene::render()
 		case 3: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	break;
 		case 4:	IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	break;
 		case 5: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 550, 500, 120);	break;
+		}
+
+		switch (selectFile)
+		{
+		case 0:	IMAGEMANAGER->findImage("redCircle")->render(getMemDC(), WINSIZEX - 100, 65); break;
+		case 1:	IMAGEMANAGER->findImage("redCircle")->render(getMemDC(), WINSIZEX - 100, 210); break;
+		case 2:	IMAGEMANAGER->findImage("redCircle")->render(getMemDC(), WINSIZEX - 100, 360); break;
 		}
 	}
 	
@@ -75,9 +84,9 @@ void MenuScene::keyboardInput()
 	{
 		switch (SelectMenu)
 		{
-		case 0:	break;		//1번째 세이브 파일
-		case 1:	break;		//2번째 세이브 파일
-		case 2:	break;		//3번째 세이브 파일
+		case 0:	selectFile = 0; break;		//1번째 세이브 파일
+		case 1:	selectFile = 1; break;		//2번째 세이브 파일
+		case 2:	selectFile = 2; break;		//3번째 세이브 파일
 		case 3:	break;		//딜리트 세이브 파일
 			//사용하는 키 안내
 		case 4:
