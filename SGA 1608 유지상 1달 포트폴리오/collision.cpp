@@ -28,16 +28,6 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 			{
 			case ATTACK_PLAYER_SLASH_LEFT:
 			case ATTACK_PLAYER_SLASH_RIGHT:
-				for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
-				{
-					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect()))
-					{
-						SOUNDMANAGER->playSound("hit", PointMake((*_viAttack)->getAttackX(), (*_viAttack)->getAttackY()));
-						(*_viAttack)->collisionTrue();
-						(*_viEnemy)->addEnemyHP(-1);
-					}
-				}
-				break;
 			case ATTACK_PLAYER_THROW_LEFT:
 			case ATTACK_PLAYER_THROW_RIGHT:
 				//플레이어 공격과 적이 충돌하면

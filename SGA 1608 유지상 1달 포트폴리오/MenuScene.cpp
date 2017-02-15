@@ -20,9 +20,9 @@ void MenuScene::update()
 void MenuScene::render()
 {
 	IMAGEMANAGER->findImage("black")->render(getMemDC());
-	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(),0,50);
-	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 200);
-	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 350);
+	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(),0,0);
+	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
+	IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
 
 }
 

@@ -17,6 +17,7 @@ TCHAR szWindowClass[MAX_LOADSTRING];			// 기본 창 클래스 이름입니다.
 POINT _ptMouse = { 0, 0 };
 gameStudy _gs;
 BOOL	_leftButtonDown = false;
+int		_saveCount = -1;
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM				MyRegisterClass(HINSTANCE hInstance);	//창 클래스를 등록합니다.

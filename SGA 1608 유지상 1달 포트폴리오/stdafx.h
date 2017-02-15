@@ -91,6 +91,7 @@ extern HINSTANCE	_hInstance; //프로그램 인스터스
 extern HWND			_hWnd;		//원도우 핸들
 extern POINT		_ptMouse;   //마우스 포인트
 extern BOOL			_leftButtonDown;
+extern int			_saveCount;		//플레이어의 세이브 카운트를 확인하는 변수
 
 //공용 ENUM 선언
 enum KEYBOARD

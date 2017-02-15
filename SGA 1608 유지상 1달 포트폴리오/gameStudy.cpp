@@ -19,6 +19,7 @@ HRESULT gameStudy::init()
 	gameNode::init();
 
 	//------------------------------------------
+	_saveCount = -1;		//플레이어의 세이브 카운트
 	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
 	SCENEMANAGER->addScene("menuScene", new MenuScene);		//게임시작전 메뉴를 선택하는 화면
 	SCENEMANAGER->addScene("testScene", new testScene);		//각종 실험을 위한 CPP
@@ -28,7 +29,7 @@ HRESULT gameStudy::init()
 	SCENEMANAGER->addScene("field2Scene", new field2Scene);	//사냥터 2
 	SCENEMANAGER->addScene("bossScene", new bossScene);		//보스방
 	
-	SCENEMANAGER->changeScene("testScene");					//현재 실험용 맵으로 진입한다.
+	SCENEMANAGER->changeScene("menuScene");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
 	return S_OK;
 }
