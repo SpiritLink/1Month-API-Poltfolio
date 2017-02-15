@@ -41,16 +41,18 @@ void MenuScene::render()
 		if (SelectMenu != 0)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 0);
 		if (SelectMenu != 1)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
 		if (SelectMenu != 2)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
-		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 100, 500);
-		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 400, 500);
+		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
+		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 300, 500);
+		if (SelectMenu != 5)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 550, 500);
 
 		switch (SelectMenu)
 		{
 		case 0:	IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 0, 120);		break;
 		case 1: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 150, 120);		break;
 		case 2: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 300, 120);		break;
-		case 3: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 100, 500, 120);	break;
-		case 4:	IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 400, 500, 120);	break;
+		case 3: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	break;
+		case 4:	IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	break;
+		case 5: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 550, 500, 120);	break;
 		}
 	}
 }
@@ -59,7 +61,7 @@ void MenuScene::keyboardInput()
 {
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_DOWN) && SelectMenu < 3)	SelectMenu++;
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_UP) && SelectMenu > 0) SelectMenu--;
-	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_RIGHT) && SelectMenu < 4)	SelectMenu++;
+	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_RIGHT) && SelectMenu < 5)	SelectMenu++;
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_LEFT) && SelectMenu > 3) SelectMenu--;
 }
 
