@@ -10,7 +10,6 @@ HRESULT player::init()
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	SPEED = DEFAULT_SPEED;
-	ATK = 1;
 	currentTime = TIMEMANAGER->getWorldTime();
 	invincibleTime = TIMEMANAGER->getWorldTime();
 	countTime = 0;

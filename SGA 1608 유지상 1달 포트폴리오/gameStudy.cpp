@@ -19,7 +19,8 @@ HRESULT gameStudy::init()
 	gameNode::init();
 
 	//------------------------------------------
-	_saveCount = -1;		//플레이어의 세이브 카운트
+	_saveCount		= -1;		//플레이어의 세이브 카운트
+	_sceneNumber	= 0;		//씬전환시 구분하기 위한 카운트
 	_whiteBackground = IMAGEMANAGER->addImage("whiteSpace", "IMAGE/background/WhiteSpace.bmp", 1600, 900, false, RGB(0, 0, 0));
 	SCENEMANAGER->addScene("menuScene", new MenuScene);		//게임시작전 메뉴를 선택하는 화면
 	SCENEMANAGER->addScene("testScene", new testScene);		//각종 실험을 위한 CPP

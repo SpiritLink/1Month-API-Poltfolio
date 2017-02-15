@@ -31,7 +31,6 @@ private:
 	int HP;			//현재 체력
 	int MAXHP;		//최대 체력
 	int MP;
-	int ATK;
 	int SPEED;
 	float gravity;
 

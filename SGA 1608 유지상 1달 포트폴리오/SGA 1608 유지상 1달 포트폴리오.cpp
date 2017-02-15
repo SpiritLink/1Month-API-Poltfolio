@@ -18,6 +18,7 @@ POINT _ptMouse = { 0, 0 };
 gameStudy _gs;
 BOOL	_leftButtonDown = false;
 int		_saveCount = -1;
+int		_sceneNumber = 0;
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM				MyRegisterClass(HINSTANCE hInstance);	//창 클래스를 등록합니다.
