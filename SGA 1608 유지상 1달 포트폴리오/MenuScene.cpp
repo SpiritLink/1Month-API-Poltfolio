@@ -9,10 +9,12 @@ HRESULT MenuScene::init()
 	IMAGEMANAGER->addImage("selectArea", "IMAGE/UI/SelectArea.bmp", 200, 51, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("name", "IMAGE/UI/name.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("title", "IMAGE/UI/title.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
+	IMAGEMANAGER->addImage("keyBoard", "IMAGE/UI/keyboard.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;
 	showLogo = false;
 	showMenu = false;
+	showKey = false;
 	SelectMenu = 0;
 	alphaValue = 0;
 	fadeOut = false;
@@ -55,6 +57,8 @@ void MenuScene::render()
 		case 5: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 550, 500, 120);	break;
 		}
 	}
+	
+	if (showKey) IMAGEMANAGER->findImage("keyBoard")->render(getMemDC());
 }
 
 void MenuScene::keyboardInput()
@@ -63,6 +67,30 @@ void MenuScene::keyboardInput()
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_UP) && SelectMenu > 0) SelectMenu--;
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_RIGHT) && SelectMenu < 5)	SelectMenu++;
 	if (showMenu && KEYMANAGER->isOnceKeyDown(VK_LEFT) && SelectMenu > 3) SelectMenu--;
+
+	//플레이어의 점프 또는 공격버튼을 누르면 현재 선택 메뉴의 번호에 따라 특정한 행동을 하게 지시합니다.
+	if (showMenu && (KEYMANAGER->isOnceKeyDown('Z') || KEYMANAGER->isOnceKeyDown('X')))
+	{
+		switch (SelectMenu)
+		{
+		case 0:	break;		//1번째 세이브 파일
+		case 1:	break;		//2번째 세이브 파일
+		case 2:	break;		//3번째 세이브 파일
+		case 3:	break;		//딜리트 세이브 파일
+			//사용하는 키 안내
+		case 4:
+			showMenu = false;
+			showKey = true;
+			break;
+		case 5:	break;		//게임 시작
+		}
+	}
+
+	if (showKey && (KEYMANAGER->isOnceKeyDown('Z') || KEYMANAGER->isOnceKeyDown('X')))
+	{
+		showKey = false;
+		showMenu = true;
+	}
 }
 
 void MenuScene::changeScene()
