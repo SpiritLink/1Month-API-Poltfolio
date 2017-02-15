@@ -67,6 +67,62 @@ void MenuScene::render()
 		case 1:	IMAGEMANAGER->findImage("redCircle")->render(getMemDC(), WINSIZEX - 100, 210); break;
 		case 2:	IMAGEMANAGER->findImage("redCircle")->render(getMemDC(), WINSIZEX - 100, 360); break;
 		}
+
+		//폰트@!!!!!
+		char str[128];
+
+		HFONT oldFont;
+		HFONT font1;
+
+		font1 = CreateFont(
+			30,					//문자높이
+			20,					//문자폭
+			00,					//문자 기울기
+			00,					//문자 방향
+			FW_NORMAL,			//문자 굵기
+			false,				//문자 기울일건가?
+			false,				//문자 밑줄칠건가?
+			false,				//문자 취소선할건가?
+			HANGEUL_CHARSET,		//문자 셋팅
+			0,					//출력정확도
+			0,					//클리핑 정확도
+			0,					//출력의 질
+			10,					//자간
+			TEXT("굴림체"));	//폰트
+
+		SetTextColor(getMemDC(), RGB(216, 213, 199));
+		oldFont = (HFONT)SelectObject(getMemDC(), font1);
+		sprintf(str, "New Game");
+
+		if (!(MAXHP[0] == -1 || HP[0] == -1 || MP[0] == -1))	//첫번째 값이 비어있는 값이 아니라면
+		{
+
+		}
+		else if (MAXHP[0] == -1 || HP[0] == -1 || MP[0] == -1)		//첫번째 값이 비어있는 값이라면
+		{
+			TextOut(getMemDC(), 100, 65, str, strlen(str));
+		}
+
+		if (!(MAXHP[1] == -1 || HP[1] == -1 || MP[1] == -1))	//두번째 값이 비어있는 값이 아니라면
+		{
+
+		}
+		else if (MAXHP[1] == -1 || HP[1] == -1 || MP[1] == -1)		//두번째 값이 비어있는 값이라면
+		{
+			TextOut(getMemDC(), 100, 210, str, strlen(str));
+		}
+
+		if (!(MAXHP[2] == -1 || HP[2] == -1 || MP[2] == -1))	//세번째 값이 비어있는 값이 아니라면
+		{
+
+		}
+		else if (MAXHP[2] == -1 || HP[2] == -1 || MP[2] == -1)		//세번째 값이 비어있는 값이라면
+		{
+			TextOut(getMemDC(), 100, 360, str, strlen(str));
+		}
+
+		SelectObject(getMemDC(), oldFont);
+		DeleteObject(font1);
 	}
 	
 	if (showKey) IMAGEMANAGER->findImage("keyBoard")->render(getMemDC());
