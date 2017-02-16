@@ -33,14 +33,12 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 				//플레이어 공격과 적이 충돌하면
 				for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 				{
-					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect()))
+					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect())
+						&& !(*_viAttack)->getCheckCollision())
 					{
 						SOUNDMANAGER->playSound("hit", PointMake((*_viAttack)->getAttackX(), (*_viAttack)->getAttackY()));
-						if (!(*_viAttack)->getCheckCollision())
-						{
-							(*_viAttack)->collisionTrue();
-							(*_viAttack)->setFrameCountZero();
-						}
+						(*_viAttack)->collisionTrue();
+						(*_viAttack)->setFrameCountZero();
 						(*_viEnemy)->addEnemyHP(-1);
 					}
 				}
@@ -61,8 +59,9 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 
 		for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 		{
-			//모든 적과 플레이어가 충돌하면
-			if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect()))
+			//모든 적과 플레이어가 충돌하면(단 적이 살아있을때)
+			if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect())&&
+				(*_viEnemy)->getEnemyAlive())
 			{
 				_player->setPlayerHit(2.0f);
 			}

@@ -27,12 +27,19 @@ void enemyManager::update()
 		if ((*_viEnemy)->getEnemyDie()) _viEnemy = _vEnemy.erase(_viEnemy);
 		else
 		{
-			(*_viEnemy)->update();
+			//화면 내의 좌표에 있다면 업데이트 합니다.
+			if ((*_viEnemy)->getEnemyX() < WINSIZEX + TILESIZE && (*_viEnemy)->getEnemyX() > -TILESIZE &&
+				(*_viEnemy)->getEnemyY() < WINSIZEY + TILESIZE && (*_viEnemy)->getEnemyY() > -TILESIZE)
+			{
+				(*_viEnemy)->update();
+			}
+			//체력이 0미만으로 떨어진다면
 			if ((*_viEnemy)->getEnemyHP() <= 0 && (*_viEnemy)->getEnemyAlive())		//피가 0이하로 떨어지면 죽는 모션을 연출하게 한다.
 			{
 				(*_viEnemy)->setAliveFalse();
 				(*_viEnemy)->setFrameCountZero();
 			}
+			//다음 적을 확인합니다.
 			++_viEnemy;
 		}
 	}

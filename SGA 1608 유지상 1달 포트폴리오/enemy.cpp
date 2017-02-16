@@ -44,6 +44,10 @@ HRESULT alien::init(int tileNum, tileMap* tileMap, attackManager* ATM)
 	HP = 3;
 	die = false;
 	alive = true;
+	
+	//멤버변수 초기화
+	patternTime = TIMEMANAGER->getWorldTime();
+	nowDetect = false;
 	return S_OK;
 }
 
@@ -53,7 +57,26 @@ void alien::release()
 
 void alien::update()
 {
+	detectArea = RectMakeCenter(x, y, 400, 400);
 	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth() - 30, _image->getFrameHeight() - 20);
+
+	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY())) && !(nowDetect))
+	{
+		patternTime = TIMEMANAGER->getWorldTime();
+		angle = getAngle(x, y, DATABASE->getPlayerX(), DATABASE->getPlayerY());
+		nowDetect = true;
+	}
+
+	if (patternTime + 1.5f < TIMEMANAGER->getWorldTime())	//특정 시간이 지나면 감지를 풀어줍니다. (각도를 변경하기 위해)
+	{
+		nowDetect = false;
+	}
+
+	if (nowDetect && alive)	//감지를 했다면 움직입니다.
+	{
+		x += cosf(angle) * 2.0f;
+		y += -sinf(angle) * 2.0f;
+	}
 	if (currentTime + 0.1f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		currentTime = TIMEMANAGER->getWorldTime();
@@ -74,6 +97,7 @@ void alien::render()
 	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2,frameCount, 0);
 	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
 		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
+	//Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
 }
 
 alien::alien()

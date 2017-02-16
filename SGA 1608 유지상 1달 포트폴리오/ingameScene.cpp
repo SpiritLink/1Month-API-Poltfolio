@@ -106,11 +106,9 @@ void townScene::update()
 
 void townScene::render()
 {
-	//_backIMG->render(getMemDC(),Background.left, Background.top);
 	_tileMap->render();
 	_enemyManager->render();
 	_player->render();
-
 	_attackManager->render();
 	_playerUI->render();
 }
@@ -976,7 +974,6 @@ void testScene::render()
 	_enemyManager->render();
 	_player->render();
 	_attackManager->render();
-	EFFECTMANAGER->render();
 	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }

@@ -36,6 +36,8 @@ public:
 	int getEnemyHP() { return HP; }
 	bool getEnemyDie() { return die; };
 	bool getEnemyAlive() { return alive; }
+	int getEnemyX() { return x; }
+	int getEnemyY() { return y; }
 
 	enemy();
 	virtual ~enemy();
@@ -43,6 +45,11 @@ public:
 
 class alien : public enemy		//일반 몬스터 (해파리)
 {
+private:
+	RECT detectArea;
+	float angle;
+	float patternTime;
+	bool nowDetect;
 public:
 	virtual HRESULT init(int tileNum, tileMap* _tileMap, attackManager* ATM);
 	virtual void release();
