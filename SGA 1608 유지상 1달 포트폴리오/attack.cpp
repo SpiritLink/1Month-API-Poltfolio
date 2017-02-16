@@ -63,6 +63,7 @@ void playerSlash::update()
 
 void playerSlash::render()
 {
+	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
 }
 
 playerSlash::playerSlash()

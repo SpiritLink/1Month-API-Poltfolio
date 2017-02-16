@@ -531,18 +531,25 @@ void rotateCube::update()
 {
 	_hitArea = RectMakeCenter(x, y, 30, 30);
 	pattern = (patternTime + 0.3f < TIMEMANAGER->getWorldTime()) ? true : false;
-	if (updateTime + 0.1f < TIMEMANAGER->getWorldTime())
+	if (updateTime + 0.1f < TIMEMANAGER->getWorldTime() && alive)
 	{
 		updateTime = TIMEMANAGER->getWorldTime();	//업데이트 시간 변경
 		collisionTileCheck();						//충돌되고 있는 타일을 체크합니다.
 	}
-	rotateCubeMove();
+	else if (!(alive))
+	{
+		++frameCount;
+		if (frameCount > 9) die = true;
+	}
+	if(alive)rotateCubeMove();
 }
 
 void rotateCube::render()
 {
 	Rectangle(getMemDC(), _hitArea.left, _hitArea.top, _hitArea.right, _hitArea.bottom);
 	_image->render(getMemDC(), x - _image->getWidth() / 2, y - _image->getHeight() / 2);
+	if (!(alive)) IMAGEMANAGER->findImage("boomEffect")->frameRender(getMemDC(), x - IMAGEMANAGER->findImage("boomEffect")->getFrameWidth() / 2,
+		y - IMAGEMANAGER->findImage("boomEffect")->getFrameHeight() / 2, frameCount, 0);
 }
 
 void rotateCube::initStatus()

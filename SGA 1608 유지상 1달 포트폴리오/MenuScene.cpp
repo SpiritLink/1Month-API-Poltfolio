@@ -102,7 +102,7 @@ void MenuScene::render()
 			0,					//클리핑 정확도
 			0,					//출력의 질
 			10,					//자간
-			TEXT("굴림체"));	//폰트
+			TEXT("Consolas"));	//폰트
 
 		SetTextColor(getMemDC(), RGB(216, 213, 199));
 		oldFont = (HFONT)SelectObject(getMemDC(), font1);
@@ -172,9 +172,45 @@ void MenuScene::keyboardInput()
 	{
 		switch (SelectMenu)
 		{
-		case 0:	selectFile = 0; break;		//1번째 세이브 파일
-		case 1:	selectFile = 1; break;		//2번째 세이브 파일
-		case 2:	selectFile = 2; break;		//3번째 세이브 파일
+		case 0:
+			if (selectFile == 0)
+			{
+				_saveCount = 0;
+				DATABASE->loadDataFromFile();
+				switch (_sceneNumber)
+				{
+				case 1: SCENEMANAGER->changeScene("townScene");	return;
+				case 2:	SCENEMANAGER->changeScene("field1Scene");	return;
+				}
+			}
+			selectFile = 0; 
+			break;		//1번째 세이브 파일
+		case 1:
+			if (selectFile == 1)
+			{
+				_saveCount = 1;
+				DATABASE->loadDataFromFile();
+				switch (_sceneNumber)
+				{
+				case 1:	SCENEMANAGER->changeScene("townScene");	return;
+				case 2:	SCENEMANAGER->changeScene("field1Scene");	return;
+				}
+			}
+			selectFile = 1; 
+			break;		//2번째 세이브 파일
+		case 2:
+			if (selectFile == 2)
+			{
+				_saveCount = 2;
+				DATABASE->loadDataFromFile();
+				switch (_sceneNumber)
+				{
+				case 1:	SCENEMANAGER->changeScene("townScene");	return;
+				case 2:	SCENEMANAGER->changeScene("field1Scene");	return;
+				}
+			}
+			selectFile = 2; 
+			break;		//3번째 세이브 파일
 		case 3:	break;		//딜리트 세이브 파일
 			//사용하는 키 안내
 		case 4:
