@@ -13,6 +13,9 @@ HRESULT MenuScene::init()
 	IMAGEMANAGER->addImage("title", "IMAGE/UI/title.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("keyBoard", "IMAGE/UI/keyboard.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addFrameImage("heart", "IMAGE/UI/heart2.bmp", 84, 24, 3, 1, true, RGB(255, 255, 255));
+	IMAGEMANAGER->addImage("Controls", "IMAGE/UI/Controls.bmp", 190, 41, true, RGB(255, 0, 0));
+	IMAGEMANAGER->addImage("DeleteSaveFile", "IMAGE/UI/DeleteSaveFile.bmp", 190, 41, true, RGB(255, 0, 0));
+
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;
 	showLogo = false;
@@ -49,7 +52,9 @@ void MenuScene::render()
 		if (SelectMenu != 1)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
 		if (SelectMenu != 2)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
 		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
+		if (SelectMenu != 3)IMAGEMANAGER->findImage("DeleteSaveFile")->render(getMemDC(), 55, 503);
 		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 300, 500);
+		if (SelectMenu != 4)IMAGEMANAGER->findImage("Controls")->render(getMemDC(), 305, 503);
 		if (SelectMenu != 5)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 550, 500);
 
 		switch (SelectMenu)
@@ -57,8 +62,14 @@ void MenuScene::render()
 		case 0:	IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 0, 120);		break;
 		case 1: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 150, 120);		break;
 		case 2: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 300, 120);		break;
-		case 3: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	break;
-		case 4:	IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	break;
+		case 3: 
+			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	
+			IMAGEMANAGER->findImage("DeleteSaveFile")->alphaRender(getMemDC(), 55, 503, 120);
+			break;
+		case 4:	
+			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	
+			IMAGEMANAGER->findImage("Controls")->alphaRender(getMemDC(), 305, 503, 120);
+			break;
 		case 5: IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 550, 500, 120);	break;
 		}
 

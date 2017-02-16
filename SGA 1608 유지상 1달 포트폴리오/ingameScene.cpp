@@ -338,11 +338,7 @@ HRESULT field1Scene::init()
 	cameraInit();
 
 	//적 배치 (나중에 함수로 분리하자)
-	_enemyManager->setFlower(21174);
-	_enemyManager->setFlower(17864);
-	_enemyManager->setOko(17870);
-	_enemyManager->setMiniGhost(18461);
-	_enemyManager->setMiniGhost(18460);
+	initEnemy();
 
 	return S_OK;
 }
@@ -391,6 +387,30 @@ void field1Scene::render()
 	_player->render();			//3.플레이어
 	_attackManager->render();	//4.공격	
 	_playerUI->render();		//5.UI		최상위
+}
+
+void field1Scene::initEnemy()
+{
+	//몬스터를 생성하는 함수입니다.
+	_enemyManager->setAlien(21022);
+	_enemyManager->setGhost(21024);
+	_enemyManager->setOko(20570);
+	_enemyManager->setFlower(20270);
+	_enemyManager->setBomb(21329);
+	_enemyManager->setMiniGhost(20270);
+	_enemyManager->setRotateCube(13250);
+	_enemyManager->setRotateCube(12947);
+	_enemyManager->setMiniGhost(12335);
+	_enemyManager->setMiniGhost(12484);
+	_enemyManager->setBomb(12922);
+	_enemyManager->setBomb(12923);
+	_enemyManager->setBomb(12924);
+	_enemyManager->setAlien(10378);
+	_enemyManager->setAlien(10526);
+	_enemyManager->setOko(9642);
+	_enemyManager->setOko(9644);
+	_enemyManager->setOko(9646);
+	_enemyManager->setEri(15718);
 }
 
 void field1Scene::cameraMove()
@@ -652,12 +672,9 @@ field2Scene::field2Scene()
 {
 }
 
-
 field2Scene::~field2Scene()
 {
 }
-
-
 
 HRESULT bossScene::init()
 {
@@ -818,10 +835,10 @@ void bossScene::cameraInit()
 {
 
 }
+
 bossScene::bossScene()
 {
 }
-
 
 bossScene::~bossScene()
 {

@@ -64,6 +64,7 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void initEnemy();
 	void cameraMove();
 	void cameraInit();
 	void portal();
