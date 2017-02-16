@@ -54,9 +54,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
 				}
 				break;
 			}
-
 		}
-
 		for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 		{
 			//모든 적과 플레이어가 충돌하면(단 적이 살아있을때)

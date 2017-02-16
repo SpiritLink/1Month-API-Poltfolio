@@ -49,8 +49,11 @@ void enemyManager::render()
 {
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 	{
-		//좌표를 벗어난다면 렌더하지 않게 변경하자.
-		(*_viEnemy)->render();
+		if ((*_viEnemy)->getEnemyX() < WINSIZEX + 50 && (*_viEnemy)->getEnemyX() > -TILESIZE &&
+			(*_viEnemy)->getEnemyY() < WINSIZEY + 50 && (*_viEnemy)->getEnemyY() > -TILESIZE)
+		{
+			(*_viEnemy)->render();
+		}
 	}
 }
 
