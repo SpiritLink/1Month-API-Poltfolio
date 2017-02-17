@@ -852,7 +852,7 @@ HRESULT testScene::init()
 	_image = IMAGEMANAGER->addImage("Èò¹è°æ", "IMAGE/whiteBackground.bmp", WINSIZEX, WINSIZEY, false, RGB(0, 0, 0));
 
 	_tileMap = new tileMap;
-	_tileMap->init("DATA/MAP/Town.map");
+	_tileMap->init("DATA/MAP/Field1.map");
 
 	_attackManager = new attackManager;
 	_attackManager->init();

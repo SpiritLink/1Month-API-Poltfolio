@@ -383,8 +383,9 @@ void player::playerAttack()
 
 	if (keyStatus & KEYBOARD_Z && keyStatus & KEYBOARD_UP)		//원거리 공격 키를 누른 상태일때
 	{
-		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK))	//현재 행동이 공격 행동이 아니라면
+		if (!(Action & ACTION_SLASH_ATTACK) && !(Action & ACTION_THROW_ATTACK) && MP > 0)	//현재 행동이 공격 행동이 아니라면
 		{
+			MP--;
 			SOUNDMANAGER->playSound("playerThrow", PointMake(x, y));
 			_attackManager->playerThrowAttack(x, y - playerIMG->getFrameHeight() / 3, direction);
 			frameCount = 0;

@@ -9,6 +9,7 @@ private:
 	image* _sealFrame;
 	image* _hpIMG;
 	image* _heart;
+	image* _number;
 	int HP;
 	int MP;
 
