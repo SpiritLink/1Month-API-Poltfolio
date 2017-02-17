@@ -640,41 +640,7 @@ field1Scene::~field1Scene()
 
 }
 
-HRESULT field2Scene::init()
-{
-	return S_OK;
-}
-
-void field2Scene::release()
-{
-}
-
-void field2Scene::update()
-{
-}
-
-void field2Scene::render()
-{
-}
-
-void field2Scene::cameraMove()
-{
-}
-
-void field2Scene::cameraInit()
-{
-
-}
-
-field2Scene::field2Scene()
-{
-}
-
-field2Scene::~field2Scene()
-{
-}
-
-HRESULT bossScene::init()
+HRESULT endingScene::init()
 {
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
@@ -706,7 +672,7 @@ HRESULT bossScene::init()
 	return S_OK;
 }
 
-void bossScene::release()
+void endingScene::release()
 {
 	_tileMap->release();
 	SAFE_DELETE(_tileMap);
@@ -724,7 +690,7 @@ void bossScene::release()
 	SAFE_DELETE(_playerUI);
 }
 
-void bossScene::update()
+void endingScene::update()
 {
 	_player->update();
 	_playerUI->update();
@@ -734,7 +700,7 @@ void bossScene::update()
 	cameraMove(); //모든 처리가 끝난뒤 카메라의 움직임을 결정합니다.
 }
 
-void bossScene::render()
+void endingScene::render()
 {
 	_tileMap->render();
 	_enemyManager->render();
@@ -743,7 +709,7 @@ void bossScene::render()
 	_playerUI->render();
 }
 
-void bossScene::cameraMove()
+void endingScene::cameraMove()
 {
 	//현재는 사실상 쓰이지 않고 있습니다.
 	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
@@ -829,16 +795,16 @@ void bossScene::cameraMove()
 	}
 }
 
-void bossScene::cameraInit()
+void endingScene::cameraInit()
 {
 
 }
 
-bossScene::bossScene()
+endingScene::endingScene()
 {
 }
 
-bossScene::~bossScene()
+endingScene::~endingScene()
 {
 }
 

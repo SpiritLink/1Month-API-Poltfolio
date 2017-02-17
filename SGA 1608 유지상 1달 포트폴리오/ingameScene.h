@@ -73,32 +73,7 @@ public:
 	virtual ~field1Scene();
 };
 
-class field2Scene : public gameNode
-{
-private:
-	tileMap* _tileMap;
-	attackManager* _attackManager;
-	enemyManager* _enemyManager;
-	player* _player;
-	playerUI* _playerUI;
-	collision* _collision;
-	RECT Background;				//임계영역 설정 (접근 불가)
-	image* _backIMG;
-
-public:
-	virtual HRESULT init();
-	virtual void release();
-	virtual void update();
-	virtual void render();
-
-	void cameraMove();
-	void cameraInit();
-
-	field2Scene();
-	virtual ~field2Scene();
-};
-
-class bossScene : public gameNode
+class endingScene : public gameNode
 {
 private:
 	tileMap* _tileMap;
@@ -116,8 +91,8 @@ public:
 
 	void cameraMove();
 	void cameraInit();
-	bossScene();
-	virtual ~bossScene();
+	endingScene();
+	virtual ~endingScene();
 };
 
 class testScene : public gameNode

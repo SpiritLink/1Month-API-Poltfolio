@@ -27,8 +27,7 @@ HRESULT gameStudy::init()
 	SCENEMANAGER->addScene("mapTool", new mapTool);			//맵을 만드는 도구
 	SCENEMANAGER->addScene("townScene", new townScene);		//마을
 	SCENEMANAGER->addScene("field1Scene", new field1Scene);	//사냥터 1
-	SCENEMANAGER->addScene("field2Scene", new field2Scene);	//사냥터 2
-	SCENEMANAGER->addScene("bossScene", new bossScene);		//보스방
+	SCENEMANAGER->addScene("bossScene", new endingScene);	//엔딩을 보여주는 씬
 	
 	SCENEMANAGER->changeScene("townScene");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
