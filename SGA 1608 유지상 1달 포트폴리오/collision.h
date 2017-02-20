@@ -15,7 +15,8 @@ private:
 	vector<enemy*>::iterator _viEnemy;
 	vector<attack*>::iterator _viAttack;
 	vector<item*>::iterator _viItem;
-	float currentTime;
+	float attackCheckTime;
+	float bodyCheckTime;
 public:
 	virtual HRESULT init();
 	virtual void release();

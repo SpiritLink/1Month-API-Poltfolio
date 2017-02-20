@@ -9,7 +9,7 @@
 #define IMAGESIZEX 336
 #define IMAGESIZEY 576
 #define PLAYERAREAX 20
-#define PLAYERAREAY	40
+#define PLAYERAREAY	30
 class player : public gameNode
 {
 private:

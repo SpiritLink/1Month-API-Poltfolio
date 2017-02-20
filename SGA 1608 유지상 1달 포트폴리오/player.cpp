@@ -5,16 +5,18 @@
 HRESULT player::init()
 {
 	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 18, true, RGB(0, 0, 255));
-	//x = DATABASE->getPlayerX();	//싱글톤으로 부터
-	//y = DATABASE->getPlayerY();	//싱글톤으로 부터
-	//MAXHP = DATABASE->getMaxHP();
-	//HP = DATABASE->getHP();
-	//MP = DATABASE->getMP();
-	x = WINSIZEX / 2;
-	y = WINSIZEY / 2;
-	MAXHP = 6;
-	HP = 6;
-	MP = 3;
+	x = DATABASE->getPlayerX();	//싱글톤으로 부터
+	y = DATABASE->getPlayerY();	//싱글톤으로 부터
+	MAXHP = DATABASE->getMaxHP();
+	HP = DATABASE->getHP();
+	MP = DATABASE->getMP();
+
+	//x = WINSIZEX / 2;			//데이터 값 고정
+	//y = WINSIZEY / 2;
+	//MAXHP = 6;
+	//HP = 6;
+	//MP = 3;
+
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	SPEED = DEFAULT_SPEED;
@@ -50,13 +52,15 @@ void player::update()
 	if(!(KEYMANAGER->isToggleKey('Y'))) testPlayerMove();
 	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
-	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY + 10, PLAYERAREAX, PLAYERAREAY);
+	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY - 5, PLAYERAREAX, PLAYERAREAY);
 }
 
 void player::render()
 {
+	
 	playerRender();	//플레이어를 그리는 함수
 	testFunction();	//값을 표시하기 위한 테스트용 함수.
+	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
 }
 
 void player::keyboardInput()
