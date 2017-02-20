@@ -43,7 +43,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 				for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 				{
 					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect())
-						&& !(*_viAttack)->getCheckCollision())
+						&& !(*_viAttack)->getCheckCollision() && (*_viEnemy)->getEnemyAlive())
 					{
 						SOUNDMANAGER->playSound("hit", PointMake((*_viAttack)->getAttackX(), (*_viAttack)->getAttackY()));
 						(*_viAttack)->collisionTrue();

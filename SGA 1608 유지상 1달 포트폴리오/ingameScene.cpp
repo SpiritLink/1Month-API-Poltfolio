@@ -43,6 +43,7 @@ HRESULT townScene::init()
 
 	_objectManager = new objectManager;
 	_objectManager->init();
+	_objectManager->setTileMapMemoryAddress(_tileMap);
 
 	_attackManager = new attackManager;
 	_attackManager->init();
@@ -77,6 +78,7 @@ HRESULT townScene::init()
 
 	_player->update();
 	cameraInit();//카메라의 위치를 세팅합니다.
+	_objectManager->setSavebell(21344);
 	return S_OK;
 }
 
@@ -103,12 +105,13 @@ void townScene::release()
 
 void townScene::update()
 {
-	_player->update();
-	_playerUI->update();
 	_tileMap->update();
-	_attackManager->update();
+	_player->update();
 	_enemyManager->update();
+	_attackManager->update();
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());
+	_objectManager->update();
+	_playerUI->update();
 	changeAlphaValue();
 	cameraMove();
 	portal();			//화면의 끝에 이동하면 field1씬으로 넘깁니다.
@@ -120,6 +123,7 @@ void townScene::render()
 	_enemyManager->render();
 	_player->render();
 	_attackManager->render();
+	_objectManager->render();
 	_playerUI->render();
 	_black->alphaRender(getMemDC(), alphaValue);
 }
@@ -413,6 +417,7 @@ HRESULT field1Scene::init()
 
 	_objectManager = new objectManager;
 	_objectManager->init();
+	_objectManager->setTileMapMemoryAddress(_tileMap);
 
 	_attackManager = new attackManager;
 	_attackManager->init();

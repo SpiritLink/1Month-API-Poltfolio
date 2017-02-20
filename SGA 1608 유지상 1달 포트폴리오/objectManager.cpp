@@ -57,6 +57,14 @@ void objectManager::setShuriken(float x, float y)
 	_vItem.push_back(_item);
 }
 
+void objectManager::setSavebell(int tileNum)
+{
+	item* _save;
+	_save = new saveBell;
+	_save->init(_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right / 2, _tileMap->getTiles()[tileNum].rc.bottom);
+	_vItem.push_back(_save);
+}
+
 void objectManager::addItemX(int value)
 {
 	vector<item*>::iterator _vItemi;

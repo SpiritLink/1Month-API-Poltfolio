@@ -42,6 +42,8 @@ HRESULT tileMap::init(const char* fileName)
 	valueY = 0;
 	skyX = 0;
 	correctionY = 0;
+
+	beforePlayerYTileNumber = 0;
 	return S_OK;
 }
 
@@ -52,8 +54,12 @@ void tileMap::release()
 void tileMap::update()
 {
 	//플레이어가 현재 위치한 Y타일의 번호 최소 0 에서  최대 250까지 검출가능
-	playerYTileNumber = TILEX - (DATABASE->getCollisionTile() / TILEX);
-	valueY = playerYTileNumber * 2.4f;	//240퍼센트 적용
+	playerYTileNumber = TILEY - (DATABASE->getCollisionTile() / TILEX);
+	if (abs(playerYTileNumber - beforePlayerYTileNumber) >= 2)
+	{
+		beforePlayerYTileNumber = playerYTileNumber;
+	}
+	valueY = beforePlayerYTileNumber * 2.4f;	//240퍼센트 적용
 	valueX = DATABASE->getbackgroundCount();
 	correctionY = (DATABASE->getPlayerY() / TILESIZE) * 2.4f;
 

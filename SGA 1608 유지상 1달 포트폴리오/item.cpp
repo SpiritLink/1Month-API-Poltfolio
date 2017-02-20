@@ -97,3 +97,32 @@ shuriken::shuriken()
 shuriken::~shuriken()
 {
 }
+
+HRESULT saveBell::init(float inputX, float inputY)
+{
+	itemType = ITEM_SAVEBELL;
+	_IMG = IMAGEMANAGER->addImage("saveBell", "IMAGE/item/saveBell.bmp", 48, 93, true, RGB(255, 0, 255));
+	return S_OK;
+}
+
+void saveBell::release()
+{
+}
+
+void saveBell::update()
+{
+	itemRect = RectMake(x - _IMG->getWidth() / 2, y - _IMG->getHeight(), _IMG->getWidth(), _IMG->getHeight());
+}
+
+void saveBell::render()
+{
+	_IMG->render(getMemDC(), x - _IMG->getWidth() / 2, y - _IMG->getHeight());
+}
+
+saveBell::saveBell()
+{
+}
+
+saveBell::~saveBell()
+{
+}

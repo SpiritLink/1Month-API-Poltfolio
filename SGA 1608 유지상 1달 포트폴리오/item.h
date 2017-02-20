@@ -52,3 +52,15 @@ public:
 	shuriken();
 	virtual ~shuriken();
 };
+
+class saveBell : public item
+{
+public:
+	virtual HRESULT init(float inputX, float inputY);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	saveBell();
+	virtual ~saveBell();
+};

@@ -17,6 +17,7 @@ private:
 	RECT _Ground;	//대지를 표시할 영역
 
 	int playerYTileNumber;	//현재 플레이어의 Y타일 위치를 저장, 배경의 y축에 변화를 줍니다.
+	int beforePlayerYTileNumber;
 	int valueX;		//배경을 움직이기 위해 필요한 변수
 	int valueY;		//배경을 움직이기 위해 필요한 변수
 	int skyX;		//하늘을 움직이기 위해 필요한 변수 (플레이어가 움직이지 않아도 배경은 움직여야 한다.)
