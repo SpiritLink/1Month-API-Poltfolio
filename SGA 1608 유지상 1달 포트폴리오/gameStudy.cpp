@@ -29,7 +29,7 @@ HRESULT gameStudy::init()
 	SCENEMANAGER->addScene("field1Scene", new field1Scene);	//사냥터 1
 	SCENEMANAGER->addScene("bossScene", new endingScene);	//엔딩을 보여주는 씬
 	
-	SCENEMANAGER->changeScene("townScene");					//현재 실험용 맵으로 진입한다.
+	SCENEMANAGER->changeScene("testScene");					//현재 실험용 맵으로 진입한다.
 	//------------------------------------------
 	return S_OK;
 }
