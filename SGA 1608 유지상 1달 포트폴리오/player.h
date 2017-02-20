@@ -60,10 +60,13 @@ public:
 
 	void playerRender();			//상태에 따라서 플레이어를 렌더하는 함수
 
-	int getPlayerX() { return x; }
-	int getPlayerY() { return y; }
 	void addPlayerX(int value) { x += value; }
 	void addPlayerY(int value) { y += value; }
+	void addPlayerHP(int value) { HP += value; }
+	void addPlayerMP(int value) { MP += value; }
+
+	int getPlayerX() { return x; }
+	int getPlayerY() { return y; }
 	int getCollisionTile() { return currentCollisionTile; }
 	RECT getPlayerRect() { return PlayerRect;}
 

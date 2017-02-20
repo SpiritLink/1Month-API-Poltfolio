@@ -8,6 +8,9 @@
 #include "enemyManager.h"
 #include "objectManager.h"
 
+#define ATTACKCHECKTIME 0.05f
+#define BODYCHECKTIME 0.1f
+#define ITEMCHECKTIME 0.2f
 class collision
 {
 private:
@@ -17,6 +20,7 @@ private:
 	vector<item*>::iterator _viItem;
 	float attackCheckTime;
 	float bodyCheckTime;
+	float itemCheckTime;
 public:
 	virtual HRESULT init();
 	virtual void release();

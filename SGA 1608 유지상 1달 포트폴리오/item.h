@@ -22,6 +22,7 @@ public:
 	int getItemY() { return y; }
 	bool getItemCollision() { return collision; }
 	RECT getItemRect() { return itemRect; }
+	ITEMTYPE getItemType() { return itemType; }
 	
 	void setItemCollision() { collision = true; }
 	item();

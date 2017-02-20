@@ -489,6 +489,9 @@ void player::testFunction()
 
 void player::playerStatusCheck()
 {
+	//체력이 최대체력을 넘는다면 최대체력으로 고정시킵니다.
+	if (HP > MAXHP) HP = MAXHP;
+
 	if (gravity > 1)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//점프 상태로 변경함

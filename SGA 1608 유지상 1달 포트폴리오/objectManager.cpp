@@ -13,9 +13,19 @@ void objectManager::release()
 
 void objectManager::update()
 {
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end();)
 	{
-		(*_viItem)->update();
+		//아이템이 한번 충돌하지 않았다면 업데이트 후 다음아이템을 검사합니다.
+		if (!(*_viItem)->getItemCollision())
+		{
+			(*_viItem)->update();
+			++_viItem;
+		}
+		//아이템이 한번 충돌했다면 업데이트를 하지 않고 제거합니다.
+		else
+		{
+			_viItem = _vItem.erase(_viItem);
+		}
 	}
 }
 
@@ -23,12 +33,11 @@ void objectManager::render()
 {
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{
-		//좌표가 화면의 안에 있다면 (여유공간은 TILESIZE만큼)
-		//if ((*_viItem)->getItemX() > -TILESIZE && (*_viItem)->getItemX() < WINSIZEX + TILESIZE &&
-		//	(*_viItem)->getItemY() > -TILESIZE && (*_viItem)->getItemY() < WINSIZEY + TILESIZE)
-		//{
+		if ((*_viItem)->getItemX() > -TILESIZE && (*_viItem)->getItemX() < WINSIZEX + TILESIZE &&
+			(*_viItem)->getItemY() > -TILESIZE && (*_viItem)->getItemY() < WINSIZEY + TILESIZE)
+		{
 			(*_viItem)->render();
-		//}
+		}
 	}
 }
 
