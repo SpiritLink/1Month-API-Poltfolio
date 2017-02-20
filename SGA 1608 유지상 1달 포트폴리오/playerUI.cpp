@@ -42,7 +42,7 @@ void playerUI::render()
 
 	for (int i = 0; i < (MP - 1) / 10 + 1; ++i)
 	{
-		if (i != (MP - 1) / 10) _number->frameRender(getMemDC(), 70 + _number->getFrameWidth() * i, 70, 0, 0);
+		if (i != (MP - 1) / 10) _number->frameRender(getMemDC(), 70 + _number->getFrameWidth() * i, 70, MP / 10, 0);
 		else _number->frameRender(getMemDC(), 70 + _number->getFrameWidth() * i, 70, MP % 10, 0);
 	}
 }

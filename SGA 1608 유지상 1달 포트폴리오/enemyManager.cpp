@@ -25,7 +25,24 @@ void enemyManager::update()
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end();)
 	{
 		//죽고나서 렌더가 끝났는지 확인하고 지우게 처리해야 할듯
-		if ((*_viEnemy)->getEnemyDie()) _viEnemy = _vEnemy.erase(_viEnemy);
+		if ((*_viEnemy)->getEnemyDie())
+		{
+			//랜덤한 수를 만든 다음에 그에맞게 만들어 주던지 해야할듯
+			switch (RND->getFromIntTo(1, 10))
+			{
+			case 1:	_objectManager->setHeart((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 2:	_objectManager->setHeart((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 3:	_objectManager->setShuriken((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 4:	_objectManager->setShuriken((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 5:	_objectManager->setShuriken((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 6: _objectManager->setShuriken((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 7:	_objectManager->setShuriken((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
+			case 8:		break;
+			case 9:		break;
+			case 10:	break;
+			}
+			_viEnemy = _vEnemy.erase(_viEnemy);
+		}
 		else
 		{
 			//화면 내의 좌표에 있다면 업데이트 합니다.
@@ -39,7 +56,6 @@ void enemyManager::update()
 			{
 				(*_viEnemy)->setAliveFalse();
 				(*_viEnemy)->setFrameCountZero();
-				_objectManager->setHeart((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY());
 			}
 			//다음 적을 확인합니다.
 			++_viEnemy;

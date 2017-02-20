@@ -103,6 +103,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 					//수리검 회복 아이템과 충돌 했을 때
 				case ITEM_SHURIKEN: 
 					(*_viItem)->setItemCollision();
+					_player->addPlayerMP(5);
 					SOUNDMANAGER->playSound("item2", PointMake(0, 0));
 					break;
 				}

@@ -10,7 +10,7 @@
 
 #define ATTACKCHECKTIME 0.05f
 #define BODYCHECKTIME 0.1f
-#define ITEMCHECKTIME 0.2f
+#define ITEMCHECKTIME 0.1f
 class collision
 {
 private:
