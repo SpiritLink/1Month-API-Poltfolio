@@ -34,6 +34,10 @@ HRESULT townScene::init()
 	DATABASE->setDestCamY(WINSIZEY / 2);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
+	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	alphaValue = 255;
+	screenStatus = FADE_IN;
+
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Town.map");
 
@@ -59,7 +63,6 @@ HRESULT townScene::init()
 	_collision = new collision;
 	_collision->init();
 
-	_backIMG = IMAGEMANAGER->addImage("테스트배경", "IMAGE/test.bmp", TILESIZEX, TILESIZEY, false, RGB(0, 0, 0));
 	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
 
 
@@ -105,7 +108,9 @@ void townScene::update()
 	_attackManager->update();
 	_enemyManager->update();
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());
+	changeAlphaValue();
 	cameraMove();
+	portal();			//화면의 끝에 이동하면 field1씬으로 넘깁니다.
 }
 
 void townScene::render()
@@ -115,6 +120,82 @@ void townScene::render()
 	_player->render();
 	_attackManager->render();
 	_playerUI->render();
+	_black->alphaRender(getMemDC(), alphaValue);
+}
+
+void townScene::changeAlphaValue()
+{
+	switch (screenStatus)
+	{
+	case DARK:
+		break;
+	case FADE_IN:
+		if (alphaValue > 0)
+		{
+			alphaValue -= 5;
+		}
+		if (alphaValue <= 0)
+		{
+			alphaValue = 0;
+			screenStatus = SHOW;
+		}
+		break;
+	case SHOW:
+		break;
+	case FADE_OUT:
+		if (alphaValue < 255)
+		{
+			alphaValue += 5;
+		}
+		if (alphaValue >= 255)
+		{
+			alphaValue = 255;
+			screenStatus = DARK;
+		}
+		break;
+	}
+}
+
+void townScene::portal()
+{
+	//플레이어가 특정 타일에 닿으면 다른 타일로 이동시키는 함수.
+	//이동할수 있는 타일을 좀더 넉넉하게 설정해주자.
+	//충돌구간이 순간적으로 이동하기 때문에 첫 충돌을 한번더 실행시켜줘야 한다.
+
+	switch (_player->getCollisionTile())
+	{
+	case 20988:
+	case 20989:
+	case 20990:
+	case 20991:
+	case 20992:
+	case 21138:
+	case 21139:
+	case 21140:
+	case 21141:
+	case 21142:
+	case 21288:
+	case 21289:
+	case 21290:
+	case 21291:
+	case 21292:
+	case 21438:
+	case 21439:
+	case 21440:
+	case 21441:
+	case 21442:
+		if (screenStatus == SHOW)
+		{
+			screenStatus = FADE_OUT;
+		}
+		if (screenStatus == DARK)
+		{
+			SCENEMANAGER->changeScene("field1Scene");
+			return;
+		}
+		
+	}
+
 }
 
 void townScene::cameraMove()
@@ -135,6 +216,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
 		_enemyManager->addEnemyX(diffrence);
+		_objectManager->addItemX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -144,6 +226,7 @@ void townScene::cameraMove()
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
 		_enemyManager->addEnemyX(-diffrence);
+		_objectManager->addItemX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -153,6 +236,7 @@ void townScene::cameraMove()
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
 		_enemyManager->addEnemyY(-diffrence);
+		_objectManager->addItemY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -163,6 +247,7 @@ void townScene::cameraMove()
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
 		_enemyManager->addEnemyY(diffrence);
+		_objectManager->addItemY(diffrence);
 	}
 
 	//X좌표 이동
@@ -174,6 +259,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		_objectManager->addItemX(-distanceX / 10);
 		DATABASE->addBackgroundCount(-distanceX / 10);
 	}
 
@@ -185,6 +271,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		_objectManager->addItemX(distanceX / 10);
 		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
@@ -197,6 +284,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileY(-distanceY / 10);
 		_attackManager->moveAttackY(-distanceY / 10);
 		_enemyManager->addEnemyY(-distanceY / 10);
+		_objectManager->addItemY(-distanceY / 10);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -207,6 +295,7 @@ void townScene::cameraMove()
 		_tileMap->moveTileY(distanceY / 10);
 		_attackManager->moveAttackY(distanceY / 10);
 		_enemyManager->addEnemyY(distanceY / 10);
+		_objectManager->addItemY(distanceY / 10);
 	}
 }
 

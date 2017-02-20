@@ -144,6 +144,14 @@ enum ITEMTYPE
 	ITEM_HEART,
 	ITEM_SHURIKEN
 };
+
+enum SCREENSTATUS
+{
+	DARK,
+	FADE_IN,
+	SHOW,
+	FADE_OUT
+};
 //프로젝트에서 사용될 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24
