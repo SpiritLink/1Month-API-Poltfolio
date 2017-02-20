@@ -401,6 +401,10 @@ HRESULT field1Scene::init()
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY / 2);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
+	
+	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI,black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	alphaValue = 255;
+	screenStatus = FADE_IN;
 
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Field1.map");
@@ -474,18 +478,20 @@ void field1Scene::update()
 	_objectManager->update();	//6.아이템
 	_playerUI->update();		//7.UI
 	cameraMove();				//8.카메라 (이동)
-	portal();					//9.포탈 (특정 A좌표 -> 특정 B좌표 이동)
+	changeAlphaValue();			//9.화면 전환효과 (페이드인 , 아웃)
+	portal();					//10.포탈 (특정 A좌표 -> 특정 B좌표 이동)
 }
 
 void field1Scene::render()
 {
 	//렌더(그리는) 순서
-	_tileMap->render();			//1.맵		최하위
-	_enemyManager->render();	//2.적
-	_player->render();			//3.플레이어
-	_attackManager->render();	//4.공격	
-	_objectManager->render();
-	_playerUI->render();		//5.UI		최상위
+	_tileMap->render();							//1.맵		최하위
+	_enemyManager->render();					//2.적
+	_player->render();							//3.플레이어
+	_attackManager->render();					//4.공격	
+	_objectManager->render();					//5.아이템
+	_playerUI->render();						//6.UI	
+	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
 }
 
 void field1Scene::initEnemy()
@@ -704,6 +710,39 @@ void field1Scene::cameraInit()
 		_attackManager->moveAttackY(distanceY);
 		_enemyManager->addEnemyY(distanceY);
 		_objectManager->addItemY(distanceY);
+	}
+}
+
+void field1Scene::changeAlphaValue()
+{
+	switch (screenStatus)
+	{
+	case DARK:
+		break;
+	case FADE_IN:
+		if (alphaValue > 0)
+		{
+			alphaValue -= 5;
+		}
+		if (alphaValue <= 0)
+		{
+			alphaValue = 0;
+			screenStatus = SHOW;
+		}
+		break;
+	case SHOW:
+		break;
+	case FADE_OUT:
+		if (alphaValue < 255)
+		{
+			alphaValue += 5;
+		}
+		if (alphaValue >= 255)
+		{
+			alphaValue = 255;
+			screenStatus = DARK;
+		}
+		break;
 	}
 }
 

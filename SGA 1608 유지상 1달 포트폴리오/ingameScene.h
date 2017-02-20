@@ -64,7 +64,10 @@ private:
 	objectManager* _objectManager;
 	collision* _collision;
 	RECT Background;				//임계영역 설정 (접근 불가)
-	image* _backIMG;
+
+	image* _black;
+	int alphaValue;	//화면의 페이드인 , 페이드 아웃을 표시하기 위한 변수
+	SCREENSTATUS screenStatus;	//페이드 인 , 페이드 아웃이 끝났음을 확인하기 위한 변수.
 
 public:
 	virtual HRESULT init();
@@ -75,6 +78,7 @@ public:
 	void initEnemy();
 	void cameraMove();
 	void cameraInit();
+	void changeAlphaValue();
 	void portal();
 
 	field1Scene();
