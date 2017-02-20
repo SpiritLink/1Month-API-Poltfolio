@@ -12,12 +12,14 @@ void collision::release()
 {
 }
 
-void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA)
+void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector<item*> VI)
 {
 	_player = PL;
 	vector<enemy*> _vEnemy = VE;
 	vector<attack*> _vAttack = VA;
+	vector<item*> _vItem = VI;
 
+	//->아이템과 플레이어가 충돌하면 특정 행동을 하도록 처리
 	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
 	{
 		currentTime = TIMEMANAGER->getWorldTime();

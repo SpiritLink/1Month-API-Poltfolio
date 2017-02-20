@@ -104,7 +104,7 @@ void townScene::update()
 	_tileMap->update();
 	_attackManager->update();
 	_enemyManager->update();
-	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
+	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());
 	cameraMove();
 }
 
@@ -381,7 +381,7 @@ void field1Scene::update()
 	_player->update();			//2.플레이어
 	_enemyManager->update();	//3.적
 	_attackManager->update();	//4.공격
-	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());	//충돌
+	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());	//충돌
 	_objectManager->update();	//6.아이템
 	_playerUI->update();		//7.UI
 	cameraMove();				//8.카메라 (이동)
@@ -799,7 +799,7 @@ void testScene::update()
 	_enemyManager->update();
 	_tileMap->update();
 	_objectManager->update();
-	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
+	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
 	{

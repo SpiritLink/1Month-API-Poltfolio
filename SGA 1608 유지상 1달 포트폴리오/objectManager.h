@@ -19,6 +19,7 @@ public:
 	void addItemX(int value);
 	void addItemY(int value);
 
+	vector<item*> getItemVector() { return _vItem; }
 	objectManager();
 	~objectManager();
 };
