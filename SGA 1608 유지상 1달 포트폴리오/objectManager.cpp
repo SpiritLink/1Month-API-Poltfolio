@@ -13,10 +13,23 @@ void objectManager::release()
 
 void objectManager::update()
 {
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{
+		(*_viItem)->update();
+	}
 }
 
 void objectManager::render()
 {
+	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	{
+		//좌표가 화면의 안에 있다면 (여유공간은 TILESIZE만큼)
+		//if ((*_viItem)->getItemX() > -TILESIZE && (*_viItem)->getItemX() < WINSIZEX + TILESIZE &&
+		//	(*_viItem)->getItemY() > -TILESIZE && (*_viItem)->getItemY() < WINSIZEY + TILESIZE)
+		//{
+			(*_viItem)->render();
+		//}
+	}
 }
 
 void objectManager::setHeart(float x, float y)
@@ -37,17 +50,19 @@ void objectManager::setShuriken(float x, float y)
 
 void objectManager::addItemX(int value)
 {
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	vector<item*>::iterator _vItemi;
+	for (_vItemi = _vItem.begin(); _vItemi != _vItem.end(); ++_vItemi)
 	{
-		(*_viItem)->addItemX(value);
+		(*_vItemi)->addItemX(value);
 	}
 }
 
 void objectManager::addItemY(int value)
 {
-	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
+	vector<item*>::iterator _vItemi;
+	for (_vItemi = _vItem.begin(); _vItemi != _vItem.end(); ++_vItemi)
 	{
-		(*_viItem)->addItemY(value);
+		(*_vItemi)->addItemY(value);
 	}
 }
 

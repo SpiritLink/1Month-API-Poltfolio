@@ -6,6 +6,7 @@
 #include "playerUI.h"
 #include "attackManager.h"
 #include "enemyManager.h"
+#include "objectManager.h"
 #include "collision.h"
 
 
@@ -30,6 +31,7 @@ private:
 	player* _player;
 	playerUI*	_playerUI;
 	collision*	_collision;
+	objectManager* _objectManager;
 
 	RECT Background;
 	image* _backIMG;
@@ -54,6 +56,7 @@ private:
 	enemyManager* _enemyManager;
 	player* _player;
 	playerUI* _playerUI;
+	objectManager* _objectManager;
 	collision* _collision;
 	RECT Background;				//임계영역 설정 (접근 불가)
 	image* _backIMG;
@@ -105,6 +108,7 @@ private:
 	player* _player;
 	playerUI* _playerUI;
 	collision* _collision;
+	objectManager* _objectManager;
 
 	float cameraX;
 	float cameraY;

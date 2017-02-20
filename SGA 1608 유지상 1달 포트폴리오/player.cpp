@@ -56,7 +56,7 @@ void player::update()
 void player::render()
 {
 	playerRender();	//플레이어를 그리는 함수
-	testFunction();	//값을 표시하기 위한 테스트용 함수.
+	//testFunction();	//값을 표시하기 위한 테스트용 함수.
 }
 
 void player::keyboardInput()

@@ -4,6 +4,7 @@
 #include "enemy.h"
 #include "tileMap.h"
 #include "attackManager.h"
+#include "objectManager.h"
 
 class enemyManager : public gameNode
 {
@@ -12,8 +13,9 @@ private:
 	vector<enemy*>::iterator _viEnemy;
 	tileMap* _tileMap;		//에너미 객체에게 타일맵을 넘겨주기 위해서 가지고 있는다.
 	attackManager* _attackManager;
+	objectManager* _objectManager;
 public:
-	virtual HRESULT init(tileMap* _tileMap, attackManager* _ATM);
+	virtual HRESULT init(tileMap* _tileMap, attackManager* _ATM, objectManager* _OBJ);
 	virtual void release();
 	virtual void update();
 	virtual void render();

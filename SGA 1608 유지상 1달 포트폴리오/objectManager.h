@@ -13,6 +13,12 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void setHeart(float x, float y);
+	void setShuriken(float x, float y);
+
+	void addItemX(int value);
+	void addItemY(int value);
+
 	objectManager();
 	~objectManager();
 };

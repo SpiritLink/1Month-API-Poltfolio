@@ -6,7 +6,6 @@
 #include "enemy.h"
 #include "attackManager.h"
 #include "enemyManager.h"
-#include "objectManager.h"
 
 class collision
 {
@@ -14,7 +13,6 @@ private:
 	player* _player;
 	attackManager* _attackManager;
 	enemyManager* _enemyManager;
-	objectManager* _objectManager;
 	vector<enemy*>::iterator _viEnemy;
 	vector<attack*>::iterator _viAttack;
 	float currentTime;

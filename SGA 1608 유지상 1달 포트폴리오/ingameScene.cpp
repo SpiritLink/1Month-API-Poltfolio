@@ -37,11 +37,15 @@ HRESULT townScene::init()
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Town.map");
 
+	_objectManager = new objectManager;
+	_objectManager->init();
+
 	_attackManager = new attackManager;
 	_attackManager->init();
 
 	_enemyManager = new enemyManager;
-	_enemyManager->init(_tileMap, _attackManager);
+	_enemyManager->init(_tileMap, _attackManager, _objectManager);
+
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
@@ -312,11 +316,14 @@ HRESULT field1Scene::init()
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Field1.map");
 
+	_objectManager = new objectManager;
+	_objectManager->init();
+
 	_attackManager = new attackManager;
 	_attackManager->init();
 
 	_enemyManager = new enemyManager;
-	_enemyManager->init(_tileMap, _attackManager);
+	_enemyManager->init(_tileMap, _attackManager, _objectManager);
 
 	_player = new player;
 	_player->init();
@@ -360,6 +367,9 @@ void field1Scene::release()
 
 	_collision->release();
 	SAFE_DELETE(_collision);
+
+	_objectManager->release();
+	SAFE_DELETE(_objectManager);
 }
 
 void field1Scene::update()
@@ -372,9 +382,10 @@ void field1Scene::update()
 	_enemyManager->update();	//3.적
 	_attackManager->update();	//4.공격
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());	//충돌
-	_playerUI->update();		//6.UI
-	cameraMove();				//7.카메라 (이동)
-	portal();					//8.포탈 (특정 A좌표 -> 특정 B좌표 이동)
+	_objectManager->update();	//6.아이템
+	_playerUI->update();		//7.UI
+	cameraMove();				//8.카메라 (이동)
+	portal();					//9.포탈 (특정 A좌표 -> 특정 B좌표 이동)
 }
 
 void field1Scene::render()
@@ -384,6 +395,7 @@ void field1Scene::render()
 	_enemyManager->render();	//2.적
 	_player->render();			//3.플레이어
 	_attackManager->render();	//4.공격	
+	_objectManager->render();
 	_playerUI->render();		//5.UI		최상위
 }
 
@@ -429,6 +441,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
 		_enemyManager->addEnemyX(diffrence);
+		_objectManager->addItemX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -438,6 +451,7 @@ void field1Scene::cameraMove()
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
 		_enemyManager->addEnemyX(-diffrence);
+		_objectManager->addItemX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -447,6 +461,7 @@ void field1Scene::cameraMove()
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
 		_enemyManager->addEnemyY(-diffrence);
+		_objectManager->addItemY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -457,6 +472,7 @@ void field1Scene::cameraMove()
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
 		_enemyManager->addEnemyY(diffrence);
+		_objectManager->addItemY(diffrence);
 	}
 
 	//X좌표 이동
@@ -468,6 +484,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		_objectManager->addItemX(-distanceX / 10);
 		DATABASE->addBackgroundCount(-distanceX / 10);
 	}
 
@@ -479,6 +496,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		_objectManager->addItemX(distanceX / 10);
 		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
@@ -491,6 +509,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileY(-distanceY / 10);
 		_attackManager->moveAttackY(-distanceY / 10);
 		_enemyManager->addEnemyY(-distanceY / 10);
+		_objectManager->addItemY(-distanceY / 10);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -501,6 +520,7 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileY(distanceY / 10);
 		_attackManager->moveAttackY(distanceY / 10);
 		_enemyManager->addEnemyY(distanceY / 10);
+		_objectManager->addItemY(distanceY / 10);
 	}
 }
 
@@ -520,6 +540,7 @@ void field1Scene::cameraInit()
 		Background.left += diffrence;	//배경의 움직이는 정도를 조정
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_objectManager->addItemX(diffrence);//아이템의 움직이는 정도를 조절
 	}
 	if (Background.left > 0)
 	{
@@ -528,6 +549,7 @@ void field1Scene::cameraInit()
 		Background.left -= diffrence;
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
+		_objectManager->addItemX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -536,6 +558,7 @@ void field1Scene::cameraInit()
 		Background.bottom -= diffrence;
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
+		_objectManager->addItemY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -545,6 +568,7 @@ void field1Scene::cameraInit()
 		Background.bottom += diffrence;
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
+		_objectManager->addItemY(diffrence);
 	}
 
 	//X좌표 이동
@@ -556,6 +580,7 @@ void field1Scene::cameraInit()
 		_tileMap->moveTileX(-distanceX);
 		_attackManager->moveAttackX(-distanceX);
 		_enemyManager->addEnemyX(-distanceX);
+		_objectManager->addItemX(-distanceX);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -566,6 +591,7 @@ void field1Scene::cameraInit()
 		_tileMap->moveTileX(distanceX);
 		_attackManager->moveAttackX(distanceX);
 		_enemyManager->addEnemyX(distanceX);
+		_objectManager->addItemX(distanceX);
 	}
 
 	//Y좌표 이동
@@ -577,6 +603,7 @@ void field1Scene::cameraInit()
 		_tileMap->moveTileY(-distanceY);
 		_attackManager->moveAttackY(-distanceY);
 		_enemyManager->addEnemyY(-distanceY);
+		_objectManager->addItemY(-distanceY);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -587,6 +614,7 @@ void field1Scene::cameraInit()
 		_tileMap->moveTileY(distanceY);
 		_attackManager->moveAttackY(distanceY);
 		_enemyManager->addEnemyY(distanceY);
+		_objectManager->addItemY(distanceY);
 	}
 }
 
@@ -642,157 +670,23 @@ field1Scene::~field1Scene()
 
 HRESULT endingScene::init()
 {
-	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
-	DATABASE->setDestCamX(WINSIZEX / 2);
-	DATABASE->setDestCamY(WINSIZEY / 2);
-	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
-	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
-
-	_tileMap = new tileMap;
-	_tileMap->init("DATA/MAP/Boss.map");
-
-	_attackManager = new attackManager;
-	_attackManager->init();
-
-	_enemyManager = new enemyManager;
-	_enemyManager->init(_tileMap, _attackManager);
-
-	_player = new player;
-	_player->init();
-	_player->setTileMapMemoryAddress(_tileMap);
-	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(21513);
-	_player->firstCollisionTileCheck();
-
-	_playerUI = new playerUI;
-	_playerUI->init();
-
-	_enemyManager->setEri(21375);
-
 	return S_OK;
 }
 
 void endingScene::release()
 {
-	_tileMap->release();
-	SAFE_DELETE(_tileMap);
-
-	_attackManager->release();
-	SAFE_DELETE(_attackManager);
-
-	_enemyManager->release();
-	SAFE_DELETE(_enemyManager);
-
-	_player->release();
-	SAFE_DELETE(_player);
-
-	_playerUI->release();
-	SAFE_DELETE(_playerUI);
 }
 
 void endingScene::update()
 {
-	_player->update();
-	_playerUI->update();
-	_attackManager->update();
-	_enemyManager->update();
-
-	cameraMove(); //모든 처리가 끝난뒤 카메라의 움직임을 결정합니다.
 }
 
 void endingScene::render()
 {
-	_tileMap->render();
-	_enemyManager->render();
-	_player->render();
-	_attackManager->render();
-	_playerUI->render();
 }
 
 void endingScene::cameraMove()
 {
-	//현재는 사실상 쓰이지 않고 있습니다.
-	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
-	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
-	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
-	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
-
-	//만약 화면을 벗어난다면
-	if (Background.right < WINSIZEX)
-	{
-		int diffrence = WINSIZEX - Background.right;
-		Background.right += diffrence;	//배경의 움직이는 정도를 조절
-		Background.left += diffrence;	//배경의 움직이는 정도를 조정
-		_tileMap->moveTileX(diffrence);
-		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
-	}
-	if (Background.left > 0)
-	{
-		int diffrence = Background.left;
-		Background.right -= diffrence;
-		Background.left -= diffrence;
-		_player->addPlayerX(+diffrence);
-		_tileMap->moveTileX(-diffrence);
-	}
-	if (Background.top > 0)
-	{
-		int diffrence = Background.top;
-		Background.top -= diffrence;
-		Background.bottom -= diffrence;
-		_player->addPlayerY(diffrence);
-		_tileMap->moveTileY(-diffrence);
-	}
-
-	if (Background.bottom < WINSIZEY)
-	{
-		int diffrence = WINSIZEY - Background.bottom;
-		Background.top += diffrence;
-		Background.bottom += diffrence;
-		_player->addPlayerY(-diffrence);
-		_tileMap->moveTileY(+diffrence);
-	}
-
-	//X좌표 이동
-	if (DATABASE->getSourCamX() > DATABASE->getDestCamX())		//화면 오른쪽으로 움직일때
-	{
-		Background.left -= distanceX / 10;
-		Background.right -= distanceX / 10;
-		_player->addPlayerX(-distanceX / 10);
-		_tileMap->moveTileX(-distanceX / 10);
-		_attackManager->moveAttackX(-distanceX / 10);
-		_enemyManager->addEnemyX(-distanceX / 10);
-	}
-
-	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
-	{
-		Background.left += distanceX / 10;
-		Background.right += distanceX / 10;
-		_player->addPlayerX(distanceX / 10);
-		_tileMap->moveTileX(distanceX / 10);
-		_attackManager->moveAttackX(distanceX / 10);
-		_enemyManager->addEnemyX(distanceX / 10);
-	}
-
-	//Y좌표 이동
-	if (DATABASE->getSourCamY() > DATABASE->getDestCamY())		//화면 아래쪽으로 움직일때
-	{
-		Background.top -= distanceY / 10;
-		Background.bottom -= distanceY / 10;
-		_player->addPlayerY(-distanceY / 10);
-		_tileMap->moveTileY(-distanceY / 10);
-		_attackManager->moveAttackY(-distanceY / 10);
-		_enemyManager->addEnemyY(-distanceY / 10);
-	}
-
-	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
-	{
-		Background.top += distanceY / 10;
-		Background.bottom += distanceY / 10;
-		_player->addPlayerY(distanceY / 10);
-		_tileMap->moveTileY(distanceY / 10);
-		_attackManager->moveAttackY(distanceY / 10);
-		_enemyManager->addEnemyY(distanceY / 10);
-	}
 }
 
 void endingScene::cameraInit()
@@ -820,11 +714,14 @@ HRESULT testScene::init()
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Field1.map");
 
+	_objectManager = new objectManager;
+	_objectManager->init();
+
 	_attackManager = new attackManager;
 	_attackManager->init();
 
 	_enemyManager = new enemyManager;
-	_enemyManager->init(_tileMap, _attackManager);
+	_enemyManager->init(_tileMap, _attackManager, _objectManager);
 
 	//플레이어를 초기화 하기 전에 싱글톤에 데이터를 로드 해줘야 합니다.
 	_player = new player;
@@ -889,6 +786,9 @@ void testScene::release()
 
 	_collision->release();
 	SAFE_DELETE(_collision);
+
+	_objectManager->release();
+	SAFE_DELETE(_objectManager);
 }
 
 void testScene::update()
@@ -898,6 +798,7 @@ void testScene::update()
 	_attackManager->update();
 	_enemyManager->update();
 	_tileMap->update();
+	_objectManager->update();
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector());
 	//만약 다른 대상을 보고싶다면
 	if (KEYMANAGER->isStayKeyDown('Q'))
@@ -940,6 +841,7 @@ void testScene::render()
 	_enemyManager->render();
 	_player->render();
 	_attackManager->render();
+	_objectManager->render();
 	_playerUI->render();
 	SetTextColor(getMemDC(), RGB(255, 255, 255));
 }
@@ -962,6 +864,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
 		_enemyManager->addEnemyX(diffrence);
+		_objectManager->addItemX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -971,6 +874,7 @@ void testScene::cameraMove()
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
 		_enemyManager->addEnemyX(-diffrence);
+		_objectManager->addItemX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -980,6 +884,7 @@ void testScene::cameraMove()
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
 		_enemyManager->addEnemyY(-diffrence);
+		_objectManager->addItemY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -990,6 +895,7 @@ void testScene::cameraMove()
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
 		_enemyManager->addEnemyY(diffrence);
+		_objectManager->addItemY(diffrence);
 	}
 
 	//X좌표 이동
@@ -1001,7 +907,9 @@ void testScene::cameraMove()
 		_tileMap->moveTileX(-distanceX / 10);
 		_attackManager->moveAttackX(-distanceX / 10);
 		_enemyManager->addEnemyX(-distanceX / 10);
+		_objectManager->addItemX(-distanceX / 10);
 		DATABASE->addBackgroundCount(-distanceX / 10);
+
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때
@@ -1012,6 +920,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileX(distanceX / 10);
 		_attackManager->moveAttackX(distanceX / 10);
 		_enemyManager->addEnemyX(distanceX / 10);
+		_objectManager->addItemX(distanceX / 10);
 		DATABASE->addBackgroundCount(distanceX / 10);
 	}
 
@@ -1024,6 +933,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileY(-distanceY / 10);
 		_attackManager->moveAttackY(-distanceY / 10);
 		_enemyManager->addEnemyY(-distanceY / 10);
+		_objectManager->addItemY(-distanceY / 10);
 	}
 
 	if (DATABASE->getSourCamY() < DATABASE->getDestCamY())		//화면 위쪽으로 움직일때
@@ -1034,6 +944,7 @@ void testScene::cameraMove()
 		_tileMap->moveTileY(distanceY / 10);
 		_attackManager->moveAttackY(distanceY / 10);
 		_enemyManager->addEnemyY(distanceY / 10);
+		_objectManager->addItemY(distanceY / 10);
 	}
 }
 
@@ -1053,6 +964,7 @@ void testScene::cameraInit()
 		Background.left += diffrence;	//배경의 움직이는 정도를 조정
 		_tileMap->moveTileX(diffrence);
 		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_objectManager->addItemX(diffrence);
 	}
 	if (Background.left > 0)
 	{
@@ -1061,6 +973,7 @@ void testScene::cameraInit()
 		Background.left -= diffrence;
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
+		_objectManager->addItemX(-diffrence);
 	}
 	if (Background.top > 0)
 	{
@@ -1069,6 +982,7 @@ void testScene::cameraInit()
 		Background.bottom -= diffrence;
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
+		_objectManager->addItemY(-diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -1078,6 +992,7 @@ void testScene::cameraInit()
 		Background.bottom += diffrence;
 		_player->addPlayerY(-diffrence);
 		_tileMap->moveTileY(+diffrence);
+		_objectManager->addItemY(diffrence);
 	}
 
 	//X좌표 이동
@@ -1089,6 +1004,7 @@ void testScene::cameraInit()
 		_tileMap->moveTileX(-distanceX);
 		_attackManager->moveAttackX(-distanceX);
 		_enemyManager->addEnemyX(-distanceX);
+		_objectManager->addItemX(-distanceX);
 	}
 
 	if (DATABASE->getSourCamX() < DATABASE->getDestCamX())		//화면 왼쪽으로 움직일때

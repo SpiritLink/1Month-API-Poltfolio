@@ -2,10 +2,11 @@
 #include "enemyManager.h"
 
 
-HRESULT enemyManager::init(tileMap* tileMap, attackManager* _ATM)
+HRESULT enemyManager::init(tileMap* tileMap, attackManager* _ATM, objectManager* _OBJ)
 {
 	_tileMap = tileMap;
 	_attackManager = _ATM;
+	_objectManager = _OBJ;
 	return S_OK;
 }
 
@@ -38,6 +39,7 @@ void enemyManager::update()
 			{
 				(*_viEnemy)->setAliveFalse();
 				(*_viEnemy)->setFrameCountZero();
+				_objectManager->setHeart((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY());
 			}
 			//다음 적을 확인합니다.
 			++_viEnemy;

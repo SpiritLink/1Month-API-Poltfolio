@@ -139,6 +139,11 @@ enum ATTACKTYPE
 	ATTACK_ERI_KNIVES
 };
 
+enum ITEMTYPE
+{
+	ITEM_HEART,
+	ITEM_SHURIKEN
+};
 //프로젝트에서 사용될 define
 #define SAMPLETILEX 27
 #define SAMPLETILEY 24
