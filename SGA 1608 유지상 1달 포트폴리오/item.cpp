@@ -100,8 +100,11 @@ shuriken::~shuriken()
 
 HRESULT saveBell::init(float inputX, float inputY)
 {
+	x = inputX;
+	y = inputY;
 	itemType = ITEM_SAVEBELL;
 	_IMG = IMAGEMANAGER->addImage("saveBell", "IMAGE/item/saveBell.bmp", 48, 93, true, RGB(255, 0, 255));
+	collision = false;
 	return S_OK;
 }
 

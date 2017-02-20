@@ -61,7 +61,7 @@ void objectManager::setSavebell(int tileNum)
 {
 	item* _save;
 	_save = new saveBell;
-	_save->init(_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right / 2, _tileMap->getTiles()[tileNum].rc.bottom);
+	_save->init((_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right) / 2, _tileMap->getTiles()[tileNum].rc.bottom);
 	_vItem.push_back(_save);
 }
 
