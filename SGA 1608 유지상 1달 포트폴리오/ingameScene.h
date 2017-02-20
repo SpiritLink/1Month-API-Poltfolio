@@ -88,21 +88,22 @@ public:
 class endingScene : public gameNode
 {
 private:
-	tileMap* _tileMap;
-	attackManager* _attackManager;
-	enemyManager* _enemyManager;
-	player* _player;
-	playerUI* _playerUI;
+	image* _IMG1;
+	image* _IMG2;
+	image* _IMG3;
+	image* _IMG4;
 
-	RECT Background;
+	image* _black;
+
+	int alphaValue;
+	int IMGNumber;
+	bool fadein;
 public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update();
 	virtual void render();
 
-	void cameraMove();
-	void cameraInit();
 	endingScene();
 	virtual ~endingScene();
 };

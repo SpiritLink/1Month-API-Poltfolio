@@ -40,10 +40,14 @@ void playerUI::render()
 		else _heart->frameRender(getMemDC(), 70 + _hpIMG->getFrameWidth() / 2 * i, 20, HP % 3, 0);
 	}
 
-	for (int i = 0; i < (MP - 1) / 10 + 1; ++i)
+	if (MP > 10)
 	{
-		if (i != (MP - 1) / 10) _number->frameRender(getMemDC(), 70 + _number->getFrameWidth() * i, 70, MP / 10, 0);
-		else _number->frameRender(getMemDC(), 70 + _number->getFrameWidth() * i, 70, MP % 10, 0);
+		_number->frameRender(getMemDC(), 70, 70, MP / 10, 0);
+		_number->frameRender(getMemDC(), 90, 70, MP % 10, 0);
+	}
+	else if (MP < 10)
+	{
+		_number->frameRender(getMemDC(), 70, 70, MP % 10, 0);
 	}
 }
 

@@ -31,7 +31,7 @@ HRESULT townScene::init()
 {
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
-	DATABASE->setDestCamY(WINSIZEY / 2);
+	DATABASE->setDestCamY(WINSIZEY - 150);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
@@ -53,6 +53,7 @@ HRESULT townScene::init()
 	_player = new player;
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
+	//플레이어의 위치를 설정해 주는 부분,
 	_player->setPlayerTilePosition(20557);
 	_player->setAttackManagerMemoryAddress(_attackManager);
 	_player->firstCollisionTileCheck();
@@ -190,6 +191,7 @@ void townScene::portal()
 		}
 		if (screenStatus == DARK)
 		{
+			DATABASE->setCollisionTile(20557);
 			SCENEMANAGER->changeScene("field1Scene");
 			return;
 		}
@@ -422,7 +424,7 @@ HRESULT field1Scene::init()
 	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(20557);
+	_player->setPlayerTilePosition(DATABASE->getCollisionTile());
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -798,6 +800,17 @@ field1Scene::~field1Scene()
 
 HRESULT endingScene::init()
 {
+	_IMG1 = IMAGEMANAGER->addImage("ending1", "IMAGE/background/ending1.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_IMG2 = IMAGEMANAGER->addImage("ending2", "IMAGE/background/ending2.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_IMG3 = IMAGEMANAGER->addImage("ending3", "IMAGE/background/ending3.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_IMG4 = IMAGEMANAGER->addImage("ending4", "IMAGE/background/ending4.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_black = IMAGEMANAGER->addImage("black", "IMAGE/background/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+
+	SOUNDMANAGER->addSound("endingSound", "SOUND/ending.ogg", true, true);
+	SOUNDMANAGER->playSound("endingSound", PointMake(0, 0));
+	alphaValue = 255;
+	IMGNumber = 1;
+	fadein = false;
 	return S_OK;
 }
 
@@ -807,19 +820,41 @@ void endingScene::release()
 
 void endingScene::update()
 {
+	if (fadein && IMGNumber < 4)
+	{
+		alphaValue++;
+		if (alphaValue > 255)
+		{
+			alphaValue = 255;
+			if (IMGNumber < 4)
+			{
+				IMGNumber++;
+				fadein = false;
+			}
+		}
+	}
+
+	if (!fadein)
+	{
+		alphaValue--;
+		if (alphaValue < 0)
+		{
+			alphaValue = 0;
+			fadein = true;
+		}
+	}
 }
 
 void endingScene::render()
 {
-}
-
-void endingScene::cameraMove()
-{
-}
-
-void endingScene::cameraInit()
-{
-
+	switch (IMGNumber)
+	{
+	case 1: _IMG1->render(getMemDC()); break;
+	case 2: _IMG2->render(getMemDC()); break;
+	case 3: _IMG3->render(getMemDC()); break;
+	case 4: _IMG4->render(getMemDC()); break;
+	}
+	_black->alphaRender(getMemDC(), alphaValue);
 }
 
 endingScene::endingScene()

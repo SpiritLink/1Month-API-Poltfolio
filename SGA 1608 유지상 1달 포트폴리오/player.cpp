@@ -15,7 +15,7 @@ HRESULT player::init()
 	//y = WINSIZEY / 2;
 	//MAXHP = 6;
 	//HP = 6;
-	//MP = 3;
+	//MP = 99;
 
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
@@ -491,6 +491,9 @@ void player::playerStatusCheck()
 {
 	//체력이 최대체력을 넘는다면 최대체력으로 고정시킵니다.
 	if (HP > MAXHP) HP = MAXHP;
+	//수리검의 최대치는 99개로
+	if (MP > 99) MP = 99;
+	if (MP < 0) MP = 0;
 
 	if (gravity > 1)
 	{
