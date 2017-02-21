@@ -22,6 +22,9 @@ private:
 	float currentTime;				//현재 시간을 저장하는 변수
 	float invincibleTime;			//무적 시간을 저장하는 변수
 	float countTime;
+	float saveTime;					//세이브를 제한시키기 위한 변수
+
+
 	RECT PlayerRect;
 	DIRECTION direction;			//방향을 확인하는 변수
 	bool attackType;				//공격의 종류를 바꿔주는 변수

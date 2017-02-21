@@ -10,6 +10,7 @@ HRESULT collision::init()
 
 	SOUNDMANAGER->addSound("item1", "SOUND/item.wav", false, false);
 	SOUNDMANAGER->addSound("item2", "SOUND/item2.wav", false, false);
+	SOUNDMANAGER->addSound("bell", "SOUND/bell.wav", false, false);
 	return S_OK;
 }
 
@@ -24,7 +25,12 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 	vector<attack*> _vAttack = VA;
 	vector<item*> _vItem = VI;
 
-	//->아이템과 플레이어가 충돌하면 특정 행동을 하도록 처리
+	//세이브의 무한 충돌을 방지하기 위한 장치
+	if (DATABASE->getSaveTime() + 0.5f < TIMEMANAGER->getWorldTime())
+	{
+		DATABASE->setCanSave(true);
+		DATABASE->setSaveTime(TIMEMANAGER->getWorldTime());
+	}
 
 	//공격과 플레이어 , 몬스터 충돌을 처리하고 있다.
 	if (attackCheckTime + ATTACKCHECKTIME < TIMEMANAGER->getWorldTime())
@@ -105,6 +111,14 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 					(*_viItem)->setItemCollision();
 					_player->addPlayerMP(5);
 					SOUNDMANAGER->playSound("item2", PointMake(0, 0));
+					break;
+				case ITEM_SAVEBELL:
+					if (DATABASE->getCanSave())
+					{
+						DATABASE->setCanSave(false);
+						DATABASE->saveDataToFile();
+						SOUNDMANAGER->playSound("bell", PointMake(0, 0));
+					}
 					break;
 				}
 			}

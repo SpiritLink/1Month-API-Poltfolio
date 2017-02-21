@@ -60,7 +60,6 @@ void player::render()
 	
 	playerRender();	//플레이어를 그리는 함수
 	testFunction();	//값을 표시하기 위한 테스트용 함수.
-	//Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
 }
 
 void player::keyboardInput()
@@ -497,8 +496,14 @@ void player::playerStatusCheck()
 
 	if (!(playerStatus & STATUS_PRAY) && keyStatus & KEYBOARD_DOWN)
 	{
+		//기도를 시작한 시간을 전송한다.
+		DATABASE->setSaveTime(TIMEMANAGER->getWorldTime());
 		playerStatus = playerStatus | STATUS_PRAY;
 		Action = Action | ACTION_PRAY;
+	}
+	if (!(playerStatus & STATUS_PRAY) && !(keyStatus & KEYBOARD_DOWN))
+	{
+		DATABASE->setCanSave(false);
 	}
 	if (playerStatus & STATUS_PRAY && !(keyStatus & KEYBOARD_DOWN))
 	{

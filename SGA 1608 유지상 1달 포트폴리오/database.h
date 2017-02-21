@@ -23,6 +23,9 @@ private:
 	int MP;					//플레이어의 MP
 	int MAXHP;				//플레이어의 최대체력
 	bool showPlayer;
+
+	float saveTime;
+	bool canSave;
 public:
 	HRESULT init();
 	void release();
@@ -46,6 +49,8 @@ public:
 	int getbackgroundCount() { return backgroundCount; }
 	bool getShowPlayer() { return showPlayer; }
 	int getMaxHP() { return MAXHP; }
+	float getSaveTime() { return saveTime; }
+	bool getCanSave() { return canSave; }
 
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
@@ -61,6 +66,8 @@ public:
 	void setEriX(float x) { eriX = x; }
 	void setEriY(float y) { eriY = y; }
 	void setMaxHP(int value) { MAXHP = value; }
+	void setSaveTime(float time) { saveTime = time; }
+	void setCanSave(bool can) { canSave = can; }
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.
 	void loadDataFromFile();	//플레이어의 정보를 파일로부터 불러오는 함수입니다.
