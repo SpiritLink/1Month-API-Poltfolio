@@ -119,13 +119,13 @@ void townScene::update()
 
 void townScene::render()
 {
-	_tileMap->render();
-	_enemyManager->render();
-	_player->render();
-	_attackManager->render();
-	_objectManager->render();
-	_playerUI->render();
-	_black->alphaRender(getMemDC(), alphaValue);
+	_tileMap->render();							//1.맵	최하위
+	_enemyManager->render();					//2.적
+	_objectManager->render();					//3.아이템
+	_player->render();							//4.플레이어
+	_attackManager->render();					//5.공격
+	_playerUI->render();						//6.인터페이스
+	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
 }
 
 void townScene::changeAlphaValue()
@@ -492,9 +492,9 @@ void field1Scene::render()
 	//렌더(그리는) 순서
 	_tileMap->render();							//1.맵		최하위
 	_enemyManager->render();					//2.적
-	_player->render();							//3.플레이어
-	_attackManager->render();					//4.공격	
-	_objectManager->render();					//5.아이템
+	_objectManager->render();					//3.아이템
+	_player->render();							//4.플레이어
+	_attackManager->render();					//5.공격	
 	_playerUI->render();						//6.UI	
 	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
 }
