@@ -7,7 +7,7 @@
 
 #define DEFAULT_SPEED 6
 #define IMAGESIZEX 336
-#define IMAGESIZEY 576
+#define IMAGESIZEY 640
 #define PLAYERAREAX 20
 #define PLAYERAREAY	30
 class player : public gameNode

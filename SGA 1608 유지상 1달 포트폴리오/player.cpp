@@ -4,7 +4,7 @@
 
 HRESULT player::init()
 {
-	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 18, true, RGB(0, 0, 255));
+	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 20, true, RGB(0, 0, 255));
 	x = DATABASE->getPlayerX();	//싱글톤으로 부터
 	y = DATABASE->getPlayerY();	//싱글톤으로 부터
 	MAXHP = DATABASE->getMaxHP();
@@ -60,7 +60,7 @@ void player::render()
 	
 	playerRender();	//플레이어를 그리는 함수
 	testFunction();	//값을 표시하기 위한 테스트용 함수.
-	Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
+	//Rectangle(getMemDC(), PlayerRect.left, PlayerRect.top, PlayerRect.right, PlayerRect.bottom);
 }
 
 void player::keyboardInput()
@@ -495,6 +495,16 @@ void player::playerStatusCheck()
 	if (MP > 99) MP = 99;
 	if (MP < 0) MP = 0;
 
+	if (!(playerStatus & STATUS_PRAY) && keyStatus & KEYBOARD_DOWN)
+	{
+		playerStatus = playerStatus | STATUS_PRAY;
+		Action = Action | ACTION_PRAY;
+	}
+	if (playerStatus & STATUS_PRAY && !(keyStatus & KEYBOARD_DOWN))
+	{
+		if (playerStatus & STATUS_PRAY) playerStatus -= STATUS_PRAY;
+		if (Action & ACTION_PRAY) Action -= ACTION_PRAY;
+	}
 	if (gravity > 1)
 	{
 		playerStatus = playerStatus | STATUS_LAND;						//점프 상태로 변경함
@@ -611,11 +621,12 @@ void player::playerRender()
 	}
 
 	//최대 프레임이 넘어가면 초기화 하는 부분
-	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK)) 	frameCount = 0;
+
+	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK) && !(playerStatus & STATUS_PRAY)) 	frameCount = 0;
 	if (playerStatus & STATUS_RUN && !(playerStatus & STATUS_ATTACK))	if (frameCount > 5) frameCount = 0;	//달리면서 공격을 안할때
 	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
 	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
-
+	if (playerStatus & STATUS_PRAY && !(playerStatus & STATUS_ATTACK))	if (frameCount > 6) frameCount = 6;	//기도중일때
 	//점프공격 , 땅에서 공격, 움직이면서 공격을 다 처리해 줘야 한다.
 	if (playerStatus & STATUS_ATTACK)	
 		if (frameCount > 2)
@@ -656,7 +667,13 @@ void player::playerRender()
 				break;
 			}
 		}
+		if (playerStatus & STATUS_PRAY)
+		{
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 18, alphaValue);
+			break;
+		}
 		break;
+
 	case LEFT:
 		if(playerStatus & STATUS_STAND)
 			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1, alphaValue);
@@ -683,6 +700,11 @@ void player::playerRender()
 				playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17, alphaValue);
 				break;
 			}
+		}
+		if (playerStatus & STATUS_PRAY)
+		{
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 19, alphaValue);
+			break;
 		}
 		break;
 	}
