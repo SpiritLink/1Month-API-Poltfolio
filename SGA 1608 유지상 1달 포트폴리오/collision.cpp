@@ -7,6 +7,7 @@ HRESULT collision::init()
 	attackCheckTime = TIMEMANAGER->getWorldTime();
 	bodyCheckTime = TIMEMANAGER->getWorldTime();
 	itemCheckTime = TIMEMANAGER->getWorldTime();
+	shakeTime = 0;
 
 	SOUNDMANAGER->addSound("item1", "SOUND/item.wav", false, false);
 	SOUNDMANAGER->addSound("item2", "SOUND/item2.wav", false, false);
@@ -20,6 +21,7 @@ void collision::release()
 
 void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector<item*> VI)
 {
+	screenShake();
 	_player = PL;
 	vector<enemy*> _vEnemy = VE;
 	vector<attack*> _vAttack = VA;
@@ -51,6 +53,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect())
 						&& !(*_viAttack)->getCheckCollision() && (*_viEnemy)->getEnemyAlive())
 					{
+						shakeTime = TIMEMANAGER->getWorldTime();
 						SOUNDMANAGER->playSound("hit", PointMake((*_viAttack)->getAttackX(), (*_viAttack)->getAttackY()));
 						(*_viAttack)->collisionTrue();
 						(*_viAttack)->setFrameCountZero();
@@ -131,6 +134,43 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 
 void collision::render()
 {
+}
+
+void collision::screenShake()
+{
+	int shakeCount = (TIMEMANAGER->getWorldTime() - shakeTime) / 0.025f;
+
+	//xÁÂÇ¥¸¸ ¸ÕÀú Èçµé¾î º¸ÀÚ.
+	switch (shakeCount)
+	{
+	case 1:	DATABASE->setDestCamX(WINSIZEX / 2 - TILESIZE); 
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	case 2:	DATABASE->setDestCamX(WINSIZEX / 2); 
+		DATABASE->setDestCamY(WINSIZEY - 200);
+		break;
+	case 3:	DATABASE->setDestCamX(WINSIZEX / 2 + TILESIZE); 
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	case 4:	DATABASE->setDestCamX(WINSIZEX / 2); 
+		DATABASE->setDestCamY(WINSIZEY - 100);
+		break;
+	case 5:	DATABASE->setDestCamX(WINSIZEX / 2 - TILESIZE);
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	case 6:	DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 200);
+		break;
+	case 7:	DATABASE->setDestCamX(WINSIZEX / 2 + TILESIZE);
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	case 8:	DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 100);
+		break;
+	default: DATABASE->setDestCamX(WINSIZEX / 2); 
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	}
 }
 
 collision::collision()

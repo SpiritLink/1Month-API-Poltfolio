@@ -26,6 +26,8 @@ private:
 
 	float saveTime;
 	bool canSave;
+
+	bool goEnding;			//엔딩으로 갈지 확인하는 변수
 public:
 	HRESULT init();
 	void release();
@@ -51,6 +53,7 @@ public:
 	int getMaxHP() { return MAXHP; }
 	float getSaveTime() { return saveTime; }
 	bool getCanSave() { return canSave; }
+	bool getGoEnding() { return goEnding; }
 
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
@@ -68,6 +71,7 @@ public:
 	void setMaxHP(int value) { MAXHP = value; }
 	void setSaveTime(float time) { saveTime = time; }
 	void setCanSave(bool can) { canSave = can; }
+	void setGoEnding(bool value) { goEnding = value; }
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.
 	void loadDataFromFile();	//플레이어의 정보를 파일로부터 불러오는 함수입니다.

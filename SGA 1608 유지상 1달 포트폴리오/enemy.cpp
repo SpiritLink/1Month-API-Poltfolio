@@ -673,7 +673,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right )/ 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
-	HP = 40;
+	HP = 10;
 	die = false;
 	alive = true;
 
@@ -708,11 +708,15 @@ void eri::update()
 	frameUpdate();
 	collisionTileCheck();	//충돌 타일 번호를 업데이트 합니다.
 	eriGravity();				//타일을 확인하고 중력을 처리합니다.
+
+	if (HP <= 0)
+	{
+		DATABASE->setGoEnding(true);//게임 엔딩으로 향하라고 변수를 변경함
+	}
 }
 
 void eri::render()
 {
-	//Rectangle(getMemDC(), detectArea.left, detectArea.top, detectArea.right, detectArea.bottom);
 	switch (status)
 	{
 	case ACTION_NONE:

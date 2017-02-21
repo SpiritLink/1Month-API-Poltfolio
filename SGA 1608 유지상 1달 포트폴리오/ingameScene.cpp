@@ -405,7 +405,7 @@ HRESULT field1Scene::init()
 {
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
-	DATABASE->setDestCamY(WINSIZEY / 2);
+	DATABASE->setDestCamY(WINSIZEY - 150);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI,black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
@@ -788,6 +788,12 @@ void field1Scene::portal()
 		_player->update();
 		cameraInit();
 		break;
+	}
+
+	if (DATABASE->getGoEnding())
+	{
+		SCENEMANAGER->changeScene("endingScene");
+		return;
 	}
 }
 

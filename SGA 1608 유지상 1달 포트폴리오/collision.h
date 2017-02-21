@@ -21,12 +21,14 @@ private:
 	float attackCheckTime;
 	float bodyCheckTime;
 	float itemCheckTime;
+	float shakeTime;
 public:
 	virtual HRESULT init();
 	virtual void release();
 	virtual void update(player* _player, vector<enemy*> _vEnemy, vector<attack*> _vAttack,vector<item*> _vItem);
 	virtual void render();
 
+	void screenShake();
 	collision();
 	virtual ~collision();
 };
