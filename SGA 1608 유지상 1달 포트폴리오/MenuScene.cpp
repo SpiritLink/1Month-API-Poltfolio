@@ -21,6 +21,7 @@ HRESULT MenuScene::init()
 	SOUNDMANAGER->addSound("stage1", "SOUND/stage1.ogg", true, true);
 	SOUNDMANAGER->addSound("stage2", "SOUND/stage2.ogg", true, true);
 	SOUNDMANAGER->addSound("stage3", "SOUND/stage3.ogg", true, true);
+	SOUNDMANAGER->addSound("battle1", "SOUND/battle1.ogg", true, true);
 
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;

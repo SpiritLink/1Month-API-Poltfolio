@@ -684,6 +684,8 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	hitTime = TIMEMANAGER->getWorldTime();
 	finalActionTime = TIMEMANAGER->getWorldTime();
 	invincible = false;	// 현재 무적상태가 아님
+	dieCheck = false;
+	dieTime = 0;
 
 	firstCollisionTileCheck();	//처음 충돌타일이 몇번인지 확인합니다.
 	return S_OK;
@@ -707,6 +709,17 @@ void eri::update()
 	eriGravity();				//타일을 확인하고 중력을 처리합니다.
 
 	if (HP <= 0)
+	{
+		status = ACTION_DIE;
+		frameCount = 0;
+		if (!(dieCheck))
+		{
+			dieCheck = true;
+			dieTime = TIMEMANAGER->getWorldTime();
+		}
+	}
+
+	if (dieCheck && dieTime + 4.0f < TIMEMANAGER->getWorldTime())
 	{
 		DATABASE->setGoEnding(true);//게임 엔딩으로 향하라고 변수를 변경함
 	}
@@ -749,9 +762,13 @@ void eri::render()
 		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 14);
 		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 15);
 		break;
+	case ACTION_DIE:
+		if (dir == RIGHT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 16);
+		if (dir == LEFT)	_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() + 22, frameCount, 17);
+		break;
 	}
 	RectangleMakeCenter(getMemDC(), x, y, 5, 5);
-	testFunction();			//실험용 함수입니다.
+	//testFunction();			//실험용 함수입니다.
 }
 
 void eri::frameUpdate()
@@ -905,7 +922,7 @@ void eri::eriAI()
 		checkXAndMove(dir, ERISPEED);
 		break;
 	case ACTION_CHARGE:
-		if (finalActionTime + 2.0f < TIMEMANAGER->getWorldTime())	//차지를 2초동안 한뒤
+		if (finalActionTime + 1.0f < TIMEMANAGER->getWorldTime())	//차지를 2초동안 한뒤
 		{
 			frameCount = 0;
 			switch (RND->getFromIntTo(0, 1))
@@ -939,7 +956,7 @@ void eri::eriAI()
 	case ACTION_THROW_ATTACK:
 		break;
 	case ACTION_DIZZY:
-		if (finalActionTime + 2.5f < TIMEMANAGER->getWorldTime())
+		if (finalActionTime + 1.5f < TIMEMANAGER->getWorldTime())
 		{
 			if (x > DATABASE->getPlayerX()) dir = LEFT;
 			if (x < DATABASE->getPlayerX()) dir = RIGHT;

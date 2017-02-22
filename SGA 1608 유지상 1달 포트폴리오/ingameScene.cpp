@@ -811,7 +811,7 @@ void field1Scene::portal()
 	case 5722:
 	case 5572:
 		SOUNDMANAGER->stopAllSound();
-		SOUNDMANAGER->play("stage3", 0.5f);
+		SOUNDMANAGER->play("battle1", 0.5f);
 		_player->setPlayerTilePosition(15137);
 		_player->firstCollisionTileCheck();
 		_player->update();
