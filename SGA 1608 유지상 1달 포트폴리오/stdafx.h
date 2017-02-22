@@ -113,7 +113,8 @@ enum STATUS
 	STATUS_JUMP = 1 << 2,
 	STATUS_LAND = 1 << 3,
 	STATUS_ATTACK = 1 << 4,
-	STATUS_PRAY = 1 << 5
+	STATUS_PRAY = 1 << 5,
+	STATUS_DIE = 1 << 6
 };
 
 enum ACTION
@@ -127,7 +128,8 @@ enum ACTION
 	ACTION_BACKDASH = 1 << 6,
 	ACTION_DASH = 1 << 7,
 	ACTION_DIZZY = 1 << 8,
-	ACTION_PRAY = 1 << 9
+	ACTION_PRAY = 1 << 9,
+	ACTION_DIE = 1 << 10
 };
 
 enum ATTACKTYPE

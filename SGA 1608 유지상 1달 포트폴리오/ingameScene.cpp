@@ -508,6 +508,16 @@ void field1Scene::initEnemy()
 	_enemyManager->setOko(9644);
 	_enemyManager->setOko(9646);
 	_enemyManager->setEri(15718);
+
+	_enemyManager->setBomb(8524);
+	_enemyManager->setBomb(8525);
+	_enemyManager->setBomb(8526);
+	_enemyManager->setBomb(8527);
+	_enemyManager->setBomb(8528);
+	_enemyManager->setBomb(8529);
+	_enemyManager->setBomb(8530);
+	_enemyManager->setBomb(8531);
+	_enemyManager->setBomb(8532);
 }
 
 void field1Scene::cameraMove()

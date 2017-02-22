@@ -48,8 +48,7 @@ void player::update()
 	collisionTileCheck();	//몇번 타일에 충돌중인지
 	keyboardInput();		//어떤 키보드 입력을 받았는지
 	playerStatusCheck();	//플레이어의 상태는 어떤지
-	if(KEYMANAGER->isToggleKey('Y')) playerMove();			//플레이어의 상태와 키보드의 상태에 따라 움직임을 결정함
-	if(!(KEYMANAGER->isToggleKey('Y'))) testPlayerMove();
+	if(!(playerStatus == STATUS_DIE)) playerMove();			//죽지 않았으면 움직임
 	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
 	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY - 5, PLAYERAREAX, PLAYERAREAY);
@@ -428,6 +427,8 @@ void player::testFunction()
 	char str18[128];
 	char str19[128];
 	char str20[128];
+	char str21[128];
+	char str22[128];
 
 	if (keyStatus & KEYBOARD_LEFT)	sprintf(str1, "←"); else sprintf(str1, " ");
 	if (keyStatus & KEYBOARD_RIGHT) sprintf(str2, "→"); else sprintf(str2, " ");
@@ -464,7 +465,12 @@ void player::testFunction()
 	case OBJ_PIXEL:		sprintf(str20, "OBJ_PIXEL"); break;
 	}
 	
-	SetTextColor(getMemDC(), RGB(255, 255, 255));
+	if (playerStatus & STATUS_DIE)	sprintf(str21, "STATUS_DIE");
+	else if (!(playerStatus & STATUS_DIE)) sprintf(str21, " ");
+	if (Action & ACTION_DIE)	sprintf(str22, "ACTION_DIE");
+	else if (!(Action & ACTION_DIE))	sprintf(str22, " ");
+
+	SetTextColor(getMemDC(), RGB(255, 0, 0));
 	TextOut(getMemDC(), 300, 20, str1, strlen(str1));
 	TextOut(getMemDC(), 320, 20, str2, strlen(str2));
 	TextOut(getMemDC(), 340, 20, str3, strlen(str3));
@@ -474,16 +480,18 @@ void player::testFunction()
 	TextOut(getMemDC(), 420, 20, str7, strlen(str7));
 	TextOut(getMemDC(), 440, 20, str8, strlen(str8));
 	TextOut(getMemDC(), 480, 20, str9, strlen(str9));
-	TextOut(getMemDC(), 100, 300, str10, strlen(str10));
-	TextOut(getMemDC(), 100, 330, str11, strlen(str11));
-	TextOut(getMemDC(), 100, 360, str12, strlen(str12));
-	TextOut(getMemDC(), 100, 390, str13, strlen(str13));
-	TextOut(getMemDC(), 100, 420, str14, strlen(str14));
-	TextOut(getMemDC(), 100, 450, str15, strlen(str15));
-	TextOut(getMemDC(), 100, 480, str16, strlen(str16));
-	TextOut(getMemDC(), 100, 510, str17, strlen(str17));
-	TextOut(getMemDC(), 100, 540, str18, strlen(str18));
+	TextOut(getMemDC(), 100, 100, str10, strlen(str10));
+	TextOut(getMemDC(), 100, 130, str11, strlen(str11));
+	TextOut(getMemDC(), 100, 160, str12, strlen(str12));
+	TextOut(getMemDC(), 100, 190, str13, strlen(str13));
+	TextOut(getMemDC(), 100, 220, str14, strlen(str14));
+	TextOut(getMemDC(), 100, 250, str15, strlen(str15));
+	TextOut(getMemDC(), 100, 280, str16, strlen(str16));
+	TextOut(getMemDC(), 100, 310, str17, strlen(str17));
+	TextOut(getMemDC(), 100, 340, str18, strlen(str18));
 	TextOut(getMemDC(), WINSIZEX / 2, WINSIZEY / 2, str20, strlen(str20));		//중점으로 부터 플레이어 까지의 거리
+	TextOut(getMemDC(), 100, 370, str21, strlen(str21));
+	TextOut(getMemDC(), 100, 400, str22, strlen(str22));
 }
 
 void player::playerStatusCheck()
@@ -540,7 +548,17 @@ void player::playerStatusCheck()
 		if (playerStatus & STATUS_LAND) playerStatus -= STATUS_LAND;
 	}
 
-	if (keyStatus & KEYBOARD_Z) playerAttack();
+	if ((keyStatus & KEYBOARD_Z) && !(playerStatus & STATUS_DIE)) playerAttack();
+
+	if (HP <= 0 && !(playerStatus & STATUS_DIE))
+	{
+		frameCount = 0;
+	}
+	if (HP <= 0 )
+	{
+		playerStatus = STATUS_DIE;
+		Action = ACTION_DIE;
+	}
 
 }
 
@@ -632,6 +650,7 @@ void player::playerRender()
 	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
 	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
 	if (playerStatus & STATUS_PRAY && !(playerStatus & STATUS_ATTACK))	if (frameCount > 6) frameCount = 6;	//기도중일때
+	if (playerStatus == STATUS_DIE) if (frameCount > 16) frameCount = 16;
 	//점프공격 , 땅에서 공격, 움직이면서 공격을 다 처리해 줘야 한다.
 	if (playerStatus & STATUS_ATTACK)	
 		if (frameCount > 2)
@@ -677,6 +696,7 @@ void player::playerRender()
 			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 18, alphaValue);
 			break;
 		}
+		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 20, alphaValue);
 		break;
 
 	case LEFT:
@@ -711,6 +731,7 @@ void player::playerRender()
 			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 19, alphaValue);
 			break;
 		}
+		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 21, alphaValue);
 		break;
 	}
 

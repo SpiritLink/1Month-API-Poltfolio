@@ -36,8 +36,8 @@ void playerUI::render()
 
 	for (int i = 0; i < (HP - 1) / 3 + 1; ++i)
 	{
-		if (i != (HP - 1) / 3) _heart->frameRender(getMemDC(), 70 + _hpIMG->getFrameWidth() / 2 * i, 20, 0, 0);
-		else _heart->frameRender(getMemDC(), 70 + _hpIMG->getFrameWidth() / 2 * i, 20, HP % 3, 0);
+		if (i != (HP - 1) / 3 && HP > 0) _heart->frameRender(getMemDC(), 70 + _hpIMG->getFrameWidth() / 2 * i, 20, 0, 0);
+		else if(HP > 0) _heart->frameRender(getMemDC(), 70 + _hpIMG->getFrameWidth() / 2 * i, 20, HP % 3, 0);
 	}
 
 	if (MP > 10)
