@@ -34,7 +34,9 @@ HRESULT townScene::init()
 	DATABASE->setDestCamY(WINSIZEY - 150);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
+	_sceneNumber = 1;
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
 	alphaValue = 255;
 	screenStatus = FADE_IN;
 
@@ -406,7 +408,8 @@ HRESULT field1Scene::init()
 	DATABASE->setDestCamY(WINSIZEY - 150);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	
-	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI,black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_sceneNumber = 2;
+	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 	alphaValue = 255;
 	screenStatus = FADE_IN;
 

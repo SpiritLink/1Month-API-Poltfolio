@@ -104,6 +104,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 		}
 	}
 
+	//플레이어와 아이템간 충돌을 처리하고 있다.
 	if (itemCheckTime + ITEMCHECKTIME < TIMEMANAGER->getWorldTime())
 	{
 		itemCheckTime = TIMEMANAGER->getWorldTime();

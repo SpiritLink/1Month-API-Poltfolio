@@ -8,7 +8,7 @@
 #include "enemyManager.h"
 #include "objectManager.h"
 
-#define ATTACKCHECKTIME 0.05f
+#define ATTACKCHECKTIME 0.03f
 #define BODYCHECKTIME 0.1f
 #define ITEMCHECKTIME 0.1f
 class collision
