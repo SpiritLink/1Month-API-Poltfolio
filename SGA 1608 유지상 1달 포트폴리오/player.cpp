@@ -5,8 +5,8 @@
 HRESULT player::init()
 {
 	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 7, 20, true, RGB(0, 0, 255));
-	x = DATABASE->getPlayerX();	//½Ì±ÛÅæÀ¸·Î ºÎÅÍ
-	y = DATABASE->getPlayerY();	//½Ì±ÛÅæÀ¸·Î ºÎÅÍ
+	x = (_tileMap->getTiles()[DATABASE->getCollisionTile()].rc.left + _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.right) / 2;	//½Ì±ÛÅæÀ¸·Î ºÎÅÍ
+	y = _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.top;	//½Ì±ÛÅæÀ¸·Î ºÎÅÍ
 	MAXHP = DATABASE->getMaxHP();
 	HP = DATABASE->getHP();
 	MP = DATABASE->getMP();

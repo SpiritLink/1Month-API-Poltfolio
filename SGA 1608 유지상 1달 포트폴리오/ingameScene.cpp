@@ -52,11 +52,9 @@ HRESULT townScene::init()
 	_enemyManager->init(_tileMap, _attackManager, _objectManager);
 
 	_player = new player;
-	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
-	//플레이어의 위치를 설정해 주는 부분,
-	_player->setPlayerTilePosition(20557);
 	_player->setAttackManagerMemoryAddress(_attackManager);
+	_player->init();
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -426,10 +424,10 @@ HRESULT field1Scene::init()
 	_enemyManager->init(_tileMap, _attackManager, _objectManager);
 
 	_player = new player;
-	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(DATABASE->getCollisionTile());
+	_player->init();
+	//_player->setPlayerTilePosition(DATABASE->getCollisionTile());
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -444,6 +442,10 @@ HRESULT field1Scene::init()
 
 	//적 배치 (나중에 함수로 분리하자)
 	initEnemy();
+	_objectManager->setSavebell(18620);
+	_objectManager->setSavebell(13089);
+	_objectManager->setSavebell(10405);
+	_objectManager->setSavebell(6217);
 
 	return S_OK;
 }

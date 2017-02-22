@@ -69,9 +69,9 @@ void MenuScene::render()
 		case 1: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 150, 120);		break;
 		case 2: IMAGEMANAGER->findImage("saveArea")->alphaRender(getMemDC(), 0, 300, 120);		break;
 		case 3: 
-			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	
+			if(!(deleteFile))	IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	
+			if(deleteFile)		IMAGEMANAGER->findImage("selectDeleteArea")->render(getMemDC(), 50, 500);
 			IMAGEMANAGER->findImage("DeleteSaveFile")->alphaRender(getMemDC(), 55, 503, 120);
-			
 			break;
 		case 4:	
 			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	
