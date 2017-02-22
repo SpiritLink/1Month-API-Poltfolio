@@ -10,18 +10,6 @@
 #include "collision.h"
 
 
-class ingameScene : public gameNode
-{
-public:
-	virtual HRESULT init();
-	virtual void release();
-	virtual void update();
-	virtual void render();
-
-	ingameScene();
-	virtual ~ingameScene();
-};
-
 class townScene : public gameNode
 {
 private:
@@ -37,7 +25,7 @@ private:
 
 	image* _black;
 	image* _white;
-	int alphaValue;	//화면의 페이드인 , 페이드 아웃을 표시하기 위한 변수
+	int alphaValue;				//화면의 페이드인 , 페이드 아웃을 표시하기 위한 변수
 	SCREENSTATUS screenStatus;	//페이드 인 , 페이드 아웃이 끝났음을 확인하기 위한 변수.
 
 public:
@@ -67,6 +55,7 @@ private:
 	RECT Background;				//임계영역 설정 (접근 불가)
 
 	image* _black;
+	image* _white;
 	int alphaValue;	//화면의 페이드인 , 페이드 아웃을 표시하기 위한 변수
 	SCREENSTATUS screenStatus;	//페이드 인 , 페이드 아웃이 끝났음을 확인하기 위한 변수.
 

@@ -27,6 +27,9 @@ private:
 	float saveTime;
 	bool canSave;
 
+	int blackAlphaValue;	//검은 화면의 투명도를 결정합니다.
+	int whiteAlphaValue;	//흰 화면의 투명도를 결정합니다.
+
 	bool goEnding;			//엔딩으로 갈지 확인하는 변수
 public:
 	HRESULT init();
@@ -54,6 +57,8 @@ public:
 	float getSaveTime() { return saveTime; }
 	bool getCanSave() { return canSave; }
 	bool getGoEnding() { return goEnding; }
+	int getBlackAlphaValue() { return blackAlphaValue; }
+	int getWhiteAlphaValue() { return whiteAlphaValue; }
 
 	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
@@ -72,6 +77,8 @@ public:
 	void setSaveTime(float time) { saveTime = time; }
 	void setCanSave(bool can) { canSave = can; }
 	void setGoEnding(bool value) { goEnding = value; }
+	void setBlackAlphaValue(int value) { blackAlphaValue = value; }
+	void setWhiteAlphaValue(int value) { whiteAlphaValue = value; }
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.
 	void loadDataFromFile();	//플레이어의 정보를 파일로부터 불러오는 함수입니다.

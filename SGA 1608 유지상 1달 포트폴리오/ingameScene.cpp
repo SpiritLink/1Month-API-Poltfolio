@@ -1,32 +1,6 @@
 #include "stdafx.h"
 #include "ingameScene.h"
 
-
-HRESULT ingameScene::init()
-{
-	return S_OK;
-}
-
-void ingameScene::release()
-{
-}
-
-void ingameScene::update()
-{
-}
-
-void ingameScene::render()
-{
-}
-
-ingameScene::ingameScene()
-{
-}
-
-ingameScene::~ingameScene()
-{
-}
-
 HRESULT townScene::init()
 {
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
@@ -126,6 +100,7 @@ void townScene::render()
 	_attackManager->render();					//5.공격
 	_playerUI->render();						//6.인터페이스
 	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
+	_white->alphaRender(getMemDC(), alphaValue);//8.전환효과 최상위
 }
 
 void townScene::changeAlphaValue()
@@ -410,6 +385,7 @@ HRESULT field1Scene::init()
 	
 	_sceneNumber = 2;
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
 	alphaValue = 255;
 	screenStatus = FADE_IN;
 
@@ -430,7 +406,6 @@ HRESULT field1Scene::init()
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
 	_player->init();
-	//_player->setPlayerTilePosition(DATABASE->getCollisionTile());
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;
@@ -502,6 +477,7 @@ void field1Scene::render()
 	_attackManager->render();					//5.공격	
 	_playerUI->render();						//6.UI	
 	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
+	_white->alphaRender(getMemDC(), alphaValue);//8.전환효과 최상위
 }
 
 void field1Scene::initEnemy()

@@ -111,8 +111,6 @@ void soundManager::play(string keyName, float volume)
 
 			else if (!(_channel[count]->getPaused(&isPlay))) resume(keyName);
 		}
-
-
 	}
 }
 
