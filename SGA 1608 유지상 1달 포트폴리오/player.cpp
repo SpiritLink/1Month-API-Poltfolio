@@ -550,10 +550,7 @@ void player::playerStatusCheck()
 
 	if ((keyStatus & KEYBOARD_Z) && !(playerStatus & STATUS_DIE)) playerAttack();
 
-	if (HP <= 0 && !(playerStatus & STATUS_DIE))
-	{
-		frameCount = 0;
-	}
+	if (HP <= 0 && !(playerStatus & STATUS_DIE))	frameCount = 0;
 	if (HP <= 0 )
 	{
 		playerStatus = STATUS_DIE;

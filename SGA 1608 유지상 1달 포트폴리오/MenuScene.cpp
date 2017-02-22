@@ -254,6 +254,49 @@ void MenuScene::keyboardInput()
 		showKey = false;
 		showMenu = true;
 	}
+
+	if (deleteFile)
+	{
+		switch (selectFile)
+		{
+		case 0:
+			_saveCount = 0;
+			DATABASE->setCollisionTile(-1);
+			DATABASE->setPlayerX(-1);
+			DATABASE->setPlayerY(-1);
+			DATABASE->setMaxHP(-1);
+			_sceneNumber = 1;
+			DATABASE->saveDataToFile();
+			deleteFile = false;
+			selectFile = -1;
+			initData();
+			break;
+		case 1:
+			_saveCount = 1;
+			DATABASE->setCollisionTile(-1);
+			DATABASE->setPlayerX(-1);
+			DATABASE->setPlayerY(-1);
+			DATABASE->setMaxHP(-1);
+			_sceneNumber = 1;
+			DATABASE->saveDataToFile();
+			deleteFile = false;
+			selectFile = -1;
+			initData();
+			break;
+		case 2:
+			_saveCount = 2;
+			DATABASE->setCollisionTile(-1);
+			DATABASE->setPlayerX(-1);
+			DATABASE->setPlayerY(-1);
+			DATABASE->setMaxHP(-1);
+			_sceneNumber = 1;
+			DATABASE->saveDataToFile();
+			deleteFile = false;
+			selectFile = -1;
+			initData();
+			break;
+		}
+	}
 }
 
 void MenuScene::changeScene()

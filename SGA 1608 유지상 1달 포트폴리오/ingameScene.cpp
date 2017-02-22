@@ -6,6 +6,7 @@ HRESULT townScene::init()
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY - 150);
+	SOUNDMANAGER->addSound("stage1", "SOUND/stage1.ogg", true, true);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
 	_sceneNumber = 1;

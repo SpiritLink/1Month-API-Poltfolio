@@ -54,6 +54,16 @@ void database::loadDataFromFile()
 			case 4:	MP = (int)atoi(arrString[i].c_str()); break;
 			}
 		}
+
+		//데이터중 일부라도 정상적인 데이터가 아니라면 (초기화한 데이터라면)
+		if (_sceneNumber == -1 || playerCollisionTile == -1 || MAXHP == -1 || HP == -1 || MP == -1)
+		{
+			_sceneNumber = 1;
+			playerCollisionTile = 20709;
+			MAXHP = DEFAULT_MAXHP;
+			HP = DEFAULT_HP;
+			MP = DEFAULT_MP;
+		}
 	}
 }
 

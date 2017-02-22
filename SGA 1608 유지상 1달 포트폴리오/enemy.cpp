@@ -25,7 +25,6 @@ enemy::enemy()
 {
 }
 
-
 enemy::~enemy()
 {
 }
@@ -57,7 +56,7 @@ void alien::release()
 
 void alien::update()
 {
-	detectArea = RectMakeCenter(x, y, 400, 400);
+	detectArea = RectMakeCenter(x, y, 600, 600);
 	_hitArea = RectMakeCenter(x, y, _image->getFrameWidth() - 30, _image->getFrameHeight() - 20);
 
 	if (PtInRect(&detectArea, PointMake(DATABASE->getPlayerX(), DATABASE->getPlayerY())) && !(nowDetect))
