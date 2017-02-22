@@ -22,7 +22,6 @@ private:
 	int HP;					//플레이어의 HP
 	int MP;					//플레이어의 MP
 	int MAXHP;				//플레이어의 최대체력
-	bool showPlayer;
 
 	float saveTime;
 	bool canSave;
@@ -31,6 +30,9 @@ private:
 	int whiteAlphaValue;	//흰 화면의 투명도를 결정합니다.
 
 	bool goEnding;			//엔딩으로 갈지 확인하는 변수
+	bool playerDie;			//플레이어가 죽었는지 확인하는 변수
+	bool restart;			//죽은뒤 리스타트를 선택했을때
+	bool menu;				//죽은뒤 메뉴를 선택했을때
 public:
 	HRESULT init();
 	void release();
@@ -52,15 +54,16 @@ public:
 	float getEriX() { return eriX; }
 	float getEriY() { return eriY; }
 	int getbackgroundCount() { return backgroundCount; }
-	bool getShowPlayer() { return showPlayer; }
 	int getMaxHP() { return MAXHP; }
 	float getSaveTime() { return saveTime; }
 	bool getCanSave() { return canSave; }
 	bool getGoEnding() { return goEnding; }
 	int getBlackAlphaValue() { return blackAlphaValue; }
 	int getWhiteAlphaValue() { return whiteAlphaValue; }
+	bool getPlayerDie() { return playerDie; }
+	bool getRestart() { return restart; }
+	bool getMenu() { return menu; }
 
-	bool setShowPlayer(bool trueOrFalse) { showPlayer = trueOrFalse; }
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
 	void setSourCamY(int Y) { sourCamY = Y; }	//기준점 (플레이어) Y를 설정
 	void setDestCamX(int X) { destCamX = X; }	//목적지점 (시야) X를 설정
@@ -79,13 +82,17 @@ public:
 	void setGoEnding(bool value) { goEnding = value; }
 	void setBlackAlphaValue(int value) { blackAlphaValue = value; }
 	void setWhiteAlphaValue(int value) { whiteAlphaValue = value; }
+	void setPlayerDie(bool value) { playerDie = value; }
+	void setRestart(bool value) { restart = value; }
+	void setMenu(bool value) { menu = value; }
+
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.
 	void loadDataFromFile();	//플레이어의 정보를 파일로부터 불러오는 함수입니다.
 	vector<string> loadDataFromFile(int value);	//플레이어의 정보를 불러온뒤 반환하는 함수입니다.
 	void addBackgroundCount(int value) { backgroundCount += value; }
 	
-	void initBackgroundCount() { backgroundCount = 0; }
+	void initBackgroundCount() {  }
 	database();
 	~database();
 };

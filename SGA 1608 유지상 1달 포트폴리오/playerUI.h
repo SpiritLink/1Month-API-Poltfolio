@@ -13,7 +13,15 @@ private:
 	int HP;
 	int MP;
 
+	image* _menuButton;
+	image* _menuButton2;
+	image* _restartButton;
+	image* _restartButton2;
+	image* _gameOver;
 	float currentTime;
+
+	int alphaValue;
+	int menuSelect;
 
 public:
 	virtual HRESULT init();

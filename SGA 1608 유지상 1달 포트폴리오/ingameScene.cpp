@@ -6,6 +6,9 @@ HRESULT townScene::init()
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY - 150);
+	DATABASE->setMenu(false);
+	DATABASE->setRestart(false);
+	DATABASE->setPlayerDie(false);
 	SOUNDMANAGER->addSound("stage1", "SOUND/stage1.ogg", true, true);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
@@ -181,8 +184,19 @@ void townScene::portal()
 			SCENEMANAGER->changeScene("field1Scene");
 			return;
 		}
-		
 	}
+	if (DATABASE->getRestart())
+	{
+		DATABASE->loadDataFromFile();
+		this->init();
+	}
+
+	if (DATABASE->getMenu())
+	{
+		SCENEMANAGER->changeScene("menuScene");
+		return;
+	}
+
 
 }
 
@@ -388,6 +402,9 @@ HRESULT field1Scene::init()
 	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY - 150);
+	DATABASE->setMenu(false);
+	DATABASE->setRestart(false);
+	DATABASE->setPlayerDie(false);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	
 	_sceneNumber = 2;
@@ -798,6 +815,17 @@ void field1Scene::portal()
 	if (DATABASE->getGoEnding())
 	{
 		SCENEMANAGER->changeScene("endingScene");
+		return;
+	}
+	if (DATABASE->getRestart())
+	{
+		DATABASE->loadDataFromFile();
+		this->init();
+	}
+
+	if (DATABASE->getMenu())
+	{
+		SCENEMANAGER->changeScene("menuScene");
 		return;
 	}
 }

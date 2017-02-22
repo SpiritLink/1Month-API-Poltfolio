@@ -91,7 +91,15 @@ database::~database()
 
 HRESULT database::init()
 {
-	initBackgroundCount();
+	backgroundCount = 0;
+	_saveCount = -1;		//플레이어의 세이브 카운트
+	_sceneNumber = 0;		//씬전환시 구분하기 위한 카운트
+	goEnding = false;
+	whiteAlphaValue = 0;
+	playerDie = false;
+	restart = false;
+	menu = false;
+
 	return S_OK;
 }
 

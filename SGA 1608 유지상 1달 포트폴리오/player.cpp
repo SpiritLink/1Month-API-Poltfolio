@@ -46,9 +46,9 @@ void player::release()
 void player::update()
 {
 	collisionTileCheck();	//몇번 타일에 충돌중인지
-	keyboardInput();		//어떤 키보드 입력을 받았는지
+	if(!(playerStatus & STATUS_DIE)) keyboardInput();		//어떤 키보드 입력을 받았는지
 	playerStatusCheck();	//플레이어의 상태는 어떤지
-	if(!(playerStatus == STATUS_DIE)) playerMove();			//죽지 않았으면 움직임
+	if(!(playerStatus & STATUS_DIE)) playerMove();			//죽지 않았으면 움직임
 	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
 
 	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY - 5, PLAYERAREAX, PLAYERAREAY);
@@ -555,7 +555,9 @@ void player::playerStatusCheck()
 	{
 		playerStatus = STATUS_DIE;
 		Action = ACTION_DIE;
+		DATABASE->setPlayerDie(true);	//플레이어가 죽었다는 데이터를 전송한다.
 	}
+	
 
 }
 
