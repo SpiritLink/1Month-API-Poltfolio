@@ -9,7 +9,6 @@ HRESULT townScene::init()
 	DATABASE->setMenu(false);
 	DATABASE->setRestart(false);
 	DATABASE->setPlayerDie(false);
-	SOUNDMANAGER->addSound("stage1", "SOUND/stage1.ogg", true, true);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
 	_sceneNumber = 1;
@@ -57,6 +56,8 @@ HRESULT townScene::init()
 	_player->update();
 	cameraInit();//카메라의 위치를 세팅합니다.
 	_objectManager->setSavebell(21344);
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->playSound("stage1", PointMake(0, 0));
 	return S_OK;
 }
 
@@ -449,6 +450,8 @@ HRESULT field1Scene::init()
 	_objectManager->setSavebell(10405);
 	_objectManager->setSavebell(6217);
 
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->play("stage2",0.5f);
 	return S_OK;
 }
 
@@ -787,16 +790,18 @@ void field1Scene::portal()
 		_player->setPlayerTilePosition(16398);
 		_player->firstCollisionTileCheck();
 		_player->update();
-		cameraInit();
+		//cameraInit();
 		break;
 	case 14748:									//2스테이지 에서 3스테이지로 넘기는 부분
 	case 14749:
 		_player->setPlayerTilePosition(13698);
 		_player->firstCollisionTileCheck();
 		_player->update();
-		cameraInit();
+		//cameraInit();
 		break;
 	case 15289:
+		SOUNDMANAGER->stopAllSound();
+		SOUNDMANAGER->play("stage2", 0.5f);
 		_player->setPlayerTilePosition(5873);
 		_player->firstCollisionTileCheck();
 		_player->update();
@@ -805,6 +810,8 @@ void field1Scene::portal()
 	case 5872:
 	case 5722:
 	case 5572:
+		SOUNDMANAGER->stopAllSound();
+		SOUNDMANAGER->play("stage3", 0.5f);
 		_player->setPlayerTilePosition(15137);
 		_player->firstCollisionTileCheck();
 		_player->update();
@@ -814,6 +821,7 @@ void field1Scene::portal()
 
 	if (DATABASE->getGoEnding())
 	{
+		SOUNDMANAGER->stopAllSound();
 		SCENEMANAGER->changeScene("endingScene");
 		return;
 	}

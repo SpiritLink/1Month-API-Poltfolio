@@ -17,6 +17,11 @@ HRESULT MenuScene::init()
 	IMAGEMANAGER->addImage("DeleteSaveFile", "IMAGE/UI/DeleteSaveFile.bmp", 190, 41, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("selectDeleteArea", "IMAGE/UI/selectDeleteArea.bmp", 200, 51, true, RGB(255, 0, 0));
 
+	SOUNDMANAGER->addSound("title", "SOUND/title.ogg", true, true);
+	SOUNDMANAGER->addSound("stage1", "SOUND/stage1.ogg", true, true);
+	SOUNDMANAGER->addSound("stage2", "SOUND/stage2.ogg", true, true);
+	SOUNDMANAGER->addSound("stage3", "SOUND/stage3.ogg", true, true);
+
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;
 	showLogo = false;
@@ -27,7 +32,8 @@ HRESULT MenuScene::init()
 	fadeOut = false;
 	selectFile = -1;
 	deleteFile = false;
-	
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->play("title", 0.5f);
 	return S_OK;
 }
 

@@ -37,21 +37,8 @@ public:
 	void addSound(string keyName, string soundName, bool background, bool loop);
 	void play(string keyName, float volume);
 	void playSound(string keyName, POINT position);	//좌표에 따라 소리의 크기가 달라지는 함수입니다.
-	void stop(string keyName)
-	{
-		arrSoundsIter iter = _mTotalSounds.begin();
-
-		int count = 0;
-
-		for (iter; iter != _mTotalSounds.end(); ++iter, count++)
-		{
-			if (keyName == iter->first)
-			{
-				_channel[count]->stop();
-				break;
-			}
-		}
-	}
+	void stop(string keyName);
+	void stopAllSound();
 	void pause(string keyName);
 	void resume(string keyName);
 

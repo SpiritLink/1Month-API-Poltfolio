@@ -109,7 +109,12 @@ void soundManager::play(string keyName, float volume)
 				break;
 			}
 
-			else if (!(_channel[count]->getPaused(&isPlay))) resume(keyName);
+			else if (!(_channel[count]->isPlaying(&isPlay)))
+			{
+				_system->playSound(FMOD_CHANNEL_FREE, *(iter->second), false, &_channel[count]);
+				_channel[count]->setVolume(volume);
+				break;
+			}
 		}
 	}
 }
@@ -138,6 +143,33 @@ void soundManager::playSound(string keyName, POINT position)
 				break;
 			}
 		}
+	}
+}
+
+void soundManager::stop(string keyName)
+{
+	arrSoundsIter iter = _mTotalSounds.begin();
+
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		if (keyName == iter->first)
+		{
+			_channel[count]->stop();
+			break;
+		}
+	}
+}
+
+void soundManager::stopAllSound()
+{
+	arrSoundsIter iter = _mTotalSounds.begin();
+	int count = 0;
+
+	for (iter; iter != _mTotalSounds.end(); ++iter, count++)
+	{
+		_channel[count]->stop();
 	}
 }
 
