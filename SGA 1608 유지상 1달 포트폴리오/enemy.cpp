@@ -678,7 +678,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	alive = true;
 
 	//멤버 변수 초기화
-	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1536, 8, 16, true, RGB(0, 0, 255));
+	_image = IMAGEMANAGER->addFrameImage("eri", "IMAGE/enemy/eri.bmp", 768, 1728, 8, 18, true, RGB(0, 0, 255));
 	chargeAura = IMAGEMANAGER->addFrameImage("chargeAura", "IMAGE/EFFECT/chargeAura(dark).bmp", 312, 52, 6, 1, true, RGB(0, 0, 0));
 	auraCount = 0;
 	dir = LEFT;

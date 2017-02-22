@@ -13,6 +13,7 @@ private:
 	int alphaValue;		//메뉴 알파렌더를 위한 변수
 	bool fadeOut;		//화면이 어두워지게 할지 밝게 할지 결정
 	float currentTime;	//시간을 저장하는 변수값
+	bool deleteFile;	//세이브 파일 삭제를 위한 변수
 
 	int MAXHP[3];		//세이브 목록에 표시하기 위한 변수
 	int HP[3];			//세이브 목록에 표시하기 위한 변수

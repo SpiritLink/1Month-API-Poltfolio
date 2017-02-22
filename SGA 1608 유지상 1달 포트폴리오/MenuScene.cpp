@@ -15,6 +15,7 @@ HRESULT MenuScene::init()
 	IMAGEMANAGER->addFrameImage("heart", "IMAGE/UI/heart2.bmp", 84, 24, 3, 1, true, RGB(255, 255, 255));
 	IMAGEMANAGER->addImage("Controls", "IMAGE/UI/Controls.bmp", 190, 41, true, RGB(255, 0, 0));
 	IMAGEMANAGER->addImage("DeleteSaveFile", "IMAGE/UI/DeleteSaveFile.bmp", 190, 41, true, RGB(255, 0, 0));
+	IMAGEMANAGER->addImage("selectDeleteArea", "IMAGE/UI/selectDeleteArea.bmp", 200, 51, true, RGB(255, 0, 0));
 
 	currentTime = TIMEMANAGER->getWorldTime();
 	showName = true;
@@ -25,6 +26,7 @@ HRESULT MenuScene::init()
 	alphaValue = 0;
 	fadeOut = false;
 	selectFile = -1;
+	deleteFile = false;
 	
 	return S_OK;
 }
@@ -51,7 +53,11 @@ void MenuScene::render()
 		if (SelectMenu != 0)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 0);
 		if (SelectMenu != 1)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 150);
 		if (SelectMenu != 2)IMAGEMANAGER->findImage("saveArea")->render(getMemDC(), 0, 300);
-		if (SelectMenu != 3)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
+		if (SelectMenu != 3)
+		{
+			if(!(deleteFile))	IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 50, 500);
+			if(deleteFile)		IMAGEMANAGER->findImage("selectDeleteArea")->render(getMemDC(), 50, 500);
+		}
 		if (SelectMenu != 3)IMAGEMANAGER->findImage("DeleteSaveFile")->render(getMemDC(), 55, 503);
 		if (SelectMenu != 4)IMAGEMANAGER->findImage("selectArea")->render(getMemDC(), 300, 500);
 		if (SelectMenu != 4)IMAGEMANAGER->findImage("Controls")->render(getMemDC(), 305, 503);
@@ -65,6 +71,7 @@ void MenuScene::render()
 		case 3: 
 			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 50, 500, 120);	
 			IMAGEMANAGER->findImage("DeleteSaveFile")->alphaRender(getMemDC(), 55, 503, 120);
+			
 			break;
 		case 4:	
 			IMAGEMANAGER->findImage("selectArea")->alphaRender(getMemDC(), 300, 500, 120);	
@@ -211,7 +218,13 @@ void MenuScene::keyboardInput()
 			}
 			selectFile = 2; 
 			break;		//3번째 세이브 파일
-		case 3:	break;		//딜리트 세이브 파일
+		case 3:
+			switch (deleteFile)
+			{
+			case true: deleteFile = false;	break;
+			case false: deleteFile = true;	break;
+			}
+			break;		//딜리트 세이브 파일
 			//사용하는 키 안내
 		case 4:
 			showMenu = false;
