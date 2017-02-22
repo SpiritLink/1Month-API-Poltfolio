@@ -133,6 +133,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 					if (DATABASE->getCanSave())
 					{
 						DATABASE->setCanSave(false);
+						DATABASE->setWhiteAlphaValue(255);
 						DATABASE->saveDataToFile();
 						SOUNDMANAGER->playSound("bell", PointMake(0, 0));
 					}

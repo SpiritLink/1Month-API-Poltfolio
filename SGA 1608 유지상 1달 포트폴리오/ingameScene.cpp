@@ -100,7 +100,7 @@ void townScene::render()
 	_attackManager->render();					//5.공격
 	_playerUI->render();						//6.인터페이스
 	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
-	_white->alphaRender(getMemDC(), alphaValue);//8.전환효과 최상위
+	_white->alphaRender(getMemDC(), DATABASE->getWhiteAlphaValue());//8.전환효과 최상위
 }
 
 void townScene::changeAlphaValue()
@@ -133,6 +133,12 @@ void townScene::changeAlphaValue()
 			screenStatus = DARK;
 		}
 		break;
+	}
+
+	if (DATABASE->getWhiteAlphaValue() > 0)
+	{
+		DATABASE->setWhiteAlphaValue(DATABASE->getWhiteAlphaValue() - 5);
+		if (DATABASE->getWhiteAlphaValue() < 0) DATABASE->setWhiteAlphaValue(0);
 	}
 }
 
@@ -477,7 +483,7 @@ void field1Scene::render()
 	_attackManager->render();					//5.공격	
 	_playerUI->render();						//6.UI	
 	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
-	_white->alphaRender(getMemDC(), alphaValue);//8.전환효과 최상위
+	_white->alphaRender(getMemDC(), DATABASE->getWhiteAlphaValue());//8.전환효과 최상위
 }
 
 void field1Scene::initEnemy()
@@ -730,6 +736,13 @@ void field1Scene::changeAlphaValue()
 		}
 		break;
 	}
+
+	if (DATABASE->getWhiteAlphaValue() > 0)
+	{
+		DATABASE->setWhiteAlphaValue(DATABASE->getWhiteAlphaValue() - 5);
+		if (DATABASE->getWhiteAlphaValue() < 0) DATABASE->setWhiteAlphaValue(0);
+	}
+
 }
 
 void field1Scene::portal()
