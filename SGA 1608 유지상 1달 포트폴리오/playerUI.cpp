@@ -39,19 +39,12 @@ void playerUI::update()
 
 	if (DATABASE->getPlayerDie())
 	{
-
 		alphaValue += 2;
 		if (alphaValue >= 255) alphaValue = 255;
 		
-		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-		{
-			if(menuSelect < 1) menuSelect++;
-		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT) && menuSelect < 1) menuSelect++;
 
-		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-		{
-			if(menuSelect > 0) menuSelect--;
-		}
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT) && menuSelect > 0) menuSelect--;
 
 		if (KEYMANAGER->isOnceKeyDown('Z'))
 		{
@@ -69,6 +62,7 @@ void playerUI::render()
 	_hpFrame->render(getMemDC(), 20, 20);
 	_sealFrame->render(getMemDC(), 20, 70);
 
+	//플레이어가 죽지 않았다면 HP와 수리검을 표시합니다.
 	if (!(DATABASE->getPlayerDie()))
 	{
 		for (int i = 0; i < (HP - 1) / 3 + 1; ++i)
@@ -87,6 +81,8 @@ void playerUI::render()
 			_number->frameRender(getMemDC(), 70, 70, MP % 10, 0);
 		}
 	}
+
+	//플레이어가 죽었다면 게임오버 , 메뉴선택 화면을 표시합니다.
 	if (DATABASE->getPlayerDie())
 	{
 		_gameOver->alphaRender(getMemDC(), (WINSIZEX - _gameOver->getWidth()) / 2, ((WINSIZEY / 2) - _gameOver->getHeight()) / 2,alphaValue);

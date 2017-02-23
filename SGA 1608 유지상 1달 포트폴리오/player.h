@@ -24,7 +24,6 @@ private:
 	float countTime;
 	float saveTime;					//세이브를 제한시키기 위한 변수
 
-
 	RECT PlayerRect;
 	DIRECTION direction;			//방향을 확인하는 변수
 	bool attackType;				//공격의 종류를 바꿔주는 변수
@@ -41,9 +40,7 @@ private:
 	int playerStatus;	//AND , OR 연산을 통한 검출 현재 상태를 확인하는 변수
 	int Action;			//AND , OR 연산을 통한 검출 현재 행동을 확인하는 변수
 
-	//->키보드에서 해당 값을 빼내야 할때 만약 keyStatus & LEFT 면 keyStatus - LEFT하도록 처리해야 할것 같다.
-
-	int alphaValue;
+	int alphaValue;		//플레이어 알파 렌더를 위한 변수
 public:
 	virtual HRESULT init();
 	virtual void release();

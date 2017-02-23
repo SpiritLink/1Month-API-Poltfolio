@@ -53,7 +53,6 @@ void heart::update()
 
 void heart::render()
 {
-	//Rectangle(getMemDC(), itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
 	_IMG->frameRender(getMemDC(), x - _IMG->getFrameWidth() / 2, y - _IMG->getFrameWidth() / 2, frameCount, 0);
 }
 
@@ -86,7 +85,6 @@ void shuriken::update()
 
 void shuriken::render()
 {
-	//Rectangle(getMemDC(), itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
 	_IMG->render(getMemDC(), x - _IMG->getWidth() / 2, y - _IMG->getHeight() / 2);
 }
 

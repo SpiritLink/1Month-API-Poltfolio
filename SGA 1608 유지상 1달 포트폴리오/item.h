@@ -16,15 +16,15 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void addItemX(int value) { x += value; }
-	void addItemY(int value) { y += value; }
-	int getItemX() { return x; }
-	int getItemY() { return y; }
-	bool getItemCollision() { return collision; }
-	RECT getItemRect() { return itemRect; }
-	ITEMTYPE getItemType() { return itemType; }
+	void addItemX(int value) { x += value; }		//아이템의 X좌표에 파라미터 만큼 추가
+	void addItemY(int value) { y += value; }		//아이템의 Y좌표에 파라미터 만큼 추가
+	int getItemX() { return x; }					//아이템의 X좌표 바환
+	int getItemY() { return y; }					//아이템의 Y좌표 반환
+	bool getItemCollision() { return collision; }	//아이템의 충돌 여부 반환 (플레이어가 습득했는지)
+	RECT getItemRect() { return itemRect; }			//아이템의 충돌 영역 반환 
+	ITEMTYPE getItemType() { return itemType; }		//아이템의 종류 반환
 	
-	void setItemCollision() { collision = true; }
+	void setItemCollision() { collision = true; }	//아이템을 충돌시키는 함수
 	item();
 	virtual ~item();
 };
