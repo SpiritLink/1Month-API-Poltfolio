@@ -33,6 +33,7 @@ void objectManager::render()
 {
 	for (_viItem = _vItem.begin(); _viItem != _vItem.end(); ++_viItem)
 	{
+		//화면 내의 좌표 + TILESIZE 안에 있는 아이템만 화면에 출력합니다.
 		if ((*_viItem)->getItemX() > -TILESIZE && (*_viItem)->getItemX() < WINSIZEX + TILESIZE &&
 			(*_viItem)->getItemY() > -TILESIZE && (*_viItem)->getItemY() < WINSIZEY + TILESIZE)
 		{

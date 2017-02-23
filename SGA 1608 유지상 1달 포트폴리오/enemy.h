@@ -26,18 +26,18 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void addEnemyX(int value) { x += value; }
-	void addEnemyY(int value) { y += value; }
-	void addEnemyHP(int value) { HP += value; }
-	void setAliveFalse() { alive = false; }
-	void setFrameCountZero() { frameCount = 0; }
+	void addEnemyX(int value) { x += value; }	//에너미의 X좌표에 파라미터만큼 값을 더한다.
+	void addEnemyY(int value) { y += value; }	//에너미의 Y좌표에 파라미터만큼 값을 더한다.
+	void addEnemyHP(int value) { HP += value; }	//에너미의 HP에 파라미터만큼 값을 더한다.
+	void setAliveFalse() { alive = false; }		//에너미의 생존을 false로 바꾼다.
+	void setFrameCountZero() { frameCount = 0; }//에너미의 프레임 카운트를 0으로 바꾼다. 
 
 	RECT getEnemyRect() { return _hitArea; }	//적의 RECT를 반환한다.
-	int getEnemyHP() { return HP; }
-	bool getEnemyDie() { return die; };
-	bool getEnemyAlive() { return alive; }
-	int getEnemyX() { return x; }
-	int getEnemyY() { return y; }
+	int getEnemyHP() { return HP; }				//에너미의 HP를 반환한다.
+	bool getEnemyDie() { return die; };			//에너미의 죽은 여부를 반환한다.
+	bool getEnemyAlive() { return alive; }		//에너미의 생존 여부를 반환한다.
+	int getEnemyX() { return x; }				//에너미의 X좌표를 반환한다.
+	int getEnemyY() { return y; }				//에너미의 Y좌표를 반환한다.
 
 	enemy();
 	virtual ~enemy();
@@ -171,7 +171,6 @@ private:
 	float finalActionTime;		//마지막 동작을 끝낸 시간을 기록한다. (패턴 사이에 텀을 두기 위해서)
 	float hitTime;				//공격을 받을때 여러개를 한번에 받지 못하게 처리한다.
 	bool invincible;			//무적 상태를 표시하는 변수
-
 	int currentCollisionTile;	//현재 충돌중인 타일을 확인할 변수
 
 	image* chargeAura;			//보스 전용 차지 이펙트
@@ -189,12 +188,9 @@ public:
 	void firstCollisionTileCheck();	//처음 모든타일과 충돌을 체크합니다.
 	void collisionTileCheck();		//이후 주변 타일과 충돌을 체크합니다.
 	void eriAI();					//보스몬스터 eri의 AI입니다.
-	bool checkXAndMove(DIRECTION dir,int value);		//X좌표지점의 상태를 확인하고 이동시킴.
-
+	bool checkXAndMove(DIRECTION dir,int value);	//X좌표지점의 상태를 확인하고 이동시킴.
 	void eriGravity();				// 보스용 이동 함수
-
-	void testFunction();		//테스트용 함수입니다.
-
+	void testFunction();			//테스트용 함수입니다.
 
 	eri();
 	virtual ~eri();

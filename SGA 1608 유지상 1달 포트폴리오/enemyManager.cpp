@@ -24,10 +24,9 @@ void enemyManager::update()
 {
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end();)
 	{
-		//죽고나서 렌더가 끝났는지 확인하고 지우게 처리해야 할듯
 		if ((*_viEnemy)->getEnemyDie())
 		{
-			//랜덤한 수를 만든 다음에 그에맞게 만들어 주던지 해야할듯
+			//적이 죽었을때 20퍼센트 확률로 체력회복 아이템, 50퍼센트 확률로 수리검, 30퍼센트 확률로 꽝이 생성된다.
 			switch (RND->getFromIntTo(1, 10))
 			{
 			case 1:	_objectManager->setHeart((*_viEnemy)->getEnemyX(), (*_viEnemy)->getEnemyY()); break;
@@ -67,6 +66,7 @@ void enemyManager::render()
 {
 	for (_viEnemy = _vEnemy.begin(); _viEnemy != _vEnemy.end(); ++_viEnemy)
 	{
+		//화면 + TILESIZE 좌표 안에 있는 적들만 그립니다. (부하 최소화)
 		if ((*_viEnemy)->getEnemyX() < WINSIZEX + 50 && (*_viEnemy)->getEnemyX() > -TILESIZE &&
 			(*_viEnemy)->getEnemyY() < WINSIZEY + 50 && (*_viEnemy)->getEnemyY() > -TILESIZE)
 		{
