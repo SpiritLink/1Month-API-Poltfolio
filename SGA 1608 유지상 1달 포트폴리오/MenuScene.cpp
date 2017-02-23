@@ -118,6 +118,7 @@ void MenuScene::render()
 			10,					//자간
 			TEXT("Consolas"));	//폰트
 
+		SetBkMode(getMemDC(),TRANSPARENT);
 		SetTextColor(getMemDC(), RGB(216, 213, 199));
 		oldFont = (HFONT)SelectObject(getMemDC(), font1);
 		sprintf(str, "New Game");
