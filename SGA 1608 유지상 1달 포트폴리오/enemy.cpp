@@ -670,7 +670,7 @@ HRESULT eri::init(int tileNum, tileMap * tileMap, attackManager* ATM)
 	x = (_tileMap->getTiles()[tileNum].rc.left + _tileMap->getTiles()[tileNum].rc.right )/ 2;
 	y = (_tileMap->getTiles()[tileNum].rc.top + _tileMap->getTiles()[tileNum].rc.bottom) / 2;
 	frameCount = 0;
-	HP = 10;
+	HP = 25;
 	die = false;
 	alive = true;
 
@@ -906,13 +906,13 @@ void eri::eriAI()
 		{
 			switch (RND->getFromIntTo(0, 6))
 			{
-			//case 0: status = ACTION_BACKDASH; break;
+			case 0: status = ACTION_BACKDASH; break;
 			case 1: status = ACTION_CHARGE; break;
-				//case 2: status = ACTION_DASH; break;
-				//case 3: status = ACTION_THROW_ATTACK; break;
-			//case 4: status = ACTION_RUN; break;
-			//case 5:	status = ACTION_SLASH_ATTACK; break;
-			//case 6: status = ACTION_THROW_ATTACK; break;
+			case 2: status = ACTION_DASH; break;
+			case 3: status = ACTION_THROW_ATTACK; break;
+			case 4: status = ACTION_RUN; break;
+			case 5:	status = ACTION_SLASH_ATTACK; break;
+			case 6: status = ACTION_THROW_ATTACK; break;
 			}
 
 			finalActionTime = TIMEMANAGER->getWorldTime();

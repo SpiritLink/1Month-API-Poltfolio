@@ -25,8 +25,8 @@ HRESULT townScene::init()
 	_tileMap->init("DATA/MAP/Town.map");
 
 	_objectManager = new objectManager;
-	_objectManager->init();
 	_objectManager->setTileMapMemoryAddress(_tileMap);
+	_objectManager->init();
 
 	_attackManager = new attackManager;
 	_attackManager->init();
@@ -50,6 +50,7 @@ HRESULT townScene::init()
 	initEnemyAndObject();//오브젝트를 배치합니다.
 	_player->update();	//플레이어의 좌표를 싱글톤에 전송합니다.
 	cameraInit();		//카메라의 위치를 세팅합니다.
+	_objectManager->setSavebell(21344);
 
 
 	return S_OK;
@@ -386,7 +387,6 @@ void townScene::initEnemyAndObject()
 	_enemyManager->setBomb(21551);
 	_enemyManager->setBomb(21552);
 	_enemyManager->setFlower(21101);
-	_objectManager->setSavebell(21344);
 }
 
 townScene::townScene()
@@ -407,8 +407,6 @@ HRESULT field1Scene::init()
 	DATABASE->setRestart(false);
 	DATABASE->setPlayerDie(false);
 	DATABASE->setBossDie(false);
-	SOUNDMANAGER->stopAllSound();
-	SOUNDMANAGER->play("stage2", 0.5f);
 	_sceneNumber = 2;
 	alphaValue = 255;
 	screenStatus = FADE_IN;
@@ -449,6 +447,9 @@ HRESULT field1Scene::init()
 	cameraInit();		//카메라를 셋팅합니다.
 	initEnemyAndObject();//오브젝트를 배치합니다.
 
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->play("stage2", 0.5f);
+
 	return S_OK;
 }
 
@@ -486,6 +487,11 @@ void field1Scene::update()
 	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());	//충돌
 	_objectManager->update();	//6.아이템
 	_playerUI->update();		//7.UI
+	if (KEYMANAGER->isStayKeyDown('R'))
+	{
+		DATABASE->setSourCamX(_tileMap->getTiles()[1661].rc.right);
+		DATABASE->setSourCamY(_tileMap->getTiles()[1661].rc.bottom);
+	}
 	cameraMove();				//8.카메라 (이동)
 	changeAlphaValue();			//9.화면 전환효과 (페이드인 , 아웃)
 	portal();					//10.포탈 (특정 A좌표 -> 특정 B좌표 이동)
@@ -840,7 +846,11 @@ void field1Scene::portal()
 	if (DATABASE->getRestart())
 	{
 		DATABASE->loadDataFromFile();
-		this->init();
+		switch (_sceneNumber)
+		{
+		case 1:SCENEMANAGER->changeScene("townScene");	break;
+		case 2:	this->init();	break;
+		}
 	}
 
 	//플레이어가 죽은뒤 메뉴를 선택했다면 메뉴씬으로 전환합니다.
@@ -867,6 +877,9 @@ HRESULT endingScene::init()
 	_IMG2 = IMAGEMANAGER->addImage("ending2", "IMAGE/background/ending2.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 	_IMG3 = IMAGEMANAGER->addImage("ending3", "IMAGE/background/ending3.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 	_IMG4 = IMAGEMANAGER->addImage("ending4", "IMAGE/background/ending4.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_IMG5 = IMAGEMANAGER->addImage("ending5", "IMAGE/background/ending5.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
+	_IMG6 = IMAGEMANAGER->addImage("ending6", "IMAGE/background/ending6.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 0, 0));
+
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/background/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 
 	SOUNDMANAGER->addSound("endingSound", "SOUND/ending.ogg", true, true);
@@ -883,13 +896,13 @@ void endingScene::release()
 
 void endingScene::update()
 {
-	if (fadein && IMGNumber < 4)
+	if (fadein && IMGNumber < 6)
 	{
 		alphaValue++;
 		if (alphaValue > 255)
 		{
 			alphaValue = 255;
-			if (IMGNumber < 4)
+			if (IMGNumber < 6)
 			{
 				IMGNumber++;
 				fadein = false;
@@ -916,6 +929,8 @@ void endingScene::render()
 	case 2: _IMG2->render(getMemDC()); break;
 	case 3: _IMG3->render(getMemDC()); break;
 	case 4: _IMG4->render(getMemDC()); break;
+	case 5:	_IMG5->render(getMemDC()); break;
+	case 6: _IMG6->render(getMemDC()); break;
 	}
 	_black->alphaRender(getMemDC(), alphaValue);
 }

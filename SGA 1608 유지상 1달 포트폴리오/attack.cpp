@@ -135,6 +135,10 @@ HRESULT eriWave::init(float inputX, float inputY)
 	x = inputX;
 	y = inputY;
 	die = false;
+
+	frameCount = 0;
+	countTime = TIMEMANAGER->getWorldTime();
+	_image = IMAGEMANAGER->addFrameImage("eriWave", "IMAGE/attack/eriWave.bmp", 224, 112, 4, 2, true, RGB(0, 128, 128));
 	return S_OK;
 }
 
@@ -144,7 +148,13 @@ void eriWave::release()
 
 void eriWave::update()
 {
-	_RECT = RectMakeCenter(x, y, 50, 100);
+	if (countTime + 0.05f < TIMEMANAGER->getWorldTime())
+	{
+		countTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+		if (frameCount > 3) frameCount = 0;
+	}
+	_RECT = RectMakeCenter(x, y, 56, 56);
 	switch (_attackType)
 	{
 	case ATTACK_ERI_WAVE_LEFT:
@@ -159,7 +169,11 @@ void eriWave::update()
 
 void eriWave::render()
 {
-	Rectangle(getMemDC(), _RECT.left, _RECT.top, _RECT.right, _RECT.bottom);
+	switch (_attackType)
+	{
+	case ATTACK_ERI_WAVE_LEFT:_image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 1); break;
+	case ATTACK_ERI_WAVE_RIGHT: _image->frameRender(getMemDC(), x - _image->getFrameWidth() / 2, y - _image->getFrameHeight() / 2, frameCount, 0); break;
+	}
 }
 
 eriWave::eriWave()

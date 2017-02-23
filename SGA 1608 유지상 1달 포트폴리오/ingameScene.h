@@ -83,6 +83,9 @@ private:
 	image* _IMG2;
 	image* _IMG3;
 	image* _IMG4;
+	image* _IMG5;
+	image* _IMG6;
+
 	image* _black;
 
 	int alphaValue;

@@ -70,6 +70,9 @@ public:
 
 class eriWave : public attack
 {
+private:
+	int frameCount;
+	float countTime;
 public:
 	virtual HRESULT init(float inputX, float inputY);
 	virtual void release();
