@@ -143,13 +143,10 @@ void townScene::changeAlphaValue()
 
 void townScene::portal()
 {
-	//플레이어가 특정 타일에 닿으면 다른 타일로 이동시키는 함수.
-	//이동할수 있는 타일을 좀더 넉넉하게 설정해주자.
-	//충돌구간이 순간적으로 이동하기 때문에 첫 충돌을 한번더 실행시켜줘야 한다.
-
+	//플레이어가 특정 좌표에 도달하면 다른 좌표로 이동시키는 함수
 	switch (_player->getCollisionTile())
 	{
-	case 20988:
+	case 20988:	//townScene에서 field1씬으로 넘깁니다.
 	case 20989:
 	case 20990:
 	case 20991:
@@ -169,10 +166,7 @@ void townScene::portal()
 	case 21440:
 	case 21441:
 	case 21442:
-		if (screenStatus == SHOW)
-		{
-			screenStatus = FADE_OUT;
-		}
+		if (screenStatus == SHOW) 	screenStatus = FADE_OUT;
 		if (screenStatus == DARK)
 		{
 			DATABASE->setCollisionTile(20557);
@@ -180,12 +174,15 @@ void townScene::portal()
 			return;
 		}
 	}
+	
+	//플레이어가 죽은뒤 재도전 버튼을 눌렀을때
 	if (DATABASE->getRestart())
 	{
 		DATABASE->loadDataFromFile();
 		this->init();
 	}
 
+	//플레이어가 죽은뒤 메뉴 버튼을 눌렀을때
 	if (DATABASE->getMenu())
 	{
 		SCENEMANAGER->changeScene("menuScene");
@@ -195,24 +192,12 @@ void townScene::portal()
 
 void townScene::cameraMove()
 {
-	//현재는 사실상 쓰이지 않고 있습니다.
-	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
-	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+	//목적 좌표와 현재 좌표 사이의 거리를 구합니다.
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
 
 
 	//만약 화면을 벗어난다면
-	if (Background.right < WINSIZEX)
-	{
-		int diffrence = WINSIZEX - Background.right;
-		Background.right += diffrence;	//배경의 움직이는 정도를 조절
-		Background.left += diffrence;	//배경의 움직이는 정도를 조정
-		_tileMap->moveTileX(diffrence);
-		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
-		_enemyManager->addEnemyX(diffrence);
-		_objectManager->addItemX(diffrence);
-	}
 	if (Background.left > 0)
 	{
 		int diffrence = Background.left;
@@ -223,6 +208,7 @@ void townScene::cameraMove()
 		_enemyManager->addEnemyX(-diffrence);
 		_objectManager->addItemX(-diffrence);
 	}
+
 	if (Background.top > 0)
 	{
 		int diffrence = Background.top;
@@ -232,6 +218,17 @@ void townScene::cameraMove()
 		_tileMap->moveTileY(-diffrence);
 		_enemyManager->addEnemyY(-diffrence);
 		_objectManager->addItemY(-diffrence);
+	}
+
+	if (Background.right < WINSIZEX)
+	{
+		int diffrence = WINSIZEX - Background.right;
+		Background.right += diffrence;	//배경의 움직이는 정도를 조절
+		Background.left += diffrence;	//배경의 움직이는 정도를 조정
+		_tileMap->moveTileX(diffrence);
+		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_enemyManager->addEnemyX(diffrence);
+		_objectManager->addItemX(diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -296,21 +293,11 @@ void townScene::cameraMove()
 
 void townScene::cameraInit()
 {
-	//현재는 사실상 쓰이지 않고 있습니다.
-	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
-	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+	//목적 좌표와 현재 좌표 사이의 거리를 구합니다.
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
 
 	//만약 화면을 벗어난다면
-	if (Background.right < WINSIZEX)
-	{
-		int diffrence = WINSIZEX - Background.right;
-		Background.right += diffrence;	//배경의 움직이는 정도를 조절
-		Background.left += diffrence;	//배경의 움직이는 정도를 조정
-		_tileMap->moveTileX(diffrence);
-		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
-	}
 	if (Background.left > 0)
 	{
 		int diffrence = Background.left;
@@ -319,6 +306,7 @@ void townScene::cameraInit()
 		_player->addPlayerX(+diffrence);
 		_tileMap->moveTileX(-diffrence);
 	}
+
 	if (Background.top > 0)
 	{
 		int diffrence = Background.top;
@@ -326,6 +314,15 @@ void townScene::cameraInit()
 		Background.bottom -= diffrence;
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
+	}
+
+	if (Background.right < WINSIZEX)
+	{
+		int diffrence = WINSIZEX - Background.right;
+		Background.right += diffrence;	//배경의 움직이는 정도를 조절
+		Background.left += diffrence;	//배경의 움직이는 정도를 조정
+		_tileMap->moveTileX(diffrence);
+		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -382,6 +379,7 @@ void townScene::cameraInit()
 
 void townScene::initEnemyAndObject()
 {
+	//몬스터와 세이브 장소를 생성하는 함수입니다.
 	_enemyManager->setBomb(21548);
 	_enemyManager->setBomb(21549);
 	_enemyManager->setBomb(21550);
@@ -414,12 +412,13 @@ HRESULT field1Scene::init()
 	_sceneNumber = 2;
 	alphaValue = 255;
 	screenStatus = FADE_IN;
+	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);	//임계영역 설정을 위해서
 
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
 
-
+	//-------------------클래스 객체 동적할당-----------------------//
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Field1.map");
 
@@ -444,12 +443,11 @@ HRESULT field1Scene::init()
 
 	_collision = new collision;
 	_collision->init();
+	//-------------------------------------------------------------//
 
-	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);	//임계영역 설정을 위해서
-	_player->update();
-	cameraInit();
-
-	initEnemyAndObject();
+	_player->update();	//플레이어의 좌표를 싱글톤으로 전송합니다.
+	cameraInit();		//카메라를 셋팅합니다.
+	initEnemyAndObject();//오브젝트를 배치합니다.
 
 	return S_OK;
 }

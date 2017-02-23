@@ -20,7 +20,6 @@ private:
 	playerUI*	_playerUI;
 	collision*	_collision;
 	objectManager* _objectManager;
-
 	RECT Background;
 
 	image* _black;
@@ -84,7 +83,6 @@ private:
 	image* _IMG2;
 	image* _IMG3;
 	image* _IMG4;
-
 	image* _black;
 
 	int alphaValue;
@@ -115,7 +113,6 @@ private:
 	float cameraX;
 	float cameraY;
 	RECT Background;
-
 	image* _test;
 public:
 	virtual HRESULT init();

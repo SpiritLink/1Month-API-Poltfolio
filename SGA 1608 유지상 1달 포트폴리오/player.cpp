@@ -4,39 +4,37 @@
 
 HRESULT player::init()
 {
+	//이미지 로딩
 	playerIMG = IMAGEMANAGER->addFrameImage("player", "IMAGE/player/player.bmp", IMAGESIZEX * 2, IMAGESIZEY * 2, 17, 22, true, RGB(0, 0, 255));
-	x = (_tileMap->getTiles()[DATABASE->getCollisionTile()].rc.left + _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.right) / 2;	//싱글톤으로 부터
-	y = _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.top;	//싱글톤으로 부터
+
+	//사운드 로딩
+	SOUNDMANAGER->addSound("playerSlash", "SOUND/punch2.wav", false, false);
+	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
+	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
+	SOUNDMANAGER->addSound("jump", "SOUND/jump.wav", false, false);
+	SOUNDMANAGER->addSound("hurt", "SOUND/hurt.wav", false, false);
+
+	//싱글톤으로 부터 정보를 로드합니다. (싱글톤은 이미 파일에서 데이터를 읽어온 상태)
+	x = (_tileMap->getTiles()[DATABASE->getCollisionTile()].rc.left + _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.right) / 2;	
+	y = _tileMap->getTiles()[DATABASE->getCollisionTile()].rc.top;
 	MAXHP = DATABASE->getMaxHP();
 	HP = DATABASE->getHP();
 	MP = DATABASE->getMP();
 
-	//x = WINSIZEX / 2;			//데이터 값 고정
-	//y = WINSIZEY / 2;
-	//MAXHP = 6;
-	//HP = 6;
-	//MP = 99;
-
+	//나머지 멤버 변수는 기본값으로 초기화 합니다.
 	gravity = 0;
 	PlayerRect = RectMakeCenter(x, y, 50, 50);
 	SPEED = DEFAULT_SPEED;
 	currentTime = TIMEMANAGER->getWorldTime();
 	invincibleTime = TIMEMANAGER->getWorldTime();
 	countTime = 0;
-
 	keyStatus = 0;
 	playerStatus = 0;
-
 	direction = RIGHT;
 	Action = ACTION_NONE;
 	frameCount = 0;
-
 	alphaValue = 255;
-	SOUNDMANAGER->addSound("playerSlash", "SOUND/punch2.wav", false, false);
-	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
-	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
-	SOUNDMANAGER->addSound("jump", "SOUND/jump.wav", false, false);
-	SOUNDMANAGER->addSound("hurt", "SOUND/hurt.wav", false, false);
+
 	return S_OK;
 }
 
@@ -46,19 +44,127 @@ void player::release()
 
 void player::update()
 {
-	collisionTileCheck();	//몇번 타일에 충돌중인지
-	if(!(playerStatus & STATUS_DIE)) keyboardInput();		//어떤 키보드 입력을 받았는지
-	playerStatusCheck();	//플레이어의 상태는 어떤지
-	if(!(playerStatus & STATUS_DIE)) playerMove();			//죽지 않았으면 움직임
-	sendDataToSingleton();	//플레이어의 데이터를 싱글톤으로 전송합니다.
-
-	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY - 5, PLAYERAREAX, PLAYERAREAY);
+	collisionTileCheck();									//1.충돌중인 타일 확인
+	if(!(playerStatus & STATUS_DIE)) keyboardInput();		//2.키보드 입력 확인
+	playerStatusCheck();									//3.플레이어 상태 확인
+	if(!(playerStatus & STATUS_DIE)) playerMove();			//4.상태와 키입력에 따라 움직임
+	sendDataToSingleton();									//5.현재 플레이어 데이터를 싱글톤에 전송합니다.
 }
 
 void player::render()
 {
-	
-	playerRender();	//플레이어를 그리는 함수
+	//플레이어의 상태에 따라 alpha값을 수정하는 부분
+	if (invincibleTime + countTime > TIMEMANAGER->getWorldTime())
+	{
+		int a = TIMEMANAGER->getWorldTime() / 0.2f;
+		switch (a % 2)
+		{
+		case 0:		alphaValue = 125;	break;
+		case 1:		alphaValue = 255;	break;
+		}
+	}
+	else
+	{
+		alphaValue = 255;
+	}
+
+	//프레임을 증가시키는 부분 (모든프레임은 0.05초마다 증가합니다)
+	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
+	{
+		currentTime = TIMEMANAGER->getWorldTime();
+		++frameCount;
+	}
+
+	//최대 프레임이 넘어가면 초기화 하는 부분
+	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK) && !(playerStatus & STATUS_PRAY)) 	frameCount = 0;
+	if (playerStatus & STATUS_RUN && !(playerStatus & STATUS_ATTACK))	if (frameCount > 5) frameCount = 0;	//달리면서 공격을 안할때
+	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
+	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
+	if (playerStatus & STATUS_PRAY && !(playerStatus & STATUS_ATTACK))	if (frameCount > 6) frameCount = 6;	//기도중일때
+	if (playerStatus == STATUS_DIE) if (frameCount > 16) frameCount = 16;									//죽은 상태일때
+
+	//공격 행동이 끝났다면 변수에서 해당값을 제거합니다. (비트연산을 이용하기 때문에 한개의 변수를 이용합니다.)
+	if (playerStatus & STATUS_ATTACK)
+		if (frameCount > 2)
+		{
+			if (Action & ACTION_SLASH_ATTACK) Action -= ACTION_SLASH_ATTACK;
+			if (Action & ACTION_THROW_ATTACK) Action -= ACTION_THROW_ATTACK;
+			if (playerStatus & STATUS_ATTACK) playerStatus -= STATUS_ATTACK;
+			frameCount = 0;
+		}
+
+	//방향과 상태에 따라서 렌더
+	switch (direction)
+	{
+	case RIGHT:
+		if (playerStatus & STATUS_STAND)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 0, alphaValue);
+		if (playerStatus & STATUS_RUN)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2, alphaValue);
+		if (playerStatus & STATUS_JUMP)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4, alphaValue);
+		if (playerStatus & STATUS_LAND)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6, alphaValue);
+		if (playerStatus & STATUS_ATTACK)
+		{
+			if (Action & ACTION_SLASH_ATTACK)	//기본 공격 상태라면
+				switch (attackType)
+				{
+				case true:
+					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8, alphaValue);
+					break;
+				case false:
+					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9, alphaValue);
+					break;
+				}
+			if (Action & ACTION_THROW_ATTACK)	//투사체 공격 상태라면
+			{
+				playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 16, alphaValue);
+				break;
+			}
+		}
+		if (playerStatus & STATUS_PRAY)
+		{
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 18, alphaValue);
+			break;
+		}
+		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 20, alphaValue);
+		break;
+	case LEFT:
+		if (playerStatus & STATUS_STAND)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1, alphaValue);
+		if (playerStatus & STATUS_RUN)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3, alphaValue);
+		if (playerStatus & STATUS_JUMP)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5, alphaValue);
+		if (playerStatus & STATUS_LAND)
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7, alphaValue);
+		if (playerStatus & STATUS_ATTACK)
+		{
+			if (Action & ACTION_SLASH_ATTACK)		//기본 공격 상태라면
+				switch (attackType)
+				{
+				case true:
+					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12, alphaValue);
+					break;
+				case false:
+					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13, alphaValue);
+					break;
+				}
+			if (Action & ACTION_THROW_ATTACK)		//투사체 공격 상태라면
+			{
+				playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17, alphaValue);
+				break;
+			}
+		}
+		if (playerStatus & STATUS_PRAY)
+		{
+			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 19, alphaValue);
+			break;
+		}
+		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 21, alphaValue);
+		break;
+	}
 	//testFunction();	//테스트용 값을 표시하기 위한 테스트용 함수.
 }
 
@@ -88,6 +194,7 @@ void player::playerMove()
 {
 	//중력을 항상 증가시킵니다. (단 중력은 타일 한개의 크기 보다는 적게)
 	if(gravity < TILESIZE) gravity += GRAVITY;
+
 	//키보드 좌 , 우 입력을 처리하는 부분입니다.
 	if (keyStatus & KEYBOARD_LEFT)
 	{
@@ -558,7 +665,7 @@ void player::playerStatusCheck()
 		DATABASE->setPlayerDie(true);	//플레이어가 죽었다는 데이터를 전송한다.
 	}
 	
-
+	PlayerRect = RectMake(x - PLAYERAREAX / 2, y - PLAYERAREAY - 5, PLAYERAREAX, PLAYERAREAY);	//플레이어 히트박스 설정
 }
 
 void player::sendDataToSingleton()
@@ -581,6 +688,7 @@ void player::setPlayerTilePosition(int tileNum)
 
 void player::setPlayerHit(float value)
 {
+	//플레이어의 체력이 1깍이고 입력한 수치만큼 무적시간을 가집니다.
 	if (invincibleTime + value < TIMEMANAGER->getWorldTime())
 	{
 		invincibleTime = TIMEMANAGER->getWorldTime();
@@ -618,128 +726,9 @@ void player::collisionTileCheck()
 	}
 }
 
-void player::playerRender()
-{
-	//플레이어의 상태에 따라 alpha값을 수정하는 부분
-	if (invincibleTime + countTime > TIMEMANAGER->getWorldTime())
-	{
-		int a = TIMEMANAGER->getWorldTime() / 0.2f;
-		switch (a % 2)
-		{
-		case 0:		alphaValue = 125;	break;
-		case 1:		alphaValue = 255;	break;
-		}
-	}
-	else
-	{
-		alphaValue = 255;
-	}
-
-	//프레임을 증가시키는 부분 (모든프레임은 0.05초마다 증가합니다)
-	if (currentTime + 0.05f < TIMEMANAGER->getWorldTime())
-	{
-		currentTime = TIMEMANAGER->getWorldTime();
-		++frameCount;
-	}
-
-	//최대 프레임이 넘어가면 초기화 하는 부분
-
-	if (playerStatus & STATUS_STAND && !(playerStatus & STATUS_ATTACK) && !(playerStatus & STATUS_PRAY)) 	frameCount = 0;
-	if (playerStatus & STATUS_RUN && !(playerStatus & STATUS_ATTACK))	if (frameCount > 5) frameCount = 0;	//달리면서 공격을 안할때
-	if (playerStatus & STATUS_JUMP && !(playerStatus & STATUS_ATTACK)) 	if (frameCount > 1) frameCount = 0;	//뛰면서 공격을 안할떄
-	if (playerStatus & STATUS_LAND && !(playerStatus & STATUS_ATTACK))	if (frameCount > 1) frameCount = 0;	//착륙하면서 공격을 안할떄
-	if (playerStatus & STATUS_PRAY && !(playerStatus & STATUS_ATTACK))	if (frameCount > 6) frameCount = 6;	//기도중일때
-	if (playerStatus == STATUS_DIE) if (frameCount > 16) frameCount = 16;
-	//점프공격 , 땅에서 공격, 움직이면서 공격을 다 처리해 줘야 한다.
-	if (playerStatus & STATUS_ATTACK)	
-		if (frameCount > 2)
-		{
-			if (Action & ACTION_SLASH_ATTACK) Action -= ACTION_SLASH_ATTACK;
-			if (Action & ACTION_THROW_ATTACK) Action -= ACTION_THROW_ATTACK;
-			if (playerStatus & STATUS_ATTACK) playerStatus -= STATUS_ATTACK;
-			frameCount = 0;
-		}
-
-	//방향과 상태에 따라서 렌더하는 부분
-	switch (direction)
-	{
-	case RIGHT:
-		if(playerStatus & STATUS_STAND)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 0, alphaValue);
-		if(playerStatus & STATUS_RUN)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 2, alphaValue);
-		if(playerStatus & STATUS_JUMP)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 4, alphaValue);
-		if(playerStatus & STATUS_LAND)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 6, alphaValue);
-		if (playerStatus & STATUS_ATTACK)
-		{
-			if (Action & ACTION_SLASH_ATTACK)	//기본 공격 상태라면
-				switch (attackType)
-				{
-				case true:
-					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 8, alphaValue);
-					break;
-				case false:
-					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 9, alphaValue);
-					break;
-				}
-			if (Action & ACTION_THROW_ATTACK)	//투사체 공격 상태라면
-			{
-				playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 16, alphaValue);
-				break;
-			}
-		}
-		if (playerStatus & STATUS_PRAY)
-		{
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 18, alphaValue);
-			break;
-		}
-		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 20, alphaValue);
-		break;
-
-	case LEFT:
-		if(playerStatus & STATUS_STAND)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 1, alphaValue);
-		if(playerStatus & STATUS_RUN)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 3, alphaValue);
-		if(playerStatus & STATUS_JUMP)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 5, alphaValue);
-		if(playerStatus & STATUS_LAND)
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 7, alphaValue);
-		if (playerStatus & STATUS_ATTACK)
-		{
-			if (Action & ACTION_SLASH_ATTACK)		//기본 공격 상태라면
-				switch (attackType)
-				{
-				case true:
-					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 12, alphaValue);
-					break;
-				case false:
-					playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 13, alphaValue);
-					break;
-				}
-			if (Action & ACTION_THROW_ATTACK)		//투사체 공격 상태라면
-			{
-				playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 17, alphaValue);
-				break;
-			}
-		}
-		if (playerStatus & STATUS_PRAY)
-		{
-			playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 19, alphaValue);
-			break;
-		}
-		if (playerStatus == STATUS_DIE) playerIMG->alphaFrameRender(getMemDC(), x - playerIMG->getFrameWidth() / 2, y - playerIMG->getFrameHeight(), frameCount, 21, alphaValue);
-		break;
-	}
-
-}
-
 player::player()
 {
 }
-
 
 player::~player()
 {

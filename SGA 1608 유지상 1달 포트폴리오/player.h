@@ -61,8 +61,6 @@ public:
 	void firstCollisionTileCheck();	//맨처음 타일의 충돌을 확인하는 함수
 	void collisionTileCheck();		//이후 타일의 충돌을 확인하는 함수 (확인하는 범위가 줄어듭니다.)
 
-	void playerRender();			//상태에 따라서 플레이어를 렌더하는 함수
-
 	void addPlayerX(int value) { x += value; }
 	void addPlayerY(int value) { y += value; }
 	void addPlayerHP(int value) { HP += value; }
