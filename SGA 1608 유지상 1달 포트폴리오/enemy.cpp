@@ -712,6 +712,7 @@ void eri::update()
 	{
 		status = ACTION_DIE;
 		frameCount = 0;
+		DATABASE->setBossDie(true);
 		if (!(dieCheck))
 		{
 			dieCheck = true;

@@ -36,6 +36,7 @@ HRESULT player::init()
 	SOUNDMANAGER->addSound("playerThrow", "SOUND/seal.wav", false, false);
 	SOUNDMANAGER->addSound("hit", "SOUND/hit.wav", false, false);
 	SOUNDMANAGER->addSound("jump", "SOUND/jump.wav", false, false);
+	SOUNDMANAGER->addSound("hurt", "SOUND/hurt.wav", false, false);
 	return S_OK;
 }
 

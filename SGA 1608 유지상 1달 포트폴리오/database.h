@@ -33,6 +33,7 @@ private:
 	bool playerDie;			//플레이어가 죽었는지 확인하는 변수
 	bool restart;			//죽은뒤 리스타트를 선택했을때
 	bool menu;				//죽은뒤 메뉴를 선택했을때
+	bool isBossDie;			//보스가 죽었는지 확인하는 변수
 public:
 	HRESULT init();
 	void release();
@@ -63,6 +64,7 @@ public:
 	bool getPlayerDie() { return playerDie; }
 	bool getRestart() { return restart; }
 	bool getMenu() { return menu; }
+	bool getBossDie() { return isBossDie; }
 
 	void setSourCamX(int X) { sourCamX = X; }	//기준점 (플레이어) X를 설정
 	void setSourCamY(int Y) { sourCamY = Y; }	//기준점 (플레이어) Y를 설정
@@ -85,6 +87,7 @@ public:
 	void setPlayerDie(bool value) { playerDie = value; }
 	void setRestart(bool value) { restart = value; }
 	void setMenu(bool value) { menu = value; }
+	void setBossDie(bool value) { isBossDie = value; }
 
 
 	void saveDataToFile();		//플레이어의 정보를 파일에 저장하는 함수입니다.

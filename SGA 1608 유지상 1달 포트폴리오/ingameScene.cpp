@@ -406,6 +406,7 @@ HRESULT field1Scene::init()
 	DATABASE->setMenu(false);
 	DATABASE->setRestart(false);
 	DATABASE->setPlayerDie(false);
+	DATABASE->setBossDie(false);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 	
 	_sceneNumber = 2;
@@ -772,6 +773,12 @@ void field1Scene::changeAlphaValue()
 	{
 		DATABASE->setWhiteAlphaValue(DATABASE->getWhiteAlphaValue() - 5);
 		if (DATABASE->getWhiteAlphaValue() < 0) DATABASE->setWhiteAlphaValue(0);
+	}
+
+	if (DATABASE->getBossDie())
+	{
+		alphaValue += 2;
+		if (alphaValue > 255) alphaValue = 255;
 	}
 
 }

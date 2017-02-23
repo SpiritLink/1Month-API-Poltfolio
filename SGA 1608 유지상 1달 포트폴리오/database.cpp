@@ -99,6 +99,7 @@ HRESULT database::init()
 	playerDie = false;
 	restart = false;
 	menu = false;
+	isBossDie = false;
 
 	return S_OK;
 }

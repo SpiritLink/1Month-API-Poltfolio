@@ -7,7 +7,8 @@ HRESULT collision::init()
 	attackCheckTime = TIMEMANAGER->getWorldTime();
 	bodyCheckTime = TIMEMANAGER->getWorldTime();
 	itemCheckTime = TIMEMANAGER->getWorldTime();
-	shakeTime = 0;
+	shakeTimeATK = 0;
+	shakeTimeHURT = 0;
 
 	SOUNDMANAGER->addSound("item1", "SOUND/item.wav", false, false);
 	SOUNDMANAGER->addSound("item2", "SOUND/item2.wav", false, false);
@@ -21,7 +22,7 @@ void collision::release()
 
 void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector<item*> VI)
 {
-	screenShake();
+	screenShakeATK();
 	_player = PL;
 	vector<enemy*> _vEnemy = VE;
 	vector<attack*> _vAttack = VA;
@@ -51,7 +52,7 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 					if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &(*_viEnemy)->getEnemyRect())
 						&& !(*_viAttack)->getCheckCollision() && (*_viEnemy)->getEnemyAlive())
 					{
-						shakeTime = TIMEMANAGER->getWorldTime();
+						shakeTimeATK = TIMEMANAGER->getWorldTime();
 						SOUNDMANAGER->playSound("hit", PointMake((*_viAttack)->getAttackX(), (*_viAttack)->getAttackY()));
 						(*_viAttack)->collisionTrue();
 						(*_viAttack)->setFrameCountZero();
@@ -80,6 +81,8 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 				//적 공격과 플레이어가 충돌하면
 				if (IntersectRect(&RectMake(0, 0, 0, 0), &(*_viAttack)->getAttackRect(), &_player->getPlayerRect()))
 				{
+					SOUNDMANAGER->play("hurt", 0.5f);
+					shakeTimeHURT = TIMEMANAGER->getWorldTime();
 					_player->setPlayerHit(2.0f);
 					(*_viAttack)->collisionTrue();
 				}
@@ -99,6 +102,8 @@ void collision::update(player* PL, vector<enemy*> VE, vector<attack*> VA, vector
 			if (IntersectRect(&RectMake(0, 0, 0, 0), &_player->getPlayerRect(), &(*_viEnemy)->getEnemyRect()) &&
 				(*_viEnemy)->getEnemyAlive())
 			{
+				SOUNDMANAGER->play("hurt", 0.5f);
+				shakeTimeHURT = TIMEMANAGER->getWorldTime();
 				_player->setPlayerHit(2.0f);
 			}
 		}
@@ -151,9 +156,9 @@ void collision::render()
 {
 }
 
-void collision::screenShake()
+void collision::screenShakeATK()
 {
-	int shakeCount = (TIMEMANAGER->getWorldTime() - shakeTime) / 0.025f;
+	int shakeCount = (TIMEMANAGER->getWorldTime() - shakeTimeATK) / 0.025f;
 
 	//x좌표만 먼저 흔들어 보자.
 	switch (shakeCount)
@@ -182,7 +187,53 @@ void collision::screenShake()
 	case 8:	DATABASE->setDestCamX(WINSIZEX / 2);
 		DATABASE->setDestCamY(WINSIZEY - 100);
 		break;
-	default: DATABASE->setDestCamX(WINSIZEX / 2); 
+	case 9:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150);
+		break;
+	}
+}
+
+void collision::screenShakeHURT()
+{
+	int shakeCount = (TIMEMANAGER->getWorldTime() - shakeTimeHURT) / 0.025f;
+
+	switch(shakeCount)
+	{
+	case 1:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 2:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 + TILESIZE);
+		break;
+	case 3:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 4:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 5:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 6:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 7:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 8:
+		DATABASE->setDestCamX(WINSIZEX / 2);
+		DATABASE->setDestCamY(WINSIZEY - 150 - TILESIZE);
+		break;
+	case 9:
+		DATABASE->setDestCamX(WINSIZEX / 2);
 		DATABASE->setDestCamY(WINSIZEY - 150);
 		break;
 	}
