@@ -102,12 +102,10 @@ void gameNode::release()
 
 void gameNode::update()
 {
-
 }
 
 void gameNode::render()
 {
-
 }
 
 LRESULT gameNode::MainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

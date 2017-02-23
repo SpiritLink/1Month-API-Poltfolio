@@ -3,20 +3,24 @@
 
 HRESULT townScene::init()
 {
-	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY - 150);
 	DATABASE->setMenu(false);
 	DATABASE->setRestart(false);
 	DATABASE->setPlayerDie(false);
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->playSound("stage1", PointMake(0, 0));
+	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
+	_sceneNumber = 1;
+
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
 
-	_sceneNumber = 1;
 	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
 	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
 	alphaValue = 255;
 	screenStatus = FADE_IN;
 
+	//---------------------클래스 객체 동적할당---------------------------//
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Town.map");
 
@@ -41,23 +45,13 @@ HRESULT townScene::init()
 
 	_collision = new collision;
 	_collision->init();
+	//-------------------------------------------------------------------//
 
-	Background = RectMake(0, 0, TILESIZEX, TILESIZEY);
+	initEnemyAndObject();//오브젝트를 배치합니다.
+	_player->update();	//플레이어의 좌표를 싱글톤에 전송합니다.
+	cameraInit();		//카메라의 위치를 세팅합니다.
 
 
-	_enemyManager->setBomb(21548);
-	_enemyManager->setBomb(21549);
-	_enemyManager->setBomb(21550);
-	_enemyManager->setBomb(21551);
-	_enemyManager->setBomb(21552);
-
-	_enemyManager->setFlower(21101);
-
-	_player->update();
-	cameraInit();//카메라의 위치를 세팅합니다.
-	_objectManager->setSavebell(21344);
-	SOUNDMANAGER->stopAllSound();
-	SOUNDMANAGER->playSound("stage1", PointMake(0, 0));
 	return S_OK;
 }
 
@@ -84,28 +78,28 @@ void townScene::release()
 
 void townScene::update()
 {
-	_tileMap->update();
-	_player->update();
-	_enemyManager->update();
-	_attackManager->update();
-	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());
-	_objectManager->update();
-	_playerUI->update();
-	changeAlphaValue();
-	cameraMove();
-	portal();			//화면의 끝에 이동하면 field1씬으로 넘깁니다.
+	_tileMap->update();			//1.맵 업데이트
+	_player->update();			//2.플레이어 업데이트
+	_enemyManager->update();	//3.적 업데이트
+	_attackManager->update();	//4.공격 업데이트
+	_collision->update(_player, _enemyManager->getEnemyVector(), _attackManager->getAttackVector(), _objectManager->getItemVector());//5.충돌 업데이트
+	_objectManager->update();	//6.아이템 업데이트
+	_playerUI->update();		//7.UI업데이트
+	changeAlphaValue();			//8.전환효과 업데이트 (alpha수치)
+	cameraMove();				//9.카메라 업데이트
+	portal();					//10.좌표변경 업데이트 (특정 좌표에 도달하면 다른 좌표로 캐릭터를 이동시킵니다.)
 }
 
 void townScene::render()
 {
-	_tileMap->render();							//1.맵	최하위
-	_enemyManager->render();					//2.적
-	_objectManager->render();					//3.아이템
-	_player->render();							//4.플레이어
-	_attackManager->render();					//5.공격
-	_playerUI->render();						//6.인터페이스
-	_black->alphaRender(getMemDC(), alphaValue);//7.전환효과 최상위
-	_white->alphaRender(getMemDC(), DATABASE->getWhiteAlphaValue());//8.전환효과 최상위
+	_tileMap->render();												//1.맵			최하위
+	_enemyManager->render();										//2.적
+	_objectManager->render();										//3.아이템
+	_player->render();												//4.플레이어
+	_attackManager->render();										//5.공격
+	_playerUI->render();											//6.인터페이스
+	_black->alphaRender(getMemDC(), alphaValue);					//7.전환효과		
+	_white->alphaRender(getMemDC(), DATABASE->getWhiteAlphaValue());//8.전환효과		최상위
 }
 
 void townScene::changeAlphaValue()
@@ -197,8 +191,6 @@ void townScene::portal()
 		SCENEMANAGER->changeScene("menuScene");
 		return;
 	}
-
-
 }
 
 void townScene::cameraMove()
@@ -388,6 +380,17 @@ void townScene::cameraInit()
 	}
 }
 
+void townScene::initEnemyAndObject()
+{
+	_enemyManager->setBomb(21548);
+	_enemyManager->setBomb(21549);
+	_enemyManager->setBomb(21550);
+	_enemyManager->setBomb(21551);
+	_enemyManager->setBomb(21552);
+	_enemyManager->setFlower(21101);
+	_objectManager->setSavebell(21344);
+}
+
 townScene::townScene()
 {
 
@@ -400,20 +403,22 @@ townScene::~townScene()
 
 HRESULT field1Scene::init()
 {
-	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY - 150);
 	DATABASE->setMenu(false);
 	DATABASE->setRestart(false);
 	DATABASE->setPlayerDie(false);
 	DATABASE->setBossDie(false);
-	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
-	
+	SOUNDMANAGER->stopAllSound();
+	SOUNDMANAGER->play("stage2", 0.5f);
 	_sceneNumber = 2;
-	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
-	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
 	alphaValue = 255;
 	screenStatus = FADE_IN;
+
+	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
+	_black = IMAGEMANAGER->addImage("black", "IMAGE/UI/black.bmp", WINSIZEX, WINSIZEY, true, RGB(255, 255, 255));
+	_white = IMAGEMANAGER->addImage("white", "IMAGE/UI/white.bmp", WINSIZEX, WINSIZEY, true, RGB(0, 0, 0));
+
 
 	_tileMap = new tileMap;
 	_tileMap->init("DATA/MAP/Field1.map");
@@ -444,15 +449,8 @@ HRESULT field1Scene::init()
 	_player->update();
 	cameraInit();
 
-	//적 배치 (나중에 함수로 분리하자)
-	initEnemy();
-	_objectManager->setSavebell(18620);
-	_objectManager->setSavebell(13089);
-	_objectManager->setSavebell(10405);
-	_objectManager->setSavebell(6217);
+	initEnemyAndObject();
 
-	SOUNDMANAGER->stopAllSound();
-	SOUNDMANAGER->play("stage2",0.5f);
 	return S_OK;
 }
 
@@ -508,9 +506,9 @@ void field1Scene::render()
 	_white->alphaRender(getMemDC(), DATABASE->getWhiteAlphaValue());//8.전환효과 최상위
 }
 
-void field1Scene::initEnemy()
+void field1Scene::initEnemyAndObject()
 {
-	//몬스터를 생성하는 함수입니다.
+	//몬스터와 세이브 벨 (저장 장소)를 생성하는 함수입니다.
 	_enemyManager->setAlien(21022);
 	_enemyManager->setGhost(21024);
 	_enemyManager->setOko(20570);
@@ -540,28 +538,22 @@ void field1Scene::initEnemy()
 	_enemyManager->setBomb(8530);
 	_enemyManager->setBomb(8531);
 	_enemyManager->setBomb(8532);
+
+	_objectManager->setSavebell(18620);
+	_objectManager->setSavebell(13089);
+	_objectManager->setSavebell(10405);
+	_objectManager->setSavebell(6217);
+
 }
 
 void field1Scene::cameraMove()
 {
-	//현재는 사실상 쓰이지 않고 있습니다.
-	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
-	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+	//목표 좌표와 현재 좌표사이의 거리를 구합니다.
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
 
 
-	//만약 화면을 벗어난다면
-	if (Background.right < WINSIZEX)
-	{
-		int diffrence = WINSIZEX - Background.right;
-		Background.right += diffrence;	//배경의 움직이는 정도를 조절
-		Background.left += diffrence;	//배경의 움직이는 정도를 조정
-		_tileMap->moveTileX(diffrence);
-		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
-		_enemyManager->addEnemyX(diffrence);
-		_objectManager->addItemX(diffrence);
-	}
+	//화면을 벗어난다면
 	if (Background.left > 0)
 	{
 		int diffrence = Background.left;
@@ -572,6 +564,7 @@ void field1Scene::cameraMove()
 		_enemyManager->addEnemyX(-diffrence);
 		_objectManager->addItemX(-diffrence);
 	}
+
 	if (Background.top > 0)
 	{
 		int diffrence = Background.top;
@@ -581,6 +574,17 @@ void field1Scene::cameraMove()
 		_tileMap->moveTileY(-diffrence);
 		_enemyManager->addEnemyY(-diffrence);
 		_objectManager->addItemY(-diffrence);
+	}
+
+	if (Background.right < WINSIZEX)
+	{
+		int diffrence = WINSIZEX - Background.right;
+		Background.right += diffrence;	//배경의 움직이는 정도를 조절
+		Background.left += diffrence;	//배경의 움직이는 정도를 조정
+		_tileMap->moveTileX(diffrence);
+		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_enemyManager->addEnemyX(diffrence);
+		_objectManager->addItemX(diffrence);
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -645,22 +649,11 @@ void field1Scene::cameraMove()
 
 void field1Scene::cameraInit()
 {
-	//현재는 사실상 쓰이지 않고 있습니다.
-	//->소수점 연산 도중 반올림에 의해 좌표가 어긋나 다른 방식으로 대체됨
-	float angle = getAngle(DATABASE->getDestCamX(), DATABASE->getDestCamY(), DATABASE->getSourCamX(), DATABASE->getSourCamY());
+	//목표 좌표와 현재 좌표 사이의 거리를 구합니다.
 	int distanceX = getDistance(DATABASE->getDestCamX(), 0, DATABASE->getSourCamX(), 0);
 	int distanceY = getDistance(0, DATABASE->getDestCamY(), 0, DATABASE->getSourCamY());
 
 	//만약 화면을 벗어난다면
-	if (Background.right < WINSIZEX)
-	{
-		int diffrence = WINSIZEX - Background.right;
-		Background.right += diffrence;	//배경의 움직이는 정도를 조절
-		Background.left += diffrence;	//배경의 움직이는 정도를 조정
-		_tileMap->moveTileX(diffrence);
-		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
-		_objectManager->addItemX(diffrence);//아이템의 움직이는 정도를 조절
-	}
 	if (Background.left > 0)
 	{
 		int diffrence = Background.left;
@@ -670,6 +663,7 @@ void field1Scene::cameraInit()
 		_tileMap->moveTileX(-diffrence);
 		_objectManager->addItemX(-diffrence);
 	}
+
 	if (Background.top > 0)
 	{
 		int diffrence = Background.top;
@@ -678,6 +672,16 @@ void field1Scene::cameraInit()
 		_player->addPlayerY(diffrence);
 		_tileMap->moveTileY(-diffrence);
 		_objectManager->addItemY(-diffrence);
+	}
+
+	if (Background.right < WINSIZEX)
+	{
+		int diffrence = WINSIZEX - Background.right;
+		Background.right += diffrence;	//배경의 움직이는 정도를 조절
+		Background.left += diffrence;	//배경의 움직이는 정도를 조정
+		_tileMap->moveTileX(diffrence);
+		_player->addPlayerX(-diffrence);//플레이어의 움직이는 정도를 조절
+		_objectManager->addItemX(diffrence);//아이템의 움직이는 정도를 조절
 	}
 
 	if (Background.bottom < WINSIZEY)
@@ -739,6 +743,7 @@ void field1Scene::cameraInit()
 
 void field1Scene::changeAlphaValue()
 {
+	//페이드 인과 페이드 아웃을 반복하기 위한 장치입니다.
 	switch (screenStatus)
 	{
 	case DARK:
@@ -769,12 +774,14 @@ void field1Scene::changeAlphaValue()
 		break;
 	}
 
+	//화면 전환시 투명 수치가 제한값을 넘어가지 못하도록 방지합니다.
 	if (DATABASE->getWhiteAlphaValue() > 0)
 	{
 		DATABASE->setWhiteAlphaValue(DATABASE->getWhiteAlphaValue() - 5);
 		if (DATABASE->getWhiteAlphaValue() < 0) DATABASE->setWhiteAlphaValue(0);
 	}
 
+	//보스가 죽었을때 페이드 아웃을 위한 함수입니다.
 	if (DATABASE->getBossDie())
 	{
 		alphaValue += 2;
@@ -785,10 +792,7 @@ void field1Scene::changeAlphaValue()
 
 void field1Scene::portal()
 {
-	//플레이어가 특정 타일에 닿으면 다른 타일로 이동시키는 함수.
-	//이동할수 있는 타일을 좀더 넉넉하게 설정해주자.
-	//충돌구간이 순간적으로 이동하기 때문에 첫 충돌을 한번더 실행시켜줘야 한다.
-
+	//플레이어가 특정 타일에 도착하면 다른 타일로 좌표를 이동시키는 함수입니다.
 	switch (_player->getCollisionTile())
 	{
 	case 17272:									//1스테이지에서 2스테이지로 넘기는 부분
@@ -806,7 +810,7 @@ void field1Scene::portal()
 		_player->update();
 		//cameraInit();
 		break;
-	case 15289:
+	case 15289:									//3스테이지 에서 보스스테이지로 넘기는 부분
 		SOUNDMANAGER->stopAllSound();
 		SOUNDMANAGER->play("stage2", 0.5f);
 		_player->setPlayerTilePosition(5873);
@@ -814,7 +818,7 @@ void field1Scene::portal()
 		_player->update();
 		cameraInit();
 		break;
-	case 5872:
+	case 5872:									//보스스테이지에서 3스테이지로 넘기는 부분
 	case 5722:
 	case 5572:
 		SOUNDMANAGER->stopAllSound();
@@ -826,18 +830,22 @@ void field1Scene::portal()
 		break;
 	}
 
+	//엔딩화면으로 넘어가는 조건이 충족된다면 엔딩씬으로 전환합니다.
 	if (DATABASE->getGoEnding())
 	{
 		SOUNDMANAGER->stopAllSound();
 		SCENEMANAGER->changeScene("endingScene");
 		return;
 	}
+
+	//플레이어가 죽은뒤 재시작을 선택했다면 세이브파일 기준으로 모든데이터를 초기화합니다.
 	if (DATABASE->getRestart())
 	{
 		DATABASE->loadDataFromFile();
 		this->init();
 	}
 
+	//플레이어가 죽은뒤 메뉴를 선택했다면 메뉴씬으로 전환합니다.
 	if (DATABASE->getMenu())
 	{
 		SCENEMANAGER->changeScene("menuScene");
@@ -925,7 +933,6 @@ endingScene::~endingScene()
 HRESULT testScene::init()
 {
 	DATABASE->loadDataFromFile();	//파일로부터 플레이어의 데이터를 불러와 셋팅합니다. 앞으로 플레이어의 초기화에 필요합니다.
-	DATABASE->setBaseTime(TIMEMANAGER->getWorldTime());
 	DATABASE->setDestCamX(WINSIZEX / 2);
 	DATABASE->setDestCamY(WINSIZEY / 2);
 	IMAGEMANAGER->addFrameImage("tileMap", "IMAGE/tile/tile.bmp", 0, 0, 1350, 1200, SAMPLETILEX, SAMPLETILEY, true, RGB(0, 0, 0));
@@ -945,10 +952,9 @@ HRESULT testScene::init()
 
 	//플레이어를 초기화 하기 전에 싱글톤에 데이터를 로드 해줘야 합니다.
 	_player = new player;
-	_player->init();
 	_player->setTileMapMemoryAddress(_tileMap);
 	_player->setAttackManagerMemoryAddress(_attackManager);
-	_player->setPlayerTilePosition(DATABASE->getCollisionTile());
+	_player->init();
 	_player->firstCollisionTileCheck();
 
 	_playerUI = new playerUI;

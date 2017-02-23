@@ -59,7 +59,7 @@ void player::render()
 {
 	
 	playerRender();	//플레이어를 그리는 함수
-	testFunction();	//값을 표시하기 위한 테스트용 함수.
+	//testFunction();	//테스트용 값을 표시하기 위한 테스트용 함수.
 }
 
 void player::keyboardInput()
@@ -72,15 +72,14 @@ void player::keyboardInput()
 	if (KEYMANAGER->isOnceKeyDown('X') && !(keyStatus & KEYBOARD_X))		keyStatus = keyStatus | KEYBOARD_X;
 	if (KEYMANAGER->isOnceKeyDown('C') && !(keyStatus & KEYBOARD_C))		keyStatus = keyStatus | KEYBOARD_C;
 
-	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && keyStatus & KEYBOARD_LEFT)	keyStatus -= KEYBOARD_LEFT;
+	if (KEYMANAGER->isOnceKeyUp(VK_LEFT) && keyStatus & KEYBOARD_LEFT)		keyStatus -= KEYBOARD_LEFT;
 	if (KEYMANAGER->isOnceKeyUp(VK_RIGHT) && keyStatus & KEYBOARD_RIGHT)	keyStatus -= KEYBOARD_RIGHT;
-	if (KEYMANAGER->isOnceKeyUp(VK_UP) && keyStatus & KEYBOARD_UP)		keyStatus -= KEYBOARD_UP;
-	if (KEYMANAGER->isOnceKeyUp(VK_DOWN) && keyStatus & KEYBOARD_DOWN)	keyStatus -= KEYBOARD_DOWN;
-	if (KEYMANAGER->isOnceKeyUp('Z') && keyStatus & KEYBOARD_Z)		keyStatus -= KEYBOARD_Z;
-	if (KEYMANAGER->isOnceKeyUp('X') && keyStatus & KEYBOARD_X)		keyStatus -= KEYBOARD_X;
-	if (KEYMANAGER->isOnceKeyUp('C') && keyStatus & KEYBOARD_C)		keyStatus -= KEYBOARD_C;
+	if (KEYMANAGER->isOnceKeyUp(VK_UP) && keyStatus & KEYBOARD_UP)			keyStatus -= KEYBOARD_UP;
+	if (KEYMANAGER->isOnceKeyUp(VK_DOWN) && keyStatus & KEYBOARD_DOWN)		keyStatus -= KEYBOARD_DOWN;
+	if (KEYMANAGER->isOnceKeyUp('Z') && keyStatus & KEYBOARD_Z)				keyStatus -= KEYBOARD_Z;
+	if (KEYMANAGER->isOnceKeyUp('X') && keyStatus & KEYBOARD_X)				keyStatus -= KEYBOARD_X;
+	if (KEYMANAGER->isOnceKeyUp('C') && keyStatus & KEYBOARD_C)				keyStatus -= KEYBOARD_C;
 
-	//실험목적, 현재 키를 누르면 방향이 바로 삽입된다.
 	if (keyStatus & KEYBOARD_LEFT) direction = LEFT;
 	if (keyStatus & KEYBOARD_RIGHT) direction = RIGHT;
 }

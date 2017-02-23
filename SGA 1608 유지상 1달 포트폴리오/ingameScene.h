@@ -38,6 +38,8 @@ public:
 	void portal();
 	void cameraMove();
 	void cameraInit();
+	void initEnemyAndObject();
+
 	townScene();
 	virtual ~townScene();
 };
@@ -65,7 +67,7 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void initEnemy();
+	void initEnemyAndObject();
 	void cameraMove();
 	void cameraInit();
 	void changeAlphaValue();
